@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>알고리즘 시험 정리본</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap');
+  :root {
+    --bg: #0f1117; --bg2: #1a1d27; --bg3: #22263a; --border: #2e3350;
+    --text: #e2e8f0; --text-muted: #8892b0;
+    --accent: #64ffda; --accent2: #ff6b9d; --accent3: #c792ea;
+    --accent4: #ffcb6b; --accent5: #82aaff; --blank: #ff6b9d; --code-bg: #161b2e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; min-height: 100vh; }
+  header { background: linear-gradient(135deg, #0f1117 0%, #1a1d27 50%, #0f1117 100%); border-bottom: 1px solid var(--border); padding: 2rem 2rem 1.5rem; text-align: center; }
+  header h1 { font-size: 1.8rem; font-weight: 700; color: var(--accent); letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+  header p { color: var(--text-muted); font-size: 0.9rem; }
+  .tab-nav { display: flex; gap: 0.3rem; padding: 1rem 1.5rem 0; background: var(--bg); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .tab-nav::-webkit-scrollbar { display: none; }
+  .tab-btn { padding: 0.6rem 1.2rem; background: transparent; border: 1px solid var(--border); border-bottom: none; color: var(--text-muted); font-family: 'Noto Sans KR', sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; border-radius: 6px 6px 0 0; white-space: nowrap; transition: all 0.2s; position: relative; bottom: -1px; }
+  .tab-btn:hover { color: var(--text); background: var(--bg2); }
+  .tab-btn.active { color: var(--accent); background: var(--bg2); border-color: var(--border); border-bottom-color: var(--bg2); }
+  .tab-content { display: none; padding: 2rem 1.5rem; max-width: 1000px; margin: 0 auto; }
+  .tab-content.active { display: block; }
+  .section { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .section-title { font-size: 1.15rem; font-weight: 700; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+  .section-title::before { content: ''; display: inline-block; width: 4px; height: 1.2em; background: var(--accent); border-radius: 2px; }
+  h3 { font-size: 0.95rem; font-weight: 600; color: var(--accent4); margin: 1.2rem 0 0.5rem; }
+  h3:first-child { margin-top: 0; }
+  p, li { font-size: 0.9rem; color: var(--text); line-height: 1.8; }
+  ul { padding-left: 1.2rem; }
+  li { margin-bottom: 0.3rem; }
+  .concept-box { background: var(--bg3); border-left: 3px solid var(--accent5); border-radius: 0 8px 8px 0; padding: 1rem 1.2rem; margin: 0.8rem 0; font-size: 0.88rem; }
+  .concept-box.analogy { border-left-color: var(--accent4); }
+  .concept-box .label { font-weight: 600; color: var(--accent5); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem; }
+  .concept-box.analogy .label { color: var(--accent4); }
+  .code-wrap { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 0.8rem 0; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; }
+  .code-header { background: var(--bg3); padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.8rem; }
+  .code-header span { font-size: 0.75rem; color: var(--text-muted); font-family: 'Noto Sans KR', sans-serif; }
+  .code-header .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  pre { padding: 1rem 1.2rem; overflow-x: auto; line-height: 1.9; color: var(--text); }
+  .blank { background: rgba(255,107,157,0.2); border: 1px solid rgba(255,107,157,0.5); color: var(--blank); border-radius: 3px; padding: 0 0.3em; font-weight: 600; }
+  .basic-op { background: rgba(100,255,218,0.15); border: 1px solid rgba(100,255,218,0.4); color: var(--accent); border-radius: 3px; padding: 0 0.3em; font-weight: 600; }
+  .comment { color: #546e7a; font-style: italic; }
+  .tag { display: inline-block; padding: 0.2em 0.6em; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin: 0 0.2em; font-family: 'JetBrains Mono', monospace; }
+  .tag-green { background: rgba(100,255,218,0.15); color: var(--accent); border: 1px solid rgba(100,255,218,0.3); }
+  .tag-pink  { background: rgba(255,107,157,0.15); color: var(--accent2); border: 1px solid rgba(255,107,157,0.3); }
+  .tag-purple{ background: rgba(199,146,234,0.15); color: var(--accent3); border: 1px solid rgba(199,146,234,0.3); }
+  .tag-yellow{ background: rgba(255,203,107,0.15); color: var(--accent4); border: 1px solid rgba(255,203,107,0.3); }
+  .tag-blue  { background: rgba(130,170,255,0.15); color: var(--accent5); border: 1px solid rgba(130,170,255,0.3); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 0.8rem 0; }
+  th { background: var(--bg3); color: var(--accent); padding: 0.6rem 0.8rem; text-align: left; border: 1px solid var(--border); font-size: 0.8rem; }
+  td { padding: 0.5rem 0.8rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .example-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.2rem; margin: 0.8rem 0; font-size: 0.85rem; }
+  .example-title { color: var(--accent2); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem; }
+  .step { margin: 0.3rem 0; padding-left: 0.5rem; }
+  .step-num { display: inline-block; width: 1.4em; height: 1.4em; background: var(--accent2); color: #000; border-radius: 50%; text-align: center; line-height: 1.4em; font-size: 0.7rem; font-weight: 700; margin-right: 0.4em; }
+  .arr { display: inline-block; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 0.1em 0.5em; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; }
+  .arr .hi { color: var(--accent2); font-weight: 700; }
+  .arr .pivot { color: var(--accent4); font-weight: 700; text-decoration: underline; }
+  .formula { background: var(--bg3); border: 1px solid var(--accent3); border-radius: 8px; padding: 0.8rem 1.2rem; margin: 0.6rem 0; font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; color: var(--accent3); text-align: center; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 1.2rem 0; }
+  .quiz-hint { background: rgba(255,203,107,0.08); border: 1px solid rgba(255,203,107,0.3); border-radius: 8px; padding: 0.8rem 1rem; margin: 0.8rem 0; font-size: 0.83rem; }
+  .quiz-hint .q-label { color: var(--accent4); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
+  .scroll-top { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--accent); color: #000; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0.7; transition: opacity 0.2s; z-index: 100; }
+  .scroll-top:hover { opacity: 1; }
+
+  /* ── 뒤로가기 ── */
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px 8px 10px;
+    margin: 16px 24px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    font-family: inherit;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.9); }
+  .back-btn:active { transform: scale(0.97); }
+</style>
+</head>
+<body>
+<a class="back-btn" href="index.html">&#8249; 목록으로</a>
+
+
+<header>
+  <h1>📚 알고리즘 시험 정리본</h1>
+  <p>챕터 1 · 챕터 2 · 챕터 3 · 챕터 4.5.4 · 과제 | 기출 기반 완전 정리</p>
+</header>
+
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('ch1')">📌 챕터 1: 기초·복잡도</button>
+  <button class="tab-btn" onclick="showTab('ch2')">⚡ 챕터 2: 분할 정복</button>
+  <button class="tab-btn" onclick="showTab('ch3')">🧩 챕터 3: DP</button>
+  <button class="tab-btn" onclick="showTab('ch4')">🎒 챕터 4.5.4: Knapsack</button>
+  <button class="tab-btn" onclick="showTab('hw')">📝 과제</button>
+</nav>
+
+<div id="ch1" class="tab-content active">
+  <div class="section">
+    <div class="section-title">1.1 알고리즘 기본 정의</div>
+    <table>
+      <tr><th>용어</th><th>뜻</th><th>예시</th></tr>
+      <tr><td><span class="tag tag-green">Problem</span></td><td>우리가 답을 구하고자 하는 질문</td><td>"리스트 S에서 숫자 x를 찾아라"</td></tr>
+      <tr><td><span class="tag tag-blue">Problem Instance</span></td><td>각 매개변수에 구체적 값이 들어간 문제</td><td>"[10,7,11,5,13,8]에서 숫자 5를 찾아라"</td></tr>
+      <tr><td><span class="tag tag-purple">Algorithm</span></td><td>각 문제 인스턴스의 해를 구하기 위한 단계별 절차</td><td>Sequential Search</td></tr>
+    </table>
+  </div>
+  <div class="section">
+    <div class="section-title">1.3 복잡도 분석의 두 가지 매개변수</div>
+    <h3>📏 Input Size</h3>
+    <ul>
+      <li>배열 정렬/탐색 → <span class="tag tag-green">n</span></li>
+      <li>피보나치 → <span class="tag tag-green">n</span></li>
+      <li>그래프 → <span class="tag tag-green">정점 수 + 간선 수</span></li>
+    </ul>
+    <h3>⚙️ Basic Operation</h3>
+    <div class="concept-box"><div class="label">정의</div>"수행 횟수가 전체 작업량에 비례하는 핵심 연산"</div>
+    <div class="concept-box analogy"><div class="label">🍕 비유</div>피자 가게에서 피자를 몇 판 만들었는지가 Basic Operation.</div>
+    <ul><li>탐색/정렬 → <strong>비교 연산</strong></li><li>행렬 곱셈 → <strong>곱셈 연산</strong></li></ul>
+    <h3>🕐 Time Complexity</h3>
+    <table>
+      <tr><th>종류</th><th>설명</th><th>예</th></tr>
+      <tr><td><span class="tag tag-green">Every Case</span></td><td>항상 같은 횟수</td><td>n개 합산 → 항상 n번</td></tr>
+      <tr><td><span class="tag tag-yellow">Best B(n)</span></td><td>최소 횟수</td><td>첫 번째에 발견 → 1번</td></tr>
+      <tr><td><span class="tag tag-pink">Worst W(n)</span></td><td>최대 횟수</td><td>마지막에 있거나 없음 → n번</td></tr>
+      <tr><td><span class="tag tag-blue">Average A(n)</span></td><td>평균 횟수</td><td>확률 p 적용</td></tr>
+    </table>
+    <div class="quiz-hint"><div class="q-label">📌 시험 포인트</div>Sequential Search Average: <code>A(n) = n(1 - p/2) + p/2</code></div>
+  </div>
+  <div class="section">
+    <div class="section-title">Sequential Search</div>
+    <div class="code-wrap"><div class="code-header"><div class="dot"></div><span>Sequential Search 수도코드</span></div>
+    <pre><code>SeqSearch(int n, keyType[] S, keyType x) {
+    index location = 1;
+    while (location &lt;= n &amp;&amp; <span class="blank">S[location] != x</span>)
+        location++;
+    if (location &gt; n)
+        <span class="blank">location = 0</span>;
+    return location;
+}</code></pre></div>
+    <table><tr><th>Case</th><th>공식</th></tr><tr><td>Best</td><td>1</td></tr><tr><td>Worst</td><td>n</td></tr><tr><td>Average</td><td>n(1-p/2) + p/2</td></tr></table>
+  </div>
+  <div class="section">
+    <div class="section-title">Binary Search — 반복문</div>
+    <div class="code-wrap"><div class="code-header"><div class="dot"></div><span>BinSearch 수도코드</span></div>
+    <pre><code>BinSearch(int n, keyType[] S, keyType x) {
+    index location, low, high, mid;
+    low = 1; high = n; location = 0;
+    while (low &lt;= high &amp;&amp; location == 0) {
+        mid = floor((low + high) / 2);
+        if (x == S[mid])       <span class="blank">location = mid</span>;
+        else if (x &lt; S[mid])   high = mid - 1;
+        else                   <span class="blank">low = mid + 1</span>;
+    }
+    return location;
+}</code></pre></div>
+    <div class="formula">W(n) = ⌊lg n⌋ + 1 ≈ Θ(lg n)</div>
+  </div>
+  <div class="section">
+    <div class="section-title">1.4 Order (점근 표기법)</div>
+    <table>
+      <tr><th>표기</th><th>의미</th></tr>
+      <tr><td><span class="tag tag-green">Big O</span></td><td>상한선 — g(n) ≤ c×f(n)</td></tr>
+      <tr><td><span class="tag tag-yellow">Omega Ω</span></td><td>하한선 — g(n) ≥ c×f(n)</td></tr>
+      <tr><td><span class="tag tag-purple">Theta Θ</span></td><td>정확한 경계 — O ∩ Ω</td></tr>
+      <tr><td><span class="tag tag-pink">small o</span></td><td>엄격한 상한 — 모든 c에 대해 성립</td></tr>
+    </table>
+    <div class="formula">1 &lt; lg n &lt; n &lt; n lg n &lt; n² &lt; n³ &lt; 2ⁿ &lt; n!</div>
+    <h3>Master Theorem T(n) = aT(n/b) + f(n)</h3>
+    <table>
+      <tr><th>조건</th><th>결론</th></tr>
+      <tr><td>f(n) ∈ O(n^(log_b a - ε))</td><td>T(n) = Θ(n^(log_b a))</td></tr>
+      <tr><td>f(n) ∈ Θ(n^(log_b a))</td><td>T(n) = Θ(n^(log_b a) lg n)</td></tr>
+      <tr><td>f(n) ∈ Ω(n^(log_b a + ε))</td><td>T(n) = Θ(f(n))</td></tr>
+    </table>
+  </div>
+</div>
+
+<div id="ch2" class="tab-content">
+  <div class="section">
+    <div class="section-title">Divide and Conquer 개념</div>
+    <div class="concept-box analogy"><div class="label">🍕 비유</div>문제가 너무 크면 → 작게 쪼개고 → 각각 풀고 → 결합!</div>
+    <table>
+      <tr><th>단계</th><th>설명</th></tr>
+      <tr><td><span class="tag tag-green">Step 1: Divide</span></td><td>더 작은 인스턴스로 나누기</td></tr>
+      <tr><td><span class="tag tag-yellow">Step 2: Conquer</span></td><td>작으면 직접 해결, 아니면 재귀</td></tr>
+      <tr><td><span class="tag tag-pink">Step 3: Combine</span></td><td>작은 해들을 합쳐 전체 해 도출</td></tr>
+    </table>
+  </div>
+  <div class="section">
+    <div class="section-title">2.2 Merge Sort</div>
+    <div class="code-wrap"><div class="code-header"><div class="dot"></div><span>mergeSort</span></div>
+    <pre><code>mergeSort(int n, keytype[] S) {
+    if (n &gt; 1) {
+        const int h = floor(n/2), m = n - h;
+        copy S[1:h]       to U[1:h];
+        copy <span class="blank">S[h+1:n]</span>    to V[1:m];
+        mergeSort(h, U);
+        mergeSort(<span class="blank">m, V</span>);
+        merge(h, m, U, V, S);
+    }
+}</code></pre></div>
+    <p>W(n) = n lg n − (n-1) ∈ <strong>Θ(n lg n)</strong></p>
+  </div>
+  <div class="section">
+    <div class="section-title">2.4 Quick Sort</div>
+    <div class="code-wrap"><div class="code-header"><div class="dot"></div><span>partition (In-Place)</span></div>
+    <pre><code>partition(index low, index high) {
+    pivotItem = S[low];
+    j = low;
+    for (i = low+1; i &lt;= high; i++)
+        if (S[i] &lt; <span class="blank">pivotItem</span>)
+            exchange S[i] and S[++j];
+    exchange S[<span class="blank">low</span>] and S[j];
+    return j;
+}</code></pre></div>
+    <table>
+      <tr><th>케이스</th><th>복잡도</th></tr>
+      <tr><td>Worst</td><td>Θ(n²) — 이미 정렬된 배열</td></tr>
+      <tr><td>Average</td><td>Θ(n lg n)</td></tr>
+    </table>
+  </div>
+</div>
+
+<div id="ch3" class="tab-content">
+  <div class="section">
+    <div class="section-title">Dynamic Programming 핵심</div>
+    <div class="concept-box analogy"><div class="label">🏗️ 비유</div>작은 문제의 답을 테이블에 저장하고, 그걸 이용해 점점 큰 문제를 풂.</div>
+    <div class="concept-box"><div class="label">DP 풀이 스텝</div>Step 1: 점화식 수립<br>Step 2: 작은 것부터 테이블에 계산</div>
+  </div>
+  <div class="section">
+    <div class="section-title">3.2 Floyd's Algorithm</div>
+    <div class="formula">D(k)[i][j] = min( D(k-1)[i][j] , D(k-1)[i][k] + D(k-1)[k][j] )</div>
+    <div class="code-wrap"><div class="code-header"><div class="dot"></div><span>Floyd</span></div>
+    <pre><code>floyd(int n, number W[][], number D[][]) {
+    D = W;
+    for k=1 to n:
+        for i=1 to n:
+            for j=1 to n:
+                <span class="basic-op">D[i][j] = min(D[i][j], D[i][k] + D[k][j]);</span>
+}</code></pre></div>
+    <p><span class="tag tag-pink">T(n) = n³</span></p>
+  </div>
+  <div class="section">
+    <div class="section-title">3.4 Optimal BST</div>
+    <div class="formula">A[i][j] = min(i≤k≤j) { A[i][k-1] + A[k+1][j] } + Σ(m=i~j) Pm</div>
+    <p><span class="tag tag-pink">T(n) ∈ Θ(n³)</span></p>
+  </div>
+  <div class="section">
+    <div class="section-title">3.6 TSP</div>
+    <div class="formula">D[vi][A] = min(j: vj∈A) { W[i][j] + D[vj][A-{vj}] }</div>
+    <p><span class="tag tag-pink">T(n) ∈ Θ(n² · 2ⁿ)</span></p>
+  </div>
+</div>
+
+<div id="ch4" class="tab-content">
+  <div class="section">
+    <div class="section-title">4.5.4 0/1 Knapsack Problem</div>
+    <div class="concept-box analogy"><div class="label">🎒 비유</div>무게 제한 배낭에 이익 최대화하도록 물건 선택.</div>
+    <div class="formula">
+      wi &gt; w: P[i][w] = P[i-1][w]<br>
+      wi ≤ w: P[i][w] = max( P[i-1][w], pi + P[i-1][w-wi] )
+    </div>
+    <p>기저: P[0][w]=0, P[i][0]=0 &nbsp;|&nbsp; 답: <span class="tag tag-pink">P[n][W]</span> &nbsp;|&nbsp; <span class="tag tag-pink">T = Θ(nW)</span></p>
+    <div class="example-box">
+      <div class="example-title">예시 — n=3, W=5, (w1=2,p1=3),(w2=3,p2=4),(w3=4,p3=5)</div>
+      <table>
+        <tr><th></th><th>w=0</th><th>w=1</th><th>w=2</th><th>w=3</th><th>w=4</th><th>w=5</th></tr>
+        <tr><td>i=0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>i=1</td><td>0</td><td>0</td><td>3</td><td>3</td><td>3</td><td>3</td></tr>
+        <tr><td>i=2</td><td>0</td><td>0</td><td>3</td><td>4</td><td>4</td><td>7</td></tr>
+        <tr><td>i=3</td><td>0</td><td>0</td><td>3</td><td>4</td><td>5</td><td><strong>7</strong></td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="hw" class="tab-content">
+  <div class="section">
+    <div class="section-title">과제 #1-1: Three-way MergeSort</div>
+    <div class="code-wrap"><div class="code-header"><div class="dot"></div><span>mergesort3</span></div>
+    <pre><code>mergesort3(int n, keytype[] S) {
+    if (n > 1) {
+        const int h=floor(n/3), m=floor(n/3), p=n-h-m;
+        copy S[1:h]       to U; copy S[h+1:h+m] to V; copy S[h+m+1:n] to W;
+        mergesort3(h,U); mergesort3(m,V); mergesort3(p,W);
+        merge3(h,m,p,U,V,W,S);
+    }
+}</code></pre></div>
+    <div class="concept-box"><div class="label">시간복잡도</div>T(n) = 3T(n/3) + n → Master Theorem Case 2 → <strong>Θ(n log n)</strong></div>
+  </div>
+  <div class="section">
+    <div class="section-title">과제 #1-2: 동전 거스름돈 경우의 수</div>
+    <div class="formula">
+      j &lt; Si: C[i][j] = C[i-1][j]<br>
+      j ≥ Si: C[i][j] = C[i-1][j] + C[i][j-Si]
+    </div>
+    <div class="code-wrap"><div class="code-header"><div class="dot"></div><span>coinChange</span></div>
+    <pre><code>coinChange(int N, int S[], int m) {
+    for i=0 to m: C[i][0] = 1;
+    for j=1 to N: C[0][j] = 0;
+    for i=1 to m:
+        for j=1 to N:
+            C[i][j] = C[i-1][j];
+            if (j >= S[i]) C[i][j] += C[i][j - S[i]];
+    return C[m][N];
+}</code></pre></div>
+    <div class="formula">T(m, N) = Θ(mN)</div>
+  </div>
+</div>
+
+<button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>

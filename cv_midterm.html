@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>영상처리 시험 대비</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0e1117;
+    --surface: #161b27;
+    --surface2: #1e2535;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #e8edf5;
+    --text2: #8b95a8;
+    --text3: #5a6275;
+    --blue: #4a9eff;
+    --blue-dim: rgba(74,158,255,0.12);
+    --teal: #30d9a0;
+    --teal-dim: rgba(48,217,160,0.12);
+    --red: #ff6b7a;
+    --red-dim: rgba(255,107,122,0.12);
+    --amber: #ffb347;
+    --amber-dim: rgba(255,179,71,0.12);
+    --purple: #b39dff;
+    --purple-dim: rgba(179,157,255,0.12);
+    --green: #7dda58;
+    --green-dim: rgba(125,218,88,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.7;
+  }
+
+  /* ── 뒤로가기 ── */
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px 8px 10px;
+    margin: 16px 32px 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text2);
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .back-btn:hover { background: var(--surface2); color: var(--text); }
+  .back-btn:active { transform: scale(0.97); }
+  .back-arrow { font-size: 16px; line-height: 1; }
+
+  /* ── 헤더 ── */
+  .header {
+    padding: 16px 32px 0;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(74,158,255,0.04) 0%, transparent 100%);
+  }
+  .header-top {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  .header-badge {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--blue-dim);
+    color: var(--blue);
+    border: 1px solid rgba(74,158,255,0.25);
+    font-weight: 500;
+  }
+
+  /* ── 챕터 탭 ── */
+  .ch-tabs {
+    display: flex;
+    gap: 4px;
+    padding-bottom: 0;
+  }
+  .ch-tab {
+    padding: 10px 22px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text3);
+    border-radius: 8px 8px 0 0;
+    transition: all 0.2s;
+    position: relative;
+    top: 1px;
+  }
+  .ch-tab:hover { color: var(--text2); background: var(--surface); }
+  .ch-tab.on {
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-bottom-color: var(--surface);
+  }
+  .ch-tab.on[data-ch="2"] { color: var(--blue); }
+  .ch-tab.on[data-ch="3"] { color: var(--teal); }
+  .ch-tab.on[data-ch="4"] { color: var(--red); }
+  .ch-tab.on[data-ch="5"] { color: var(--green); }
+
+  /* ── 메인 레이아웃 ── */
+  .main {
+    display: flex;
+    min-height: calc(100vh - 100px);
+  }
+
+  /* ── 사이드바 (세부 탭) ── */
+  .sidebar {
+    width: 200px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+  }
+  .sidebar-section {
+    margin-bottom: 4px;
+  }
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text3);
+    padding: 8px 20px 4px;
+    text-transform: uppercase;
+  }
+  .sub-tab {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    color: var(--text2);
+    padding: 8px 20px;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+  .sub-tab:hover { color: var(--text); background: var(--surface2); }
+  .sub-tab.on {
+    color: var(--text);
+    background: var(--surface2);
+    font-weight: 500;
+  }
+  .ch2 .sub-tab.on { border-left-color: var(--blue); color: var(--blue); }
+  .ch3 .sub-tab.on { border-left-color: var(--teal); color: var(--teal); }
+  .ch4 .sub-tab.on { border-left-color: var(--red); color: var(--red); }
+  .ch5 .sub-tab.on { border-left-color: var(--green); color: var(--green); }
+
+  /* ── 콘텐츠 영역 ── */
+  .content {
+    flex: 1;
+    padding: 32px 36px;
+    overflow-y: auto;
+    max-width: 860px;
+  }
+
+  .ch-page { display: none; }
+  .ch-page.on { display: block; }
+  .sub-page { display: none; }
+  .sub-page.on { display: block; }
+
+  /* ── 콘텐츠 타이포 ── */
+  .page-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+  .page-sub {
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  h3 { font-size: 16px; font-weight: 600; margin: 28px 0 10px; color: var(--text); }
+  h4 { font-size: 14px; font-weight: 600; margin: 20px 0 8px; color: var(--text2); }
+  p { font-size: 14px; color: var(--text2); margin: 6px 0; line-height: 1.8; }
+  li { font-size: 14px; color: var(--text2); line-height: 1.8; }
+  ul { padding-left: 20px; margin: 8px 0; }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 12px 0;
+  }
+  .card-blue { border-left: 3px solid var(--blue); border-radius: 0 10px 10px 0; background: var(--surface); padding: 12px 16px; margin: 10px 0; }
+  .card-teal { border-left: 3px solid var(--teal); border-radius: 0 10px 10px 0; background: var(--surface); padding: 12px 16px; margin: 10px 0; }
+  .card-red { border-left: 3px solid var(--red); border-radius: 0 10px 10px 0; background: var(--surface); padding: 12px 16px; margin: 10px 0; }
+  .card-amber { border-left: 3px solid var(--amber); border-radius: 0 10px 10px 0; background: var(--surface); padding: 12px 16px; margin: 10px 0; }
+  .card-purple { border-left: 3px solid var(--purple); border-radius: 0 10px 10px 0; background: var(--surface); padding: 12px 16px; margin: 10px 0; }
+
+  /* ── 알림 박스 ── */
+  .tip { background: var(--purple-dim); border: 1px solid rgba(179,157,255,0.2); border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 13px; color: var(--purple); }
+  .warn { background: var(--red-dim); border: 1px solid rgba(255,107,122,0.2); border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 13px; color: var(--red); }
+  .ok { background: var(--teal-dim); border: 1px solid rgba(48,217,160,0.2); border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 13px; color: var(--teal); }
+  .info { background: var(--blue-dim); border: 1px solid rgba(74,158,255,0.2); border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 13px; color: var(--blue); }
+
+  /* ── 코드 ── */
+  .code {
+    background: #0a0d14;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.9;
+    overflow-x: auto;
+    white-space: pre;
+    color: #c9d4e8;
+    margin: 12px 0;
+  }
+  .cm { color: #4a5568; }
+  .ck { color: var(--blue); }
+  .cs { color: var(--teal); }
+  .cn { color: var(--amber); }
+
+  /* ── 배지 ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    margin: 0 4px 4px 0;
+    letter-spacing: 0.3px;
+  }
+  .b-blue { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(74,158,255,0.2); }
+  .b-red { background: var(--red-dim); color: var(--red); border: 1px solid rgba(255,107,122,0.2); }
+  .b-teal { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(48,217,160,0.2); }
+  .b-amber { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(255,179,71,0.2); }
+  .b-purple { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(179,157,255,0.2); }
+  .b-gray { background: rgba(255,255,255,0.06); color: var(--text2); border: 1px solid var(--border); }
+
+  /* ── 그리드 ── */
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 12px 0; }
+
+  /* ── 표 ── */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { padding: 9px 12px; text-align: left; font-weight: 600; background: var(--surface2); border-bottom: 1px solid var(--border2); color: var(--text); }
+  td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .mono-td { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--blue); }
+
+  /* ── SVG 그림 박스 ── */
+  .fig {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 14px 0;
+    text-align: center;
+  }
+  .fig-cap { font-size: 12px; color: var(--text3); margin-top: 10px; }
+
+  /* ── 커널 그리드 ── */
+  .kernel { display: grid; grid-template-columns: repeat(3, 40px); gap: 3px; }
+  .kc { height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 5px; font-size: 13px; font-weight: 600; }
+
+  /* ── 구분선 ── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+  /* ── 스크롤바 ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* ── 반응형 ── */
+  @media (max-width: 700px) {
+    .sidebar { width: 160px; }
+    .content { padding: 20px 18px; }
+    .g2, .g3 { grid-template-columns: 1fr; }
+  }
+
+  /* ── 뒤로가기 ── */
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px 8px 10px;
+    margin: 16px 24px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    font-family: inherit;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.9); }
+  .back-btn:active { transform: scale(0.97); }
+</style>
+</head>
+<body>
+<a class="back-btn" href="index.html">&#8249; 목록으로</a>
+
+<div class="header">
+  <div class="header-top">
+    <h1>영상처리 시험 대비</h1>
+    <span class="header-badge">Ch.1 ~ Ch.5.3</span>
+  </div>
+  <div class="ch-tabs">
+    <button class="ch-tab on" data-ch="2" onclick="showCh(2)">Ch.2 OpenCV 기초</button>
+    <button class="ch-tab" data-ch="3" onclick="showCh(3)">Ch.3 영상 처리</button>
+    <button class="ch-tab" data-ch="4" onclick="showCh(4)">Ch.4 에지·영역</button>
+    <button class="ch-tab" data-ch="5" onclick="showCh(5)">Ch.5 지역 특징</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ─── 사이드바 ─── -->
+  <nav class="sidebar ch2" id="sidebar">
+
+    <!-- Ch.2 메뉴 -->
+    <div id="menu-2">
+      <div class="sidebar-section">
+        <div class="sidebar-label">개념</div>
+        <button class="sub-tab on" onclick="showSub(2,'img')">이미지 구조</button>
+        <button class="sub-tab" onclick="showSub(2,'coord')">좌표계·채널</button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">실습</div>
+        <button class="sub-tab" onclick="showSub(2,'ex1')">예제1 읽기·표시</button>
+        <button class="sub-tab" onclick="showSub(2,'ex2')">예제2 변환·크기</button>
+        <button class="sub-tab" onclick="showSub(2,'ex4')">예제7 사각형</button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">정리</div>
+        <button class="sub-tab" onclick="showSub(2,'funcs2')">함수 전체 정리</button>
+      </div>
+    </div>
+
+    <!-- Ch.3 메뉴 -->
+    <div id="menu-3" style="display:none">
+      <div class="sidebar-section">
+        <div class="sidebar-label">개념</div>
+        <button class="sub-tab on" onclick="showSub(3,'digital')">디지털 변환</button>
+        <button class="sub-tab" onclick="showSub(3,'otsu')">이진화·Otsu</button>
+        <button class="sub-tab" onclick="showSub(3,'morph')">모폴로지</button>
+        <button class="sub-tab" onclick="showSub(3,'hist')">히스토그램·감마</button>
+        <button class="sub-tab" onclick="showSub(3,'conv')">컨볼루션·필터</button>
+        <button class="sub-tab" onclick="showSub(3,'overflow')">오버플로우·엠보싱</button>
+        <button class="sub-tab" onclick="showSub(3,'interp')">보간법</button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">정리</div>
+        <button class="sub-tab" onclick="showSub(3,'funcs3')">함수 전체 정리</button>
+      </div>
+    </div>
+
+    <!-- Ch.4 메뉴 -->
+    <div id="menu-4" style="display:none">
+      <div class="sidebar-section">
+        <div class="sidebar-label">에지</div>
+        <button class="sub-tab on" onclick="showSub(4,'edge')">에지란?</button>
+        <button class="sub-tab" onclick="showSub(4,'sobel')">Sobel 계산</button>
+        <button class="sub-tab" onclick="showSub(4,'nms')">비최대억제 NMS</button>
+        <button class="sub-tab" onclick="showSub(4,'canny')">Canny 에지</button>
+        <button class="sub-tab" onclick="showSub(4,'contour')">외곽선 검출</button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">영역 분할</div>
+        <button class="sub-tab" onclick="showSub(4,'region')">슈퍼화소·능동외곽선</button>
+        <button class="sub-tab" onclick="showSub(4,'grabcut')">GrabCut</button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">정리</div>
+        <button class="sub-tab" onclick="showSub(4,'funcs4')">함수 전체 정리</button>
+      </div>
+    </div>
+
+    <!-- Ch.5 메뉴 -->
+    <div id="menu-5" style="display:none">
+      <div class="sidebar-section">
+        <div class="sidebar-label">개념</div>
+        <button class="sub-tab on" onclick="showSub(5,'what')">지역 특징이란?</button>
+        <button class="sub-tab" onclick="showSub(5,'moravec')">모라벡 알고리즘</button>
+        <button class="sub-tab" onclick="showSub(5,'harris')">해리스 특징점</button>
+        <button class="sub-tab" onclick="showSub(5,'sift')">SIFT·매칭</button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">정리</div>
+        <button class="sub-tab" onclick="showSub(5,'funcs5')">함수 전체 정리</button>
+      </div>
+    </div>
+
+  </nav>
+
+  <!-- ─── 콘텐츠 ─── -->
+  <main class="content">
+
+    <!-- ════ Ch.2 ════ -->
+    <div class="ch-page on" id="ch-2">
+
+      <div class="sub-page on" id="sub-2-img">
+        <div class="page-title">이미지 구조</div>
+        <div class="page-sub">컴퓨터가 이미지를 저장하는 방식</div>
+
+        <p>우리 눈에는 사진처럼 보이지만 컴퓨터한테 이미지는 그냥 <strong>숫자들의 격자판</strong>이에요. 각 칸(픽셀)에 밝기를 나타내는 0~255 숫자가 저장돼요.</p>
+
+        <div class="fig">
+          <svg width="100%" viewBox="0 0 500 145" style="max-width:500px">
+            <rect x="10" y="15" width="100" height="100" rx="4" fill="#B4B2A9"/>
+            <rect x="18" y="23" width="24" height="84" rx="2" fill="#2C2C2A"/>
+            <rect x="50" y="30" width="50" height="77" rx="2" fill="#F1EFE8"/>
+            <text x="60" y="128" text-anchor="middle" font-size="11" fill="#5a6275">사진처럼 보임</text>
+            <text x="135" y="72" font-size="20" fill="#4a5568">→</text>
+            <g transform="translate(156,10)">
+              <rect x="0" y="0" width="330" height="115" rx="6" fill="#161b27" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <text x="10" y="16" font-size="9" fill="#5a6275">픽셀(0,0)  (0,1)  (0,2)  (0,3)  (0,4)  (0,5)</text>
+              <rect x="5" y="22" width="44" height="26" rx="2" fill="#1a1a2e"/><text x="27" y="39" text-anchor="middle" font-size="12" fill="#8090a0">12</text>
+              <rect x="53" y="22" width="44" height="26" rx="2" fill="#1e2235"/><text x="75" y="39" text-anchor="middle" font-size="12" fill="#8090a0">48</text>
+              <rect x="101" y="22" width="44" height="26" rx="2" fill="#2a2f45"/><text x="123" y="39" text-anchor="middle" font-size="12" fill="#c8d0e0">128</text>
+              <rect x="149" y="22" width="44" height="26" rx="2" fill="#3a4055"/><text x="171" y="39" text-anchor="middle" font-size="12" fill="#c8d0e0">188</text>
+              <rect x="197" y="22" width="44" height="26" rx="2" fill="#5a6275"/><text x="219" y="39" text-anchor="middle" font-size="12" fill="#e8edf5">215</text>
+              <rect x="245" y="22" width="44" height="26" rx="2" fill="#8090a0"/><text x="267" y="39" text-anchor="middle" font-size="12" fill="#fff">242</text>
+              <rect x="5" y="52" width="44" height="26" rx="2" fill="#1e2235"/><text x="27" y="69" text-anchor="middle" font-size="12" fill="#8090a0">38</text>
+              <rect x="53" y="52" width="44" height="26" rx="2" fill="#252a40"/><text x="75" y="69" text-anchor="middle" font-size="12" fill="#8090a0">82</text>
+              <rect x="101" y="52" width="44" height="26" rx="2" fill="#2a2f45"/><text x="123" y="69" text-anchor="middle" font-size="12" fill="#c8d0e0">133</text>
+              <rect x="149" y="52" width="44" height="26" rx="2" fill="#3a4055"/><text x="171" y="69" text-anchor="middle" font-size="12" fill="#c8d0e0">192</text>
+              <rect x="197" y="52" width="44" height="26" rx="2" fill="#5a6275"/><text x="219" y="69" text-anchor="middle" font-size="12" fill="#e8edf5">220</text>
+              <rect x="245" y="52" width="44" height="26" rx="2" fill="#8090a0"/><text x="267" y="69" text-anchor="middle" font-size="12" fill="#fff">248</text>
+              <text x="165" y="100" text-anchor="middle" font-size="11" fill="#5a6275">숫자가 클수록 밝아요: 0=검정, 255=흰색</text>
+            </g>
+          </svg>
+          <p class="fig-cap">이미지 = 숫자 격자판. 각 픽셀에 0~255 숫자 저장</p>
+        </div>
+
+        <div class="g3">
+          <div class="card" style="text-align:center"><div style="font-size:30px;font-weight:700;color:#e8edf5">0</div><div style="font-size:12px;color:var(--text3);margin-top:4px">완전 검정</div></div>
+          <div class="card" style="text-align:center"><div style="font-size:30px;font-weight:700;color:#e8edf5">128</div><div style="font-size:12px;color:var(--text3);margin-top:4px">중간 회색</div></div>
+          <div class="card" style="text-align:center"><div style="font-size:30px;font-weight:700;color:#e8edf5">255</div><div style="font-size:12px;color:var(--text3);margin-top:4px">완전 흰색</div></div>
+        </div>
+
+        <h3>컬러 이미지 = BGR 3채널</h3>
+        <p>컬러 이미지는 파랑(B)·초록(G)·빨강(R) 3장의 흑백 이미지가 겹쳐진 거예요. OpenCV는 <strong>BGR 순서</strong>로 저장해요!</p>
+
+        <div class="fig">
+          <svg width="100%" viewBox="0 0 420 120" style="max-width:420px">
+            <rect x="8" y="12" width="65" height="65" rx="4" fill="#1D4ED8" opacity=".25"/>
+            <rect x="16" y="20" width="65" height="65" rx="4" fill="#16A34A" opacity=".25"/>
+            <rect x="24" y="28" width="65" height="65" rx="4" fill="#DC2626" opacity=".25"/>
+            <rect x="24" y="28" width="65" height="65" rx="4" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <text x="56" y="106" text-anchor="middle" font-size="10" fill="#5a6275">컬러 이미지</text>
+            <text x="107" y="62" font-size="16" fill="#4a5568">=</text>
+            <rect x="122" y="18" width="70" height="60" rx="4" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.3)" stroke-width="1.5"/>
+            <text x="157" y="47" text-anchor="middle" font-size="16" fill="#4a9eff" font-weight="700">B</text>
+            <text x="157" y="62" text-anchor="middle" font-size="10" fill="#4a9eff">Blue</text>
+            <text x="157" y="93" text-anchor="middle" font-size="11" fill="#4a9eff" font-weight="600">채널 0</text>
+            <text x="157" y="106" text-anchor="middle" font-size="10" fill="#5a6275">img[:,:,0]</text>
+            <text x="203" y="52" font-size="14" fill="#4a5568">+</text>
+            <rect x="214" y="18" width="70" height="60" rx="4" fill="rgba(48,217,160,0.12)" stroke="rgba(48,217,160,0.3)" stroke-width="1.5"/>
+            <text x="249" y="47" text-anchor="middle" font-size="16" fill="#30d9a0" font-weight="700">G</text>
+            <text x="249" y="62" text-anchor="middle" font-size="10" fill="#30d9a0">Green</text>
+            <text x="249" y="93" text-anchor="middle" font-size="11" fill="#30d9a0" font-weight="600">채널 1</text>
+            <text x="249" y="106" text-anchor="middle" font-size="10" fill="#5a6275">img[:,:,1]</text>
+            <text x="295" y="52" font-size="14" fill="#4a5568">+</text>
+            <rect x="306" y="18" width="70" height="60" rx="4" fill="rgba(255,107,122,0.12)" stroke="rgba(255,107,122,0.3)" stroke-width="1.5"/>
+            <text x="341" y="47" text-anchor="middle" font-size="16" fill="#ff6b7a" font-weight="700">R</text>
+            <text x="341" y="62" text-anchor="middle" font-size="10" fill="#ff6b7a">Red</text>
+            <text x="341" y="93" text-anchor="middle" font-size="11" fill="#ff6b7a" font-weight="600">채널 2</text>
+            <text x="341" y="106" text-anchor="middle" font-size="10" fill="#5a6275">img[:,:,2]</text>
+          </svg>
+          <p class="fig-cap">B(0번) + G(1번) + R(2번). R이 2번인 거 기억!</p>
+        </div>
+
+        <div class="warn">⚠️ OpenCV는 BGR 순서! 일반 RGB와 반대예요. 빨간 채널을 꺼내려면 img[:,:,2]</div>
+      </div>
+
+      <div class="sub-page" id="sub-2-coord">
+        <div class="page-title">좌표계·채널 접근</div>
+        <div class="page-sub">이미지 배열 접근 방법</div>
+
+        <p>수학에서는 y축이 위로 올라가지만, 이미지에서는 <strong>y축이 아래로</strong> 내려가요. 원점(0,0)은 왼쪽 위 모서리예요.</p>
+
+        <div class="fig">
+          <svg width="100%" viewBox="0 0 380 190" style="max-width:380px">
+            <defs>
+              <marker id="xa" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4a9eff"/></marker>
+              <marker id="ya" markerWidth="8" markerHeight="8" refX="3" refY="6" orient="auto"><path d="M0,0 L6,0 L3,8 z" fill="#ff6b7a"/></marker>
+            </defs>
+            <rect x="52" y="26" width="225" height="148" rx="4" fill="#161b27" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <line x1="52" y1="100" x2="277" y2="100" stroke="rgba(255,255,255,0.06)" stroke-width=".5" stroke-dasharray="4,3"/>
+            <line x1="52" y1="150" x2="277" y2="150" stroke="rgba(255,255,255,0.06)" stroke-width=".5" stroke-dasharray="4,3"/>
+            <line x1="127" y1="26" x2="127" y2="174" stroke="rgba(255,255,255,0.06)" stroke-width=".5" stroke-dasharray="4,3"/>
+            <line x1="202" y1="26" x2="202" y2="174" stroke="rgba(255,255,255,0.06)" stroke-width=".5" stroke-dasharray="4,3"/>
+            <line x1="52" y1="26" x2="295" y2="26" stroke="#4a9eff" stroke-width="2" marker-end="url(#xa)"/>
+            <line x1="52" y1="26" x2="52" y2="185" stroke="#ff6b7a" stroke-width="2" marker-end="url(#ya)"/>
+            <circle cx="52" cy="26" r="5" fill="#b39dff"/>
+            <text x="42" y="20" font-size="11" fill="#b39dff" font-weight="600">(0,0)</text>
+            <text x="272" y="20" font-size="11" fill="#4a9eff">x →</text>
+            <text x="10" y="178" font-size="11" fill="#ff6b7a">y ↓</text>
+            <text x="127" y="18" text-anchor="middle" font-size="9" fill="#5a6275">x=1</text>
+            <text x="202" y="18" text-anchor="middle" font-size="9" fill="#5a6275">x=2</text>
+            <text x="38" y="104" font-size="9" fill="#5a6275">y=1</text>
+            <text x="38" y="154" font-size="9" fill="#5a6275">y=2</text>
+            <circle cx="168" cy="125" r="6" fill="#ffb347"/>
+            <rect x="176" y="108" width="96" height="52" rx="4" fill="rgba(255,179,71,0.15)" stroke="rgba(255,179,71,0.3)" stroke-width="1"/>
+            <text x="224" y="126" text-anchor="middle" font-size="11" fill="#ffb347" font-weight="600">img[y, x, 채널]</text>
+            <text x="224" y="142" text-anchor="middle" font-size="10" fill="#ffb347">img[2, 2, 0]</text>
+            <text x="224" y="154" text-anchor="middle" font-size="9" fill="#5a6275">행=y, 열=x 순서!</text>
+          </svg>
+          <p class="fig-cap">원점(0,0)은 왼쪽 위. y가 아래로 증가. 배열 접근: img[y, x, 채널]</p>
+        </div>
+
+        <div class="warn">y(세로)가 먼저, x(가로)가 나중! img[y, x, ch] 순서예요.</div>
+
+        <div class="card">
+          <table>
+            <tr><th>상황</th><th>코드</th><th>설명</th></tr>
+            <tr><td class="mono-td">img[100, 200, 0]</td><td>특정 픽셀 B값</td><td>100행 200열의 Blue 채널값</td></tr>
+            <tr><td class="mono-td">img[:, :, 2]</td><td>전체 R채널</td><td>모든 행·열의 2번(Red) 채널 전체</td></tr>
+            <tr><td class="mono-td">img.shape</td><td>이미지 크기</td><td>(세로픽셀, 가로픽셀, 채널수) 반환</td></tr>
+            <tr><td class="mono-td">img.dtype</td><td>자료형 확인</td><td>보통 uint8 (0~255 범위)</td></tr>
+          </table>
+        </div>
+
+        <div class="code">img = cv.imread(<span class="cs">'soccer.jpg'</span>)
+print(img.shape)   <span class="cm"># → (948, 1434, 3) : 세로, 가로, 채널</span>
+
+gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+print(gray.shape)  <span class="cm"># → (948, 1434) : 흑백은 채널 없음!</span></div>
+      </div>
+
+      <div class="sub-page" id="sub-2-ex1">
+        <div class="page-title">예제1 — 이미지 읽고 표시하기</div>
+        <div class="page-sub">cv.imread, cv.imshow, cv.waitKey</div>
+
+        <div class="code"><span class="ck">import</span> cv2 <span class="ck">as</span> cv, sys
+
+img = cv.imread(<span class="cs">'soccer.jpg'</span>)       <span class="cm"># 파일 읽기 → ndarray 반환</span>
+<span class="ck">if</span> img <span class="ck">is</span> None:
+    sys.exit(<span class="cs">'파일 없음!'</span>)          <span class="cm"># 파일 없으면 None 반환 → 반드시 체크</span>
+
+cv.imshow(<span class="cs">'창 제목'</span>, img)             <span class="cm"># 새 창에 이미지 표시</span>
+cv.waitKey()                        <span class="cm"># 키 누를 때까지 대기 (0=무한)</span>
+cv.destroyAllWindows()              <span class="cm"># 모든 창 닫기</span></div>
+
+        <div class="card"><table>
+          <tr><th>함수</th><th>핵심 인자</th><th>주의사항</th></tr>
+          <tr><td class="mono-td">cv.imread(path)</td><td>파일 경로</td><td>실패시 None 반환!</td></tr>
+          <tr><td class="mono-td">cv.imshow(title, img)</td><td>창 제목, 이미지</td><td>waitKey 없으면 창 즉시 닫힘</td></tr>
+          <tr><td class="mono-td">cv.waitKey(delay)</td><td>0=무한, 양수=ms</td><td>imshow 후 반드시 호출</td></tr>
+          <tr><td class="mono-td">cv.destroyAllWindows()</td><td>없음</td><td>열려있는 모든 창 닫기</td></tr>
+        </table></div>
+      </div>
+
+      <div class="sub-page" id="sub-2-ex2">
+        <div class="page-title">예제2 — 그레이스케일 변환 + 크기 조정</div>
+        <div class="page-sub">cv.cvtColor, cv.resize ★출제확정</div>
+
+        <div class="code">gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+<span class="cm"># COLOR_BGR2GRAY: 컬러→흑백
+# COLOR_BGR2RGB:  BGR↔RGB 순서 변환</span>
+
+small = cv.resize(gray, dsize=(0,0), fx=0.5, fy=0.5)
+<span class="cm"># dsize=(0,0)이면 fx,fy 비율 사용
+# fx=0.5 → 가로 절반 / fy=0.5 → 세로 절반
+# dsize=(320,240) 이렇게 직접 크기 지정도 가능</span>
+
+cv.imwrite(<span class="cs">'result.jpg'</span>, gray)    <span class="cm"># 파일로 저장</span></div>
+
+        <div class="fig">
+          <svg width="100%" viewBox="0 0 380 80" style="max-width:380px">
+            <defs><marker id="ga" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#5a6275"/></marker></defs>
+            <rect x="5" y="10" width="80" height="60" rx="4" fill="#3a4055"/>
+            <rect x="15" y="18" width="20" height="44" rx="2" fill="#1a1a2e"/>
+            <rect x="42" y="22" width="36" height="40" rx="2" fill="#8090a0"/>
+            <text x="45" y="82" text-anchor="middle" font-size="10" fill="#5a6275">원본 컬러</text>
+            <text x="110" y="42" font-size="11" fill="#b39dff">cvtColor →</text>
+            <rect x="165" y="10" width="80" height="60" rx="4" fill="#2a2f45"/>
+            <line x1="165" y1="22" x2="245" y2="22" stroke="rgba(255,255,255,0.05)" stroke-width=".5"/>
+            <line x1="165" y1="40" x2="245" y2="40" stroke="rgba(255,255,255,0.05)" stroke-width=".5"/>
+            <line x1="165" y1="56" x2="245" y2="56" stroke="rgba(255,255,255,0.05)" stroke-width=".5"/>
+            <text x="205" y="82" text-anchor="middle" font-size="10" fill="#5a6275">흑백 gray</text>
+            <text x="278" y="42" font-size="11" fill="#b39dff">resize →</text>
+            <rect x="315" y="22" width="45" height="30" rx="3" fill="#2a2f45"/>
+            <text x="338" y="66" text-anchor="middle" font-size="10" fill="#5a6275">절반 크기</text>
+          </svg>
+          <p class="fig-cap">컬러 → 흑백 변환 → 절반 크기 축소</p>
+        </div>
+
+        <div class="tip">dsize=(0,0)으로 주면 fx,fy 비율이 적용돼요. fx=2.0이면 가로 2배, fx=0.25면 가로 1/4크기!</div>
+      </div>
+
+      <div class="sub-page" id="sub-2-ex4">
+        <div class="page-title">예제7 — 사각형 그리기</div>
+        <div class="page-sub">cv.rectangle ★ 콜백 제외, 이 부분만</div>
+
+        <div class="code">cv.rectangle(img, (x, y), (x+200, y+200), (0, 0, 255), 2)
+<span class="cm">#             ↑이미지  ↑왼위꼭짓점(x,y)  ↑오른아래꼭짓점  ↑BGR색  ↑선두께</span>
+<span class="cm"># (0,0,255) = 빨강 (B=0, G=0, R=255)
+# thickness=-1 이면 내부 채우기</span></div>
+
+        <div class="card"><table>
+          <tr><th>인자</th><th>의미</th><th>예시</th></tr>
+          <tr><td class="mono-td">pt1</td><td>왼쪽 위 꼭짓점 (x,y)</td><td>(10, 20)</td></tr>
+          <tr><td class="mono-td">pt2</td><td>오른쪽 아래 꼭짓점 (x,y)</td><td>(100, 80)</td></tr>
+          <tr><td class="mono-td">color</td><td>BGR 색상 튜플</td><td>(0,0,255)=빨강, (0,255,0)=초록</td></tr>
+          <tr><td class="mono-td">thickness</td><td>선 두께 (픽셀)</td><td>2, 3, -1(채우기)</td></tr>
+        </table></div>
+
+        <div class="warn">색상이 BGR 순서예요! 빨간색이 (255,0,0)이 아니라 (0,0,255)예요.</div>
+      </div>
+
+      <div class="sub-page" id="sub-2-funcs2">
+        <div class="page-title">Ch.2 함수 전체 정리</div>
+        <div class="page-sub">OpenCV 기초 함수 레퍼런스</div>
+        <div class="card"><table>
+          <tr><th>함수</th><th>핵심 인자</th><th>주의사항</th></tr>
+          <tr><td class="mono-td">cv.imread(path)</td><td>파일 경로</td><td>실패시 None 반환!</td></tr>
+          <tr><td class="mono-td">cv.imshow(title, img)</td><td>창 제목, 이미지</td><td>waitKey 없으면 창 즉시 닫힘</td></tr>
+          <tr><td class="mono-td">cv.waitKey(delay)</td><td>0=무한, 양수=ms</td><td>imshow 후 반드시 호출</td></tr>
+          <tr><td class="mono-td">cv.imwrite(path, img)</td><td>저장경로, 이미지</td><td>확장자로 포맷 자동 결정</td></tr>
+          <tr><td class="mono-td">cv.destroyAllWindows()</td><td>없음</td><td>모든 창 닫기</td></tr>
+          <tr><td class="mono-td">cv.cvtColor(img, code)</td><td>변환 코드</td><td>BGR→GRAY: COLOR_BGR2GRAY</td></tr>
+          <tr><td class="mono-td">cv.resize(img, dsize, fx, fy)</td><td>dsize 또는 fx/fy</td><td>dsize=(0,0)이면 fx/fy 비율 사용</td></tr>
+          <tr><td class="mono-td">cv.rectangle(img,pt1,pt2,color,t)</td><td>두 꼭짓점, BGR색, 두께</td><td>색상이 BGR 순서! t=-1이면 채우기</td></tr>
+          <tr><td class="mono-td">cv.VideoCapture(idx)</td><td>0=첫번째 카메라</td><td>cap.read() → (ret, frame) 반환</td></tr>
+          <tr><td class="mono-td">np.hstack([img1, img2])</td><td>같은 세로 크기 리스트</td><td>이미지를 가로로 이어붙이기</td></tr>
+        </table></div>
+      </div>
+
+    </div><!-- end ch-2 -->
+
+    <!-- ════ Ch.3 ════ -->
+    <div class="ch-page" id="ch-3">
+
+      <div class="sub-page on" id="sub-3-digital">
+        <div class="page-title">디지털 변환</div>
+        <div class="page-sub">샘플링 vs 양자화 — 객관식 출제!</div>
+        <p>현실의 연속적인 장면을 컴퓨터 숫자로 바꾸는 2단계 과정이에요.</p>
+        <div class="fig">
+          <svg width="100%" viewBox="0 0 400 100" style="max-width:400px">
+            <defs><marker id="fa" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#5a6275"/></marker></defs>
+            <rect x="5" y="14" width="80" height="72" rx="6" fill="rgba(125,218,88,0.1)" stroke="rgba(125,218,88,0.3)" stroke-width="1"/>
+            <text x="45" y="38" text-anchor="middle" font-size="11" fill="#7dda58" font-weight="600">현실 세계</text>
+            <text x="45" y="54" text-anchor="middle" font-size="10" fill="#5a6275">연속적인 빛</text>
+            <text x="45" y="67" text-anchor="middle" font-size="10" fill="#5a6275">신호</text>
+            <path d="M88 50 L103 50" stroke="#5a6275" stroke-width="1.5" marker-end="url(#fa)"/>
+            <rect x="107" y="4" width="92" height="92" rx="6" fill="rgba(74,158,255,0.1)" stroke="rgba(74,158,255,0.3)" stroke-width="1"/>
+            <text x="153" y="27" text-anchor="middle" font-size="12" fill="#4a9eff" font-weight="700">① 샘플링</text>
+            <text x="153" y="44" text-anchor="middle" font-size="10" fill="#4a9eff">Sampling</text>
+            <text x="153" y="58" text-anchor="middle" font-size="10" fill="#4a9eff">연속→픽셀 단위</text>
+            <text x="153" y="72" text-anchor="middle" font-size="9" fill="#5a6275">해상도 결정</text>
+            <path d="M202 50 L217 50" stroke="#5a6275" stroke-width="1.5" marker-end="url(#fa)"/>
+            <rect x="221" y="4" width="92" height="92" rx="6" fill="rgba(255,179,71,0.1)" stroke="rgba(255,179,71,0.3)" stroke-width="1"/>
+            <text x="267" y="27" text-anchor="middle" font-size="12" fill="#ffb347" font-weight="700">② 양자화</text>
+            <text x="267" y="44" text-anchor="middle" font-size="10" fill="#ffb347">Quantization</text>
+            <text x="267" y="58" text-anchor="middle" font-size="10" fill="#ffb347">밝기→0~255</text>
+            <text x="267" y="72" text-anchor="middle" font-size="9" fill="#5a6275">비트수 결정</text>
+            <path d="M316 50 L331 50" stroke="#5a6275" stroke-width="1.5" marker-end="url(#fa)"/>
+            <rect x="335" y="18" width="60" height="64" rx="6" fill="rgba(179,157,255,0.1)" stroke="rgba(179,157,255,0.3)" stroke-width="1"/>
+            <text x="365" y="46" text-anchor="middle" font-size="11" fill="#b39dff" font-weight="600">디지털</text>
+            <text x="365" y="60" text-anchor="middle" font-size="11" fill="#b39dff" font-weight="600">이미지</text>
+          </svg>
+          <p class="fig-cap">현실 → 샘플링 → 양자화 → 디지털 이미지</p>
+        </div>
+        <div class="g2">
+          <div class="card-blue">
+            <span class="badge b-blue">샘플링 (Sampling)</span>
+            <p style="margin-top:8px">연속적인 장면을 격자로 나눠서 픽셀을 추출. 카메라 해상도를 결정해요.</p>
+            <p style="font-size:13px;margin-top:6px;color:var(--text3)">비유: 그림을 모눈종이에 옮겨 그리는 것. 칸이 많을수록 더 세밀!</p>
+            <div style="margin-top:8px;padding:8px;background:var(--surface2);border-radius:6px;font-size:12px;color:var(--text2)">샘플 많을수록 → 해상도 높아짐</div>
+          </div>
+          <div class="card-amber">
+            <span class="badge b-amber">양자화 (Quantization)</span>
+            <p style="margin-top:8px">각 픽셀의 밝기를 0~255 정수로 변환. 비트수와 관련있어요.</p>
+            <p style="font-size:13px;margin-top:6px;color:var(--text3)">비유: 무한한 색을 256가지로 줄이는 것. 8bit = 256단계!</p>
+            <div style="margin-top:8px;padding:8px;background:var(--surface2);border-radius:6px;font-size:12px;color:var(--text2)">비트수 많을수록 → 더 자연스러운 색</div>
+          </div>
+        </div>
+        <div class="tip">핵심 구별법: 샘플링 = 픽셀 개수(해상도), 양자화 = 픽셀 밝기값(비트수)</div>
+      </div>
+
+      <div class="sub-page" id="sub-3-otsu">
+        <div class="page-title">이진화와 Otsu 알고리즘</div>
+        <div class="page-sub">cv.threshold + THRESH_OTSU ★반환값 2개!</div>
+        <p>이진화란 이미지 픽셀을 0(검정) 또는 255(흰색) 둘 중 하나로만 만드는 거예요. Otsu는 임계값 T를 자동으로 찾아줘요.</p>
+        <div class="fig">
+          <svg width="100%" viewBox="0 0 400 115" style="max-width:400px">
+            <defs><marker id="ba" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#b39dff"/></marker></defs>
+            <rect x="10" y="15" width="108" height="74" rx="4" fill="#3a4055"/>
+            <rect x="22" y="25" width="26" height="54" rx="3" fill="#1a1a2e"/>
+            <rect x="56" y="30" width="46" height="49" rx="3" fill="#8090a0"/>
+            <text x="64" y="100" text-anchor="middle" font-size="10" fill="#5a6275">원본: 다양한 밝기</text>
+            <path d="M124 52 L152 52" stroke="#b39dff" stroke-width="2" marker-end="url(#ba)"/>
+            <text x="138" y="43" text-anchor="middle" font-size="9" fill="#b39dff">Otsu</text>
+            <text x="138" y="67" text-anchor="middle" font-size="9" fill="#b39dff">임계값 T</text>
+            <rect x="157" y="15" width="108" height="74" rx="4" fill="#0e1117" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <rect x="169" y="25" width="26" height="54" rx="3" fill="#0e1117"/>
+            <rect x="203" y="30" width="46" height="49" rx="3" fill="#fff"/>
+            <text x="211" y="100" text-anchor="middle" font-size="10" fill="#5a6275">이진화: 0 또는 255</text>
+            <line x1="312" y1="15" x2="312" y2="89" stroke="#ff6b7a" stroke-width="1.5" stroke-dasharray="4,2"/>
+            <text x="348" y="33" font-size="11" fill="#ff6b7a">T 이상</text>
+            <text x="348" y="47" font-size="11" fill="#ff6b7a">→ 255</text>
+            <text x="348" y="67" font-size="11" fill="#4a9eff">T 미만</text>
+            <text x="348" y="81" font-size="11" fill="#4a9eff">→ 0</text>
+          </svg>
+          <p class="fig-cap">임계값 T를 기준으로 밝으면 255, 어두우면 0으로 이분화</p>
+        </div>
+        <div class="code"><span class="cm"># Otsu 이진화 — 반환값이 2개!</span>
+t, bin_img = cv.threshold(img[:,:,2], 0, 255,
+                           cv.THRESH_BINARY + cv.THRESH_OTSU)
+<span class="cm">#              ↑R채널  ↑0은 무의미(Otsu가 자동 계산)
+#                                   ↑OTSU: 자동으로 T 찾기</span>
+print(<span class="cs">'자동 임계값:'</span>, t)   <span class="cm"># t = 자동 계산된 임계값 숫자</span></div>
+        <div class="warn">반환값이 2개예요! t (임계값 숫자) 와 bin_img (결과 이미지). 순서 틀리면 오류!</div>
+        <div class="ok">print(t)로 Otsu가 자동 계산한 임계값 확인 가능 — 이 줄도 시험에 나와요!</div>
+        <div class="card"><table>
+          <tr><th>인자/반환</th><th>값</th><th>의미</th></tr>
+          <tr><td class="mono-td">thresh</td><td>0</td><td>Otsu 쓸 땐 무의미 (자동 계산됨)</td></tr>
+          <tr><td class="mono-td">maxval</td><td>255</td><td>T 이상일 때 채울 값</td></tr>
+          <tr><td class="mono-td">type</td><td>THRESH_BINARY+THRESH_OTSU</td><td>이진화 방식 + 자동 임계값</td></tr>
+          <tr><td class="mono-td">반환① t</td><td>숫자</td><td>자동으로 찾은 최적 임계값</td></tr>
+          <tr><td class="mono-td">반환② bin_img</td><td>이미지</td><td>이진화된 결과 이미지</td></tr>
+        </table></div>
+      </div>
+
+      <div class="sub-page" id="sub-3-morph">
+        <div class="page-title">모폴로지 연산</div>
+        <div class="page-sub">팽창·침식·열림·닫힘 — 객관식 출제!</div>
+        <p>이진 이미지의 형태를 조작하는 연산이에요. 구조 요소(kernel)를 이미지 위에 슬라이딩하며 적용해요.</p>
+        <div class="g2">
+          <div class="card-blue">
+            <span class="badge b-blue">팽창 (Dilation)</span>
+            <p style="margin-top:8px">구조 요소를 씌웠을 때 <strong>하나라도 1이면</strong> 중심 픽셀을 1로 만들어요.</p>
+            <p style="font-size:13px;margin-top:6px;color:var(--text3)">효과: 흰색 영역 커짐, 끊어진 선 연결</p>
+            <div class="code" style="margin-top:10px">b_dilation = cv.dilate(b, se, iterations=1)</div>
+          </div>
+          <div class="card-red">
+            <span class="badge b-red">침식 (Erosion)</span>
+            <p style="margin-top:8px">구조 요소를 씌웠을 때 <strong>모두 1이어야만</strong> 중심 픽셀을 1로 유지해요.</p>
+            <p style="font-size:13px;margin-top:6px;color:var(--text3)">효과: 흰색 영역 줄어듦, 노이즈 제거</p>
+            <div class="code" style="margin-top:10px">b_erosion = cv.erode(b, se, iterations=1)</div>
+          </div>
+        </div>
+        <div class="fig">
+          <svg width="100%" viewBox="0 0 400 145" style="max-width:400px">
+            <defs><marker id="ma" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#5a6275"/></marker></defs>
+            <text x="60" y="13" text-anchor="middle" font-size="11" fill="#e8edf5" font-weight="600">원본</text>
+            <rect x="10" y="18" width="100" height="100" rx="4" fill="#0e1117" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <rect x="30" y="38" width="60" height="60" rx="2" fill="#fff"/>
+            <rect x="44" y="22" width="22" height="16" rx="2" fill="#fff" opacity=".6"/>
+            <path d="M115 68 L133 68" stroke="#5a6275" stroke-width="1.5" marker-end="url(#ma)"/>
+            <text x="200" y="13" text-anchor="middle" font-size="11" fill="#4a9eff" font-weight="600">팽창 결과</text>
+            <rect x="140" y="18" width="100" height="100" rx="4" fill="#0e1117" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <rect x="152" y="30" width="76" height="76" rx="2" fill="#fff"/>
+            <rect x="162" y="16" width="36" height="26" rx="2" fill="#fff"/>
+            <text x="190" y="130" text-anchor="middle" font-size="10" fill="#4a9eff">흰 영역이 커짐</text>
+            <path d="M245 68 L263 68" stroke="#5a6275" stroke-width="1.5" marker-end="url(#ma)"/>
+            <text x="330" y="13" text-anchor="middle" font-size="11" fill="#ff6b7a" font-weight="600">침식 결과</text>
+            <rect x="270" y="18" width="100" height="100" rx="4" fill="#0e1117" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <rect x="292" y="46" width="38" height="38" rx="2" fill="#fff"/>
+            <text x="320" y="130" text-anchor="middle" font-size="10" fill="#ff6b7a">줄고 노이즈 사라짐</text>
+          </svg>
+          <p class="fig-cap">팽창은 흰 영역이 커지고, 침식은 줄어들어요</p>
+        </div>
+        <div class="g2">
+          <div class="card">
+            <span class="badge b-teal">열림 (Opening) = 침식→팽창</span>
+            <p style="font-size:13px;margin-top:6px">작은 노이즈 제거 + 원래 크기 유지. 비유: 돌기 깎기</p>
+          </div>
+          <div class="card">
+            <span class="badge b-amber">닫힘 (Closing) = 팽창→침식</span>
+            <p style="font-size:13px;margin-top:6px">작은 구멍 메우기 + 원래 크기 유지. 비유: 구멍 메우기</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-page" id="sub-3-hist">
+        <div class="page-title">히스토그램 평활화 + 감마 보정</div>
+        <div class="page-sub">cv.equalizeHist, 감마 보정 코드</div>
+        <p>히스토그램이란 이미지에서 각 밝기값(0~255)이 몇 개나 있는지 보여주는 그래프예요. 평활화는 이 분포를 균등하게 만들어서 대비를 높여요.</p>
+        <div class="code"><span class="cm"># 히스토그램 평활화 — 한 줄!</span>
+result = cv.equalizeHist(gray)   <span class="cm"># 흑백 이미지만 가능!</span>
+
+h = cv.calcHist([img], [2], None, [256], [0,256])
+<span class="cm">#              ↑채널번호(R=2)  ↑마스크없음  ↑256단계  ↑0~255범위</span></div>
+
+        <h4>히스토그램 평활화 표 채우기 (31p — 시험 문제!)</h4>
+        <div class="card"><table>
+          <tr><th>열 이름</th><th>의미</th><th>계산 방법</th></tr>
+          <tr><td class="mono-td">l</td><td>원래 밝기값</td><td>주어짐</td></tr>
+          <tr><td class="mono-td">h</td><td>해당 밝기의 픽셀 개수</td><td>주어짐</td></tr>
+          <tr><td class="mono-td">h̄ (정규화)</td><td>전체 대비 비율</td><td>h ÷ 전체 픽셀수 N</td></tr>
+          <tr><td class="mono-td">H̄ (누적합)</td><td>그때까지 누적</td><td>이전 H̄ + 현재 h̄</td></tr>
+          <tr><td class="mono-td">H̄×(L-1)</td><td>범위에 맞게 늘리기</td><td>H̄ × (단계수-1)</td></tr>
+          <tr><td class="mono-td" style="color:var(--red)">l' (채우기!)</td><td>변환된 새 밝기값</td><td>H̄×(L-1) 반올림</td></tr>
+        </table></div>
+
+        <h4>감마 보정</h4>
+        <p>각 픽셀에 지수(γ)를 적용해서 전체 밝기를 조절해요. γ &lt; 1이면 밝아지고, γ &gt; 1이면 어두워져요.</p>
+        <div class="code"><span class="ck">def</span> gamma(f, gamma=1.0):
+    f1 = f / 255.0
+    <span class="ck">return</span> np.uint8(255 * (f1 ** gamma))  <span class="cm"># 반드시 np.uint8 변환!</span>
+
+gc = np.hstack((gamma(img, 0.5), gamma(img, 1.0), gamma(img, 2.0)))</div>
+      </div>
+
+      <div class="sub-page" id="sub-3-conv">
+        <div class="page-title">컨볼루션 · 필터</div>
+        <div class="page-sub">샤프닝·가우시안 필터 개념</div>
+        <p>이미지의 각 픽셀에 필터(커널)를 씌워서 <strong>곱의 합</strong>을 구하는 연산이에요.</p>
+        <div class="warn">컨볼루션 결과를 원본에 덮어쓰면 안 돼요! 별도 출력 배열 필요!</div>
+
+        <div class="g2">
+          <div class="card">
+            <span class="badge b-blue">샤프닝 필터</span>
+            <p style="margin-top:8px">원리: 원본 − 흐릿한 버전 = 경계만 추출 → 원본에 더하면 선명!</p>
+            <p style="font-size:13px;margin-top:6px;color:var(--text3)">부작용: 노이즈(잡음)도 함께 강조됨</p>
+            <div class="kernel" style="margin-top:10px">
+              <div class="kc" style="background:rgba(255,107,122,0.15);color:#ff6b7a">-1</div><div class="kc" style="background:rgba(255,107,122,0.15);color:#ff6b7a">-1</div><div class="kc" style="background:rgba(255,107,122,0.15);color:#ff6b7a">-1</div>
+              <div class="kc" style="background:rgba(255,107,122,0.15);color:#ff6b7a">-1</div><div class="kc" style="background:rgba(179,157,255,0.2);color:#b39dff;font-weight:700">+8</div><div class="kc" style="background:rgba(255,107,122,0.15);color:#ff6b7a">-1</div>
+              <div class="kc" style="background:rgba(255,107,122,0.15);color:#ff6b7a">-1</div><div class="kc" style="background:rgba(255,107,122,0.15);color:#ff6b7a">-1</div><div class="kc" style="background:rgba(255,107,122,0.15);color:#ff6b7a">-1</div>
+            </div>
+          </div>
+          <div class="card">
+            <span class="badge b-teal">가우시안 필터</span>
+            <p style="margin-top:8px">원리: 중심에 높은 가중치, 멀어질수록 낮아지는 종 모양 분포.</p>
+            <p style="font-size:13px;margin-top:6px;color:var(--text3)">부작용: 경계선도 뭉개짐. σ 클수록 더 넓게 흐려짐. 식은 안 나옴!</p>
+            <div class="code" style="margin-top:10px;font-size:11px">cv.GaussianBlur(img, (5,5), 0)
+<span class="cm"># (5,5): 커널크기(홀수!)
+# 0: σ=0이면 자동계산</span></div>
+          </div>
+        </div>
+
+        <h4>덧대기(패딩) 방식</h4>
+        <div class="g2">
+          <div class="card"><span class="badge b-gray">방식 ①</span> Zero Padding<p style="font-size:13px;margin-top:4px;color:var(--text3)">경계 바깥을 0으로 채움. 가장자리가 어둡게 처리될 수 있어요.</p></div>
+          <div class="card"><span class="badge b-gray">방식 ②</span> 복사 패딩<p style="font-size:13px;margin-top:4px;color:var(--text3)">가장자리 픽셀을 그대로 복사. 더 자연스러운 결과!</p></div>
+        </div>
+      </div>
+
+      <div class="sub-page" id="sub-3-overflow">
+        <div class="page-title">오버플로우 · 엠보싱</div>
+        <div class="page-sub">uint8 범위 초과 처리 — 39p ★별표</div>
+        <p>이미지는 기본으로 uint8 타입이에요. 0~255 범위만 저장 가능한데, 이 범위를 벗어나면 이상한 값이 생겨요!</p>
+        <div class="fig">
+          <svg width="100%" viewBox="0 0 390 88" style="max-width:390px">
+            <defs><marker id="oa" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#ff6b7a"/></marker></defs>
+            <text x="195" y="13" text-anchor="middle" font-size="11" fill="#e8edf5" font-weight="600">uint8 오버플로우 — wrap-around!</text>
+            <rect x="8" y="22" width="55" height="40" rx="4" fill="rgba(255,107,122,0.12)" stroke="rgba(255,107,122,0.3)" stroke-width="1"/>
+            <text x="35" y="46" text-anchor="middle" font-size="14" fill="#ff6b7a" font-weight="700">-3</text>
+            <path d="M66 42 L80 42" stroke="#ff6b7a" stroke-width="1.5" marker-end="url(#oa)"/>
+            <rect x="83" y="22" width="55" height="40" rx="4" fill="rgba(255,179,71,0.12)" stroke="rgba(255,179,71,0.3)" stroke-width="1"/>
+            <text x="110" y="46" text-anchor="middle" font-size="14" fill="#ffb347" font-weight="700">253</text>
+            <text x="110" y="73" text-anchor="middle" font-size="10" fill="#5a6275">-3+256=253</text>
+            <rect x="163" y="22" width="55" height="40" rx="4" fill="rgba(255,107,122,0.12)" stroke="rgba(255,107,122,0.3)" stroke-width="1"/>
+            <text x="190" y="46" text-anchor="middle" font-size="14" fill="#ff6b7a" font-weight="700">256</text>
+            <path d="M221 42 L235 42" stroke="#ff6b7a" stroke-width="1.5" marker-end="url(#oa)"/>
+            <rect x="238" y="22" width="55" height="40" rx="4" fill="rgba(255,179,71,0.12)" stroke="rgba(255,179,71,0.3)" stroke-width="1"/>
+            <text x="265" y="46" text-anchor="middle" font-size="14" fill="#ffb347" font-weight="700">0</text>
+            <text x="265" y="73" text-anchor="middle" font-size="10" fill="#5a6275">256-256=0</text>
+            <rect x="310" y="27" width="72" height="28" rx="4" fill="rgba(179,157,255,0.12)" stroke="rgba(179,157,255,0.3)" stroke-width="1"/>
+            <text x="346" y="45" text-anchor="middle" font-size="11" fill="#b39dff">wrap-around!</text>
+          </svg>
+          <p class="fig-cap">범위 벗어나면 반대쪽으로 돌아와요. -3은 253, 256은 0이 됩니다</p>
+        </div>
+        <h4>엠보싱 코드 (40p ★★ 형광펜)</h4>
+        <div class="code">femboss = np.array([[-1.0, 0.0, 0.0],
+                    [ 0.0, 0.0, 0.0],
+                    [ 0.0, 0.0, 1.0]])
+
+gray16 = np.int16(gray)         <span class="cm"># 음수 저장 위해 int16으로 변환</span>
+
+emboss = np.uint8(np.clip(cv.filter2D(gray16, -1, femboss) + 128, 0, 255))
+<span class="cm">#                  ↑컨볼루션         ↑+128: 음수를 양수로 올리기
+#         ↑clip: 0~255 강제조정  ↑uint8로 최종 변환</span></div>
+        <div class="card"><table>
+          <tr><th>단계</th><th>왜 하는가</th></tr>
+          <tr><td class="mono-td">np.int16(gray)</td><td>엠보싱 결과가 음수 나올 수 있어서 미리 int16으로 변환</td></tr>
+          <tr><td class="mono-td">cv.filter2D(...)</td><td>커널로 컨볼루션 수행. -1은 입력과 같은 자료형</td></tr>
+          <tr><td class="mono-td">+128</td><td>음수 결과를 양수 구간으로 올리는 오프셋</td></tr>
+          <tr><td class="mono-td">np.clip(...,0,255)</td><td>+128 후에도 범위 초과 가능 → 강제로 0~255로 자름</td></tr>
+          <tr><td class="mono-td">np.uint8(...)</td><td>최종적으로 uint8로 변환해야 이미지로 표시 가능</td></tr>
+        </table></div>
+      </div>
+
+      <div class="sub-page" id="sub-3-interp">
+        <div class="page-title">영상 보간법</div>
+        <div class="page-sub">양선형 보간법 — 50p ★★★ 무조건 나옴!</div>
+        <p>이미지를 확대·축소·기하 변환할 때 소수점 좌표에 픽셀값을 어떻게 채울지 결정하는 방법이에요.</p>
+        <div class="g2">
+          <div class="card"><span class="badge b-gray">최근접 이웃법</span><p style="margin-top:6px">소수점 좌표를 반올림해서 가장 가까운 픽셀값 사용. 빠르지만 계단 현상 발생.</p></div>
+          <div class="card"><span class="badge b-red">양선형 보간법 ★</span><p style="margin-top:6px">소수점 좌표 주변 4개 픽셀을 넓이 비율(α, β)로 가중합산. 부드러운 결과!</p></div>
+        </div>
+        <div class="fig">
+          <svg width="100%" viewBox="0 0 400 200" style="max-width:400px">
+            <rect x="10" y="10" width="180" height="172" rx="6" fill="#161b27" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+            <line x1="10" y1="95" x2="190" y2="95" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="4,3"/>
+            <line x1="10" y1="150" x2="190" y2="150" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="4,3"/>
+            <line x1="95" y1="10" x2="95" y2="182" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="4,3"/>
+            <line x1="150" y1="10" x2="150" y2="182" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="4,3"/>
+            <circle cx="10" cy="10" r="7" fill="#b39dff"/><text x="20" y="8" font-size="10" fill="#b39dff">f(j,i)</text>
+            <circle cx="190" cy="10" r="7" fill="#b39dff"/><text x="148" y="8" font-size="10" fill="#b39dff">f(j,i+1)</text>
+            <circle cx="10" cy="182" r="7" fill="#b39dff"/><text x="18" y="194" font-size="10" fill="#b39dff">f(j+1,i)</text>
+            <circle cx="190" cy="182" r="7" fill="#b39dff"/><text x="145" y="197" font-size="10" fill="#b39dff">f(j+1,i+1)</text>
+            <circle cx="72" cy="122" r="8" fill="#ff6b7a"/>
+            <text x="83" y="117" font-size="11" fill="#ff6b7a" font-weight="600">구하려는 점</text>
+            <text x="83" y="130" font-size="10" fill="#ff6b7a">(j', i')</text>
+            <line x1="10" y1="122" x2="72" y2="122" stroke="#ffb347" stroke-width="2"/>
+            <line x1="72" y1="10" x2="72" y2="122" stroke="#4a9eff" stroke-width="2"/>
+            <text x="38" y="136" font-size="12" fill="#ffb347" font-weight="600">α</text>
+            <text x="76" y="64" font-size="12" fill="#4a9eff" font-weight="600">β</text>
+            <rect x="208" y="10" width="182" height="172" rx="6" fill="rgba(179,157,255,0.08)" stroke="rgba(179,157,255,0.2)" stroke-width="1"/>
+            <text x="299" y="28" text-anchor="middle" font-size="12" fill="#b39dff" font-weight="600">양선형 보간 수식</text>
+            <line x1="218" y1="37" x2="382" y2="37" stroke="rgba(179,157,255,0.2)" stroke-width=".5"/>
+            <text x="218" y="54" font-size="11" fill="#8090a0">α = i' − i  (소수 부분)</text>
+            <text x="218" y="70" font-size="11" fill="#8090a0">β = j' − j  (소수 부분)</text>
+            <line x1="218" y1="80" x2="382" y2="80" stroke="rgba(179,157,255,0.2)" stroke-width=".5"/>
+            <text x="218" y="98" font-size="11" fill="#b39dff">f ≈ αβ · f(j,i)</text>
+            <text x="218" y="116" font-size="11" fill="#b39dff">   + (1-α)β · f(j,i+1)</text>
+            <text x="218" y="134" font-size="11" fill="#b39dff">   + α(1-β) · f(j+1,i)</text>
+            <text x="218" y="152" font-size="11" fill="#b39dff">   + (1-α)(1-β) · f(j+1,i+1)</text>
+            <line x1="218" y1="162" x2="382" y2="162" stroke="rgba(179,157,255,0.2)" stroke-width=".5"/>
+            <text x="299" y="177" text-anchor="middle" font-size="10" fill="#5a6275">가까울수록 가중치 큼</text>
+          </svg>
+          <p class="fig-cap">빨간 점 주변 4개 픽셀을 넓이 비율(α, β)로 가중합산해서 값 추정</p>
+        </div>
+        <div class="tip">직관: 빨간 점이 f(j,i)에 가까울수록 그 픽셀값이 더 많이 반영돼요!</div>
+      </div>
+
+      <div class="sub-page" id="sub-3-funcs3">
+        <div class="page-title">Ch.3 함수 전체 정리</div>
+        <div class="page-sub">영상 처리 함수 레퍼런스</div>
+        <h4>이진화 · 모폴로지</h4>
+        <div class="card"><table>
+          <tr><th>함수</th><th>핵심 인자</th><th>주의사항</th></tr>
+          <tr><td class="mono-td">cv.threshold(img,0,255,THRESH_BINARY+THRESH_OTSU)</td><td>img, thresh, maxval, type</td><td>반환값 2개! t=임계값, bin_img=결과</td></tr>
+          <tr><td class="mono-td">cv.calcHist([img],[ch],None,[256],[0,256])</td><td>ch: 채널번호(R=2)</td><td>None = 마스크 없음</td></tr>
+          <tr><td class="mono-td">cv.equalizeHist(gray)</td><td>흑백 이미지</td><td>흑백만 가능! 컬러 불가</td></tr>
+          <tr><td class="mono-td">cv.getStructuringElement(shape, ksize)</td><td>MORPH_CROSS/MORPH_RECT</td><td>구조 요소 자동 생성</td></tr>
+          <tr><td class="mono-td">cv.dilate(img, kernel, iterations=n)</td><td>kernel, 반복횟수</td><td>팽창: 하나라도 1 → 중심 1</td></tr>
+          <tr><td class="mono-td">cv.erode(img, kernel, iterations=n)</td><td>kernel, 반복횟수</td><td>침식: 모두 1이어야 중심 1</td></tr>
+        </table></div>
+        <h4>컨볼루션 · 필터 · 자료형</h4>
+        <div class="card"><table>
+          <tr><th>함수</th><th>핵심 인자</th><th>주의사항</th></tr>
+          <tr><td class="mono-td">cv.filter2D(img, ddepth, kernel)</td><td>ddepth: -1 또는 cv.CV_32F</td><td>음수 나오는 필터는 CV_32F 필수!</td></tr>
+          <tr><td class="mono-td">cv.GaussianBlur(img, ksize, sigma)</td><td>ksize=(홀수,홀수), sigma=0이면 자동</td><td>노이즈 제거 + 흐림</td></tr>
+          <tr><td class="mono-td">np.int16(img)</td><td>이미지 배열</td><td>음수 저장 가능하게 변환</td></tr>
+          <tr><td class="mono-td">np.uint8(arr)</td><td>배열</td><td>최종 이미지 변환 필수</td></tr>
+          <tr><td class="mono-td">np.clip(arr, 0, 255)</td><td>배열, 최솟값, 최댓값</td><td>오버플로우 방지용 범위 제한</td></tr>
+          <tr><td class="mono-td">cv.getRotationMatrix2D(center,angle,scale)</td><td>회전중심, 각도, 크기비율</td><td>2×3 어파인 행렬 M 반환</td></tr>
+          <tr><td class="mono-td">cv.warpAffine(img, M, dsize)</td><td>M: 변환행렬, dsize: 출력크기</td><td>이동·회전에 사용</td></tr>
+        </table></div>
+      </div>
+
+    </div><!-- end ch-3 -->
+
+    <!-- ════ Ch.4 ════ -->
+    <div class="ch-page" id="ch-4">
+
+      <div class="sub-page on" id="sub-4-edge">
+        <div class="page-title">에지(Edge)란?</div>
+        <div class="page-sub">밝기가 급격히 바뀌는 경계 부분</div>
+        <p>이미지에서 <strong>밝기가 급격하게 바뀌는 경계 부분</strong>이에요. 에지 강도는 √(Gx² + Gy²)로 계산해요.</p>
+        <div class="fig">
+          <svg width="100%" viewBox="0 0 400 130" style="max-width:400px">
+            <rect x="10" y="15" width="170" height="90" rx="4" fill="#161b27" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+            <rect x="10" y="15" width="80" height="90" rx="4" fill="#1a1a2e"/>
+            <line x1="90" y1="15" x2="90" y2="105" stroke="#ff6b7a" stroke-width="2.5"/>
+            <text x="96" y="35" font-size="10" fill="#ff6b7a">에지!</text>
+            <text x="44" y="65" text-anchor="middle" font-size="11" fill="#4a5568">어두움</text>
+            <text x="44" y="79" text-anchor="middle" font-size="11" fill="#4a5568">0~50</text>
+            <text x="140" y="65" text-anchor="middle" font-size="11" fill="#8090a0">밝음</text>
+            <text x="140" y="79" text-anchor="middle" font-size="11" fill="#8090a0">200~255</text>
+            <text x="90" y="120" text-anchor="middle" font-size="10" fill="#5a6275">밝기가 급격히 바뀌는 곳 = 에지</text>
+            <rect x="218" y="10" width="172" height="110" rx="6" fill="rgba(179,157,255,0.08)" stroke="rgba(179,157,255,0.2)" stroke-width="1"/>
+            <text x="304" y="28" text-anchor="middle" font-size="12" fill="#b39dff" font-weight="600">에지 강도 계산</text>
+            <line x1="228" y1="36" x2="382" y2="36" stroke="rgba(179,157,255,0.2)" stroke-width=".5"/>
+            <text x="228" y="52" font-size="11" fill="#8090a0">Gx = x방향 밝기 변화량</text>
+            <text x="228" y="68" font-size="11" fill="#8090a0">Gy = y방향 밝기 변화량</text>
+            <line x1="228" y1="78" x2="382" y2="78" stroke="rgba(179,157,255,0.2)" stroke-width=".5"/>
+            <text x="304" y="96" text-anchor="middle" font-size="14" fill="#b39dff" font-weight="700">강도 = √(Gx² + Gy²)</text>
+            <text x="304" y="112" text-anchor="middle" font-size="10" fill="#5a6275">클수록 뚜렷한 에지</text>
+          </svg>
+          <p class="fig-cap">밝기가 급격히 바뀌는 곳 = 에지. 에지 강도 = √(Gx²+Gy²)</p>
+        </div>
+        <div class="g2">
+          <div class="card-blue"><span class="badge b-blue">Gradient 방향</span><p style="margin-top:6px">밝기가 밝아지는 방향. arctan(Gy/Gx)로 계산. <strong>시험에 안 나옴!</strong></p></div>
+          <div class="card-red"><span class="badge b-red">에지 방향</span><p style="margin-top:6px">Gradient 방향에 <strong>수직</strong>. 실제 경계선이 뻗어있는 방향.</p></div>
+        </div>
+        <div class="tip">비유: 언덕에서 가장 가파른 방향 = Gradient 방향. 에지 방향은 그 언덕을 따라 옆으로 걷는 방향!</div>
+      </div>
+
+      <div class="sub-page" id="sub-4-sobel">
+        <div class="page-title">Sobel 연산자</div>
+        <div class="page-sub">직접 계산 문제 출제! CV_32F 필수!</div>
+        <div class="g2">
+          <div class="card">
+            <span class="badge b-blue">Gx 필터 (세로 경계)</span>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:8px">
+              <div style="background:rgba(255,107,122,0.15);text-align:center;padding:8px;font-size:13px;color:#ff6b7a;border-radius:4px;font-weight:600">-1</div>
+              <div style="background:rgba(255,255,255,0.05);text-align:center;padding:8px;font-size:13px;color:#5a6275;border-radius:4px;font-weight:600">0</div>
+              <div style="background:rgba(125,218,88,0.12);text-align:center;padding:8px;font-size:13px;color:#7dda58;border-radius:4px;font-weight:600">+1</div>
+              <div style="background:rgba(255,107,122,0.15);text-align:center;padding:8px;font-size:13px;color:#ff6b7a;border-radius:4px;font-weight:600">-2</div>
+              <div style="background:rgba(255,255,255,0.05);text-align:center;padding:8px;font-size:13px;color:#5a6275;border-radius:4px;font-weight:600">0</div>
+              <div style="background:rgba(125,218,88,0.12);text-align:center;padding:8px;font-size:13px;color:#7dda58;border-radius:4px;font-weight:600">+2</div>
+              <div style="background:rgba(255,107,122,0.15);text-align:center;padding:8px;font-size:13px;color:#ff6b7a;border-radius:4px;font-weight:600">-1</div>
+              <div style="background:rgba(255,255,255,0.05);text-align:center;padding:8px;font-size:13px;color:#5a6275;border-radius:4px;font-weight:600">0</div>
+              <div style="background:rgba(125,218,88,0.12);text-align:center;padding:8px;font-size:13px;color:#7dda58;border-radius:4px;font-weight:600">+1</div>
+            </div>
+            <p style="font-size:12px;margin-top:8px;color:var(--text3)">왼쪽(-) vs 오른쪽(+) 차이 → 세로 경계</p>
+          </div>
+          <div class="card">
+            <span class="badge b-red">Gy 필터 (가로 경계)</span>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:8px">
+              <div style="background:rgba(255,107,122,0.15);text-align:center;padding:8px;font-size:13px;color:#ff6b7a;border-radius:4px;font-weight:600">-1</div>
+              <div style="background:rgba(255,107,122,0.15);text-align:center;padding:8px;font-size:13px;color:#ff6b7a;border-radius:4px;font-weight:600">-2</div>
+              <div style="background:rgba(255,107,122,0.15);text-align:center;padding:8px;font-size:13px;color:#ff6b7a;border-radius:4px;font-weight:600">-1</div>
+              <div style="background:rgba(255,255,255,0.05);text-align:center;padding:8px;font-size:13px;color:#5a6275;border-radius:4px;font-weight:600">0</div>
+              <div style="background:rgba(255,255,255,0.05);text-align:center;padding:8px;font-size:13px;color:#5a6275;border-radius:4px;font-weight:600">0</div>
+              <div style="background:rgba(255,255,255,0.05);text-align:center;padding:8px;font-size:13px;color:#5a6275;border-radius:4px;font-weight:600">0</div>
+              <div style="background:rgba(125,218,88,0.12);text-align:center;padding:8px;font-size:13px;color:#7dda58;border-radius:4px;font-weight:600">+1</div>
+              <div style="background:rgba(125,218,88,0.12);text-align:center;padding:8px;font-size:13px;color:#7dda58;border-radius:4px;font-weight:600">+2</div>
+              <div style="background:rgba(125,218,88,0.12);text-align:center;padding:8px;font-size:13px;color:#7dda58;border-radius:4px;font-weight:600">+1</div>
+            </div>
+            <p style="font-size:12px;margin-top:8px;color:var(--text3)">위(-) vs 아래(+) 차이 → 가로 경계</p>
+          </div>
+        </div>
+        <div class="warn">Sobel 결과는 음수도 포함! 반드시 cv.CV_32F 지정해야 해요.</div>
+        <div class="code">gx = cv.Sobel(gray, cv.CV_32F, 1, 0, ksize=3)   <span class="cm"># x방향: dx=1, dy=0</span>
+gy = cv.Sobel(gray, cv.CV_32F, 0, 1, ksize=3)   <span class="cm"># y방향: dx=0, dy=1</span>
+<span class="cm">#                    ↑CV_32F 필수!</span>
+mag = cv.magnitude(gx, gy)   <span class="cm"># 에지 강도 = √(Gx²+Gy²)</span></div>
+      </div>
+
+      <div class="sub-page" id="sub-4-nms">
+        <div class="page-title">비최대억제 (NMS)</div>
+        <div class="page-sub">에지를 1픽셀 두께로 — 상황에 따라 어케 하는지</div>
+        <p>에지 검출 시 경계가 두껍게 나와요. NMS는 에지 방향에 수직인 양옆 픽셀과 강도를 비교해서 <strong>1픽셀 두께의 얇은 선</strong>으로 만들어요.</p>
+        <div class="g2">
+          <div class="card-red"><span class="badge b-red">원리</span><p style="margin-top:6px">에지 방향 수직 양옆과 강도 비교. 자신이 가장 크면 살리고, 작으면 0으로 억제.</p></div>
+          <div class="card-blue"><span class="badge b-blue">결과</span><p style="margin-top:6px">굵은 에지 띠가 얇은 1픽셀 선으로 정리돼요.</p></div>
+        </div>
+        <div class="fig">
+          <svg width="100%" viewBox="0 0 400 145" style="max-width:400px">
+            <text x="200" y="14" text-anchor="middle" font-size="11" fill="#e8edf5" font-weight="600">에지 방향에 따른 비교 방향 (4가지)</text>
+            <g transform="translate(5,22)">
+              <rect x="0" y="0" width="80" height="80" rx="4" fill="#161b27" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <line x1="0" y1="27" x2="80" y2="27" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/><line x1="0" y1="53" x2="80" y2="53" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
+              <line x1="27" y1="0" x2="27" y2="80" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/><line x1="53" y1="0" x2="53" y2="80" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
+              <rect x="27" y="27" width="26" height="26" fill="rgba(179,157,255,0.15)"/>
+              <line x1="40" y1="0" x2="40" y2="27" stroke="#b39dff" stroke-width="2" stroke-dasharray="3,2"/>
+              <line x1="40" y1="53" x2="40" y2="80" stroke="#b39dff" stroke-width="2" stroke-dasharray="3,2"/>
+              <text x="40" y="95" text-anchor="middle" font-size="10" fill="#b39dff">수평 에지</text>
+              <text x="40" y="107" text-anchor="middle" font-size="9" fill="#5a6275">위아래 비교</text>
+            </g>
+            <g transform="translate(100,22)">
+              <rect x="0" y="0" width="80" height="80" rx="4" fill="#161b27" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <line x1="0" y1="27" x2="80" y2="27" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/><line x1="0" y1="53" x2="80" y2="53" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
+              <line x1="27" y1="0" x2="27" y2="80" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/><line x1="53" y1="0" x2="53" y2="80" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
+              <rect x="27" y="27" width="26" height="26" fill="rgba(179,157,255,0.15)"/>
+              <line x1="0" y1="40" x2="27" y2="40" stroke="#b39dff" stroke-width="2" stroke-dasharray="3,2"/>
+              <line x1="53" y1="40" x2="80" y2="40" stroke="#b39dff" stroke-width="2" stroke-dasharray="3,2"/>
+              <text x="40" y="95" text-anchor="middle" font-size="10" fill="#b39dff">수직 에지</text>
+              <text x="40" y="107" text-anchor="middle" font-size="9" fill="#5a6275">좌우 비교</text>
+            </g>
+            <g transform="translate(195,22)">
+              <rect x="0" y="0" width="80" height="80" rx="4" fill="#161b27" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <line x1="0" y1="27" x2="80" y2="27" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/><line x1="0" y1="53" x2="80" y2="53" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
+              <line x1="27" y1="0" x2="27" y2="80" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/><line x1="53" y1="0" x2="53" y2="80" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
+              <rect x="27" y="27" width="26" height="26" fill="rgba(179,157,255,0.15)"/>
+              <line x1="0" y1="0" x2="27" y2="27" stroke="#b39dff" stroke-width="2" stroke-dasharray="3,2"/>
+              <line x1="53" y1="53" x2="80" y2="80" stroke="#b39dff" stroke-width="2" stroke-dasharray="3,2"/>
+              <text x="40" y="95" text-anchor="middle" font-size="10" fill="#b39dff">대각(↘)</text>
+              <text x="40" y="107" text-anchor="middle" font-size="9" fill="#5a6275">↖↘ 비교</text>
+            </g>
+            <g transform="translate(290,22)">
+              <rect x="0" y="0" width="80" height="80" rx="4" fill="#161b27" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <line x1="0" y1="27" x2="80" y2="27" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/><line x1="0" y1="53" x2="80" y2="53" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
+              <line x1="27" y1="0" x2="27" y2="80" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/><line x1="53" y1="0" x2="53" y2="80" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
+              <rect x="27" y="27" width="26" height="26" fill="rgba(179,157,255,0.15)"/>
+              <line x1="53" y1="0" x2="27" y2="27" stroke="#b39dff" stroke-width="2" stroke-dasharray="3,2"/>
+              <line x1="53" y1="53" x2="27" y2="80" stroke="#b39dff" stroke-width="2" stroke-dasharray="3,2"/>
+              <text x="40" y="95" text-anchor="middle" font-size="10" fill="#b39dff">대각(↗)</text>
+              <text x="40" y="107" text-anchor="middle" font-size="9" fill="#5a6275">↙↗ 비교</text>
+            </g>
+            <text x="200" y="132" text-anchor="middle" font-size="10" fill="#5a6275">보라 셀 = 현재 픽셀. 점선 방향 양옆과 강도 비교해서 자신이 최대면 살림</text>
+          </svg>
+          <p class="fig-cap">에지 방향에 따라 비교하는 방향이 달라져요 (4가지 경우)</p>
+        </div>
+      </div>
+
+      <div class="sub-page" id="sub-4-canny">
+        <div class="page-title">Canny 에지 알고리즘</div>
+        <div class="page-sub">4단계 파이프라인 + 이중 임계값</div>
+        <div class="fig">
+          <svg width="100%" viewBox="0 0 400 75" style="max-width:400px">
+            <defs><marker id="ca2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#5a6275"/></marker></defs>
+            <rect x="2" y="15" width="64" height="44" rx="6" fill="rgba(125,218,88,0.1)" stroke="rgba(125,218,88,0.25)" stroke-width="1"/>
+            <text x="34" y="34" text-anchor="middle" font-size="10" fill="#7dda58" font-weight="600">① 가우시안</text>
+            <text x="34" y="48" text-anchor="middle" font-size="9" fill="#5a6275">노이즈 제거</text>
+            <path d="M69 37 L80 37" stroke="#5a6275" stroke-width="1.5" marker-end="url(#ca2)"/>
+            <rect x="83" y="15" width="64" height="44" rx="6" fill="rgba(74,158,255,0.1)" stroke="rgba(74,158,255,0.25)" stroke-width="1"/>
+            <text x="115" y="34" text-anchor="middle" font-size="10" fill="#4a9eff" font-weight="600">② Sobel</text>
+            <text x="115" y="48" text-anchor="middle" font-size="9" fill="#5a6275">강도·방향</text>
+            <path d="M150 37 L161 37" stroke="#5a6275" stroke-width="1.5" marker-end="url(#ca2)"/>
+            <rect x="164" y="15" width="64" height="44" rx="6" fill="rgba(255,179,71,0.1)" stroke="rgba(255,179,71,0.25)" stroke-width="1"/>
+            <text x="196" y="34" text-anchor="middle" font-size="10" fill="#ffb347" font-weight="600">③ NMS</text>
+            <text x="196" y="48" text-anchor="middle" font-size="9" fill="#5a6275">1픽셀 두께</text>
+            <path d="M231 37 L242 37" stroke="#5a6275" stroke-width="1.5" marker-end="url(#ca2)"/>
+            <rect x="245" y="15" width="80" height="44" rx="6" fill="rgba(179,157,255,0.1)" stroke="rgba(179,157,255,0.25)" stroke-width="1"/>
+            <text x="285" y="34" text-anchor="middle" font-size="10" fill="#b39dff" font-weight="600">④ 이중 임계값</text>
+            <text x="285" y="48" text-anchor="middle" font-size="9" fill="#5a6275">강한/약한 에지</text>
+            <path d="M328 37 L338 37" stroke="#5a6275" stroke-width="1.5" marker-end="url(#ca2)"/>
+            <rect x="341" y="20" width="55" height="34" rx="6" fill="rgba(74,158,255,0.1)" stroke="rgba(74,158,255,0.25)" stroke-width="1"/>
+            <text x="368" y="40" text-anchor="middle" font-size="10" fill="#4a9eff" font-weight="600">결과</text>
+          </svg>
+          <p class="fig-cap">가우시안 → Sobel → NMS → 이중 임계값 → 최종 에지 맵</p>
+        </div>
+        <div class="code">canny1 = cv.Canny(gray, 50, 150)    <span class="cm"># T_low=50, T_high=150</span>
+canny2 = cv.Canny(gray, 100, 200)   <span class="cm"># T_low=100, T_high=200</span>
+<span class="cm"># T_high 높을수록 → 더 확실한 에지만 → 선이 적고 끊겨요</span></div>
+        <div class="tip">시험 포인트: 두 결과 이미지를 보여주고 어느 게 T_high가 더 높은지 맞추기! T_high 높을수록 선이 적고 끊겨요.</div>
+      </div>
+
+      <div class="sub-page" id="sub-4-contour">
+        <div class="page-title">외곽선 검출</div>
+        <div class="page-sub">cv.findContours — 왕복저장 주의!</div>
+        <div class="code">contours, hierarchy = cv.findContours(canny, cv.RETR_LIST, cv.CHAIN_APPROX_NONE)
+
+lcontour = []
+<span class="ck">for</span> i <span class="ck">in</span> range(len(contours)):
+    <span class="ck">if</span> contours[i].shape[0] > 100:   <span class="cm"># 길이 50이상 = 100 (왕복저장 × 2)</span>
+        lcontour.append(contours[i])
+
+cv.drawContours(img, lcontour, -1, (0,255,0), 3)
+<span class="cm">#                          ↑-1이면 모든 외곽선 그리기</span></div>
+        <div class="warn">왕복 저장 방식! 실제 외곽선 길이가 50픽셀이면 shape[0]은 100이에요 (×2).</div>
+        <div class="card"><table>
+          <tr><th>모드</th><th>가져오는 외곽선</th><th>계층</th></tr>
+          <tr><td class="mono-td">RETR_EXTERNAL</td><td>가장 바깥 외곽선만</td><td>없음</td></tr>
+          <tr><td class="mono-td">RETR_LIST</td><td>모든 외곽선</td><td>없음 (그냥 리스트)</td></tr>
+          <tr><td class="mono-td">RETR_CCOMP</td><td>모든 외곽선</td><td>2단계 계층</td></tr>
+          <tr><td class="mono-td">RETR_TREE</td><td>모든 외곽선</td><td>완전한 트리 계층</td></tr>
+        </table></div>
+      </div>
+
+      <div class="sub-page" id="sub-4-region">
+        <div class="page-title">슈퍼화소 · 능동 외곽선</div>
+        <div class="page-sub">SLIC 코드 + Snake 4단계 그림</div>
+        <h4>슈퍼화소 SLIC — 코드 문제!</h4>
+        <div class="code"><span class="ck">import</span> skimage.segmentation
+
+slic1 = skimage.segmentation.slic(img, compactness=20, n_segments=600)
+<span class="cm"># compactness: 클수록 사각형 모양 유지
+# n_segments: 전체를 몇 개 영역으로 나눌지</span>
+
+sp_img1 = skimage.segmentation.mark_boundaries(img, slic1)
+sp_img1 = np.uint8(sp_img1 * 255.0)   <span class="cm"># float → uint8 변환 필수!</span></div>
+
+        <h4>능동 외곽선 Snake — 4단계 그림 알기!</h4>
+        <div class="fig">
+          <svg width="100%" viewBox="0 0 400 125" style="max-width:400px">
+            <defs><marker id="sna" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#5a6275"/></marker></defs>
+            <g transform="translate(5,12)">
+              <rect x="0" y="0" width="78" height="78" rx="6" fill="#161b27" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <ellipse cx="39" cy="39" rx="16" ry="14" fill="#3a4055"/>
+              <ellipse cx="39" cy="39" rx="30" ry="27" fill="none" stroke="#ff6b7a" stroke-width="2"/>
+              <text x="39" y="95" text-anchor="middle" font-size="10" fill="#7dda58" font-weight="600">① 초기 곡선</text>
+              <text x="39" y="107" text-anchor="middle" font-size="9" fill="#5a6275">사용자 배치</text>
+            </g>
+            <path d="M88 51 L101 51" stroke="#5a6275" stroke-width="1.5" marker-end="url(#sna)"/>
+            <g transform="translate(106,12)">
+              <rect x="0" y="0" width="78" height="78" rx="6" fill="#161b27" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <ellipse cx="39" cy="39" rx="16" ry="14" fill="#3a4055"/>
+              <ellipse cx="39" cy="39" rx="23" ry="21" fill="none" stroke="#ff6b7a" stroke-width="2"/>
+              <text x="39" y="95" text-anchor="middle" font-size="10" fill="#7dda58" font-weight="600">② 곡선 이동</text>
+              <text x="39" y="107" text-anchor="middle" font-size="9" fill="#5a6275">에너지 최소화</text>
+            </g>
+            <path d="M189 51 L202 51" stroke="#5a6275" stroke-width="1.5" marker-end="url(#sna)"/>
+            <g transform="translate(207,12)">
+              <rect x="0" y="0" width="78" height="78" rx="6" fill="#161b27" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <ellipse cx="39" cy="39" rx="16" ry="14" fill="#3a4055"/>
+              <ellipse cx="39" cy="38" rx="17" ry="15" fill="none" stroke="#ff6b7a" stroke-width="2"/>
+              <text x="39" y="95" text-anchor="middle" font-size="10" fill="#7dda58" font-weight="600">③ 에지 수렴</text>
+              <text x="39" y="107" text-anchor="middle" font-size="9" fill="#5a6275">경계에 달라붙음</text>
+            </g>
+            <path d="M290 51 L303 51" stroke="#5a6275" stroke-width="1.5" marker-end="url(#sna)"/>
+            <g transform="translate(308,12)">
+              <rect x="0" y="0" width="78" height="78" rx="6" fill="rgba(125,218,88,0.06)" stroke="rgba(125,218,88,0.3)" stroke-width="1"/>
+              <ellipse cx="39" cy="39" rx="16" ry="14" fill="#3a4055"/>
+              <ellipse cx="39" cy="38" rx="17" ry="15" fill="none" stroke="#7dda58" stroke-width="2.5"/>
+              <text x="39" y="95" text-anchor="middle" font-size="10" fill="#7dda58" font-weight="600">④ 최종 분할</text>
+              <text x="39" y="107" text-anchor="middle" font-size="9" fill="#7dda58">완성!</text>
+            </g>
+          </svg>
+          <p class="fig-cap">에너지 = 곡률 에너지 + 영상 에너지 → 합이 작을수록 좋음</p>
+        </div>
+        <div class="tip">각 점이 주변 9개 위치 중 에너지가 가장 작은 위치로 반복 이동 → 물체 경계에 수렴!</div>
+      </div>
+
+      <div class="sub-page" id="sub-4-grabcut">
+        <div class="page-title">GrabCut</div>
+        <div class="page-sub">마스크 4가지 + 핵심 3줄 코드 ★별표</div>
+        <h4>마스크 4가지 값 (반드시 암기)</h4>
+        <div class="g2">
+          <div class="card-red"><span class="badge b-red">GC_BGD (값=0)</span><p style="margin-top:6px">확실히 배경. 사용자가 빨간 붓으로 칠한 영역.</p></div>
+          <div class="card-teal"><span class="badge b-teal">GC_FGD (값=1)</span><p style="margin-top:6px">확실히 물체. 사용자가 파란 붓으로 칠한 영역.</p></div>
+          <div class="card-amber"><span class="badge b-amber">GC_PR_BGD (값=2)</span><p style="margin-top:6px">배경일 것 같음. 알고리즘이 자동 판단.</p></div>
+          <div class="card-blue"><span class="badge b-blue">GC_PR_FGD (값=3)</span><p style="margin-top:6px">물체일 것 같음. 알고리즘이 자동 판단.</p></div>
+        </div>
+        <h4>핵심 3줄 코드 (형광펜 표시!)</h4>
+        <div class="code"><span class="cm"># 1. GrabCut 실행</span>
+cv.grabCut(img, mask, None, background, foreground, 5, cv.GC_INIT_WITH_MASK)
+
+<span class="cm"># 2. 마스크를 0/1 이진 마스크로 변환</span>
+mask2 = np.where((mask==cv.GC_BGD)|(mask==cv.GC_PR_BGD), 0, 1).astype(<span class="cs">'uint8'</span>)
+<span class="cm">#       배경이거나 배경같으면 0, 나머지(물체)는 1</span>
+
+<span class="cm"># 3. 마스크 적용해서 물체만 추출</span>
+grab = img * mask2[:,:,np.newaxis]
+<span class="cm">#              ↑차원 추가: (H,W) → (H,W,1) 로 3채널 img와 곱하기</span></div>
+        <div class="tip">콜백 이벤트(마우스로 칠하는 부분)는 시험에서 코드를 줘요. 위 3줄이 핵심!</div>
+      </div>
+
+      <div class="sub-page" id="sub-4-funcs4">
+        <div class="page-title">Ch.4 함수 전체 정리</div>
+        <div class="page-sub">에지·영역 함수 레퍼런스</div>
+        <h4>에지 검출</h4>
+        <div class="card"><table>
+          <tr><th>함수</th><th>핵심 인자</th><th>주의사항</th></tr>
+          <tr><td class="mono-td">cv.Sobel(img, cv.CV_32F, dx, dy, ksize=3)</td><td>dx=1,dy=0이면 x방향</td><td>CV_32F 필수! 음수 포함</td></tr>
+          <tr><td class="mono-td">cv.magnitude(gx, gy)</td><td>x,y 방향 Sobel 결과</td><td>에지 강도 = √(Gx²+Gy²)</td></tr>
+          <tr><td class="mono-td">cv.Canny(gray, T_low, T_high)</td><td>T_low, T_high</td><td>T_high↑ = 에지 적게 검출</td></tr>
+        </table></div>
+        <h4>외곽선 검출</h4>
+        <div class="card"><table>
+          <tr><th>함수</th><th>핵심 인자</th><th>주의사항</th></tr>
+          <tr><td class="mono-td">cv.findContours(img, mode, method)</td><td>mode: RETR_LIST 등</td><td>왕복저장 → shape[0]>100 = 실제 50이상</td></tr>
+          <tr><td class="mono-td">cv.drawContours(img,contours,idx,color,t)</td><td>idx=-1이면 모두</td><td>두께 t=-1이면 채우기</td></tr>
+          <tr><td class="mono-td">cv.HoughCircles(img,method,dp,minDist,...)</td><td>param1=T_high, param2=임계값</td><td>원 검출용. HOUGH_GRADIENT</td></tr>
+        </table></div>
+        <h4>영역 분할</h4>
+        <div class="card"><table>
+          <tr><th>함수</th><th>핵심 인자</th><th>주의사항</th></tr>
+          <tr><td class="mono-td">cv.grabCut(img,mask,None,bg,fg,5,mode)</td><td>mode: GC_INIT_WITH_MASK</td><td>GC_FGD/BGD/PR_FGD/PR_BGD 4가지</td></tr>
+          <tr><td class="mono-td">np.where((mask==GC_BGD)|(mask==GC_PR_BGD),0,1)</td><td>조건, 참값, 거짓값</td><td>배경=0, 물체=1 이진 마스크</td></tr>
+          <tr><td class="mono-td">img * mask2[:,:,np.newaxis]</td><td>mask2: (H,W) 배열</td><td>np.newaxis로 차원 추가 후 곱하기</td></tr>
+          <tr><td class="mono-td">slic(img, compactness, n_segments)</td><td>compactness↑=사각형유지</td><td>from skimage.segmentation import slic</td></tr>
+          <tr><td class="mono-td">mark_boundaries(img, segments)</td><td>segments: slic 결과</td><td>경계 시각화. np.uint8(×255) 변환 필요</td></tr>
+        </table></div>
+      </div>
+
+    </div><!-- end ch-4 -->
+
+    <!-- ════ Ch.5 ════ -->
+    <div class="ch-page" id="ch-5">
+
+      <div class="sub-page on" id="sub-5-what">
+        <div class="page-title">지역 특징이란?</div>
+        <div class="page-sub">6가지 조건 ★별표</div>
+        <p>두 장의 사진에서 같은 물체를 찾아 매칭하려면 각 이미지에서 특징적인 점을 찾아야 해요. 그 특징점이 갖춰야 할 6가지 조건이에요.</p>
+        <div class="g2">
+          <div class="card"><span class="badge b-purple">반복성</span><p style="margin-top:6px">다른 이미지에서도 같은 위치에 높은 확률로 검출돼야 해요.</p><p style="font-size:12px;color:var(--text3)">비유: 항상 같은 장소에 나타나는 친구</p></div>
+          <div class="card"><span class="badge b-purple">불변성</span><p style="margin-top:6px">이동, 회전, 크기 변화, 조명 변화에도 기술자 값이 비슷해야 해요.</p><p style="font-size:12px;color:var(--text3)">비유: 어느 각도에서 봐도 알아볼 수 있는 얼굴</p></div>
+          <div class="card"><span class="badge b-purple">분별력</span><p style="margin-top:6px">다른 점들과 두드러지게 달라야 해요. 픽셀의 '지문' 역할.</p><p style="font-size:12px;color:var(--text3)">비유: 군중 속 특이한 옷</p></div>
+          <div class="card"><span class="badge b-purple">지역성</span><p style="margin-top:6px">작은 영역 기반이라 일부 가려져도 안정적으로 매칭돼요.</p><p style="font-size:12px;color:var(--text3)">비유: 눈 모양만으로 인식</p></div>
+          <div class="card"><span class="badge b-purple">적당한 양</span><p style="margin-top:6px">물체 추적에는 몇 개의 대응점만 있으면 충분해요.</p></div>
+          <div class="card"><span class="badge b-purple">계산 효율</span><p style="margin-top:6px">실시간 응용이 많아서 계산 속도가 중요해요.</p></div>
+        </div>
+      </div>
+
+      <div class="sub-page" id="sub-5-moravec">
+        <div class="page-title">모라벡 알고리즘</div>
+        <div class="page-sub">계산 문제 출제! S(0,1)=4 계산 과정</div>
+        <p>이미지에서 코너(모서리) 점을 찾는 알고리즘이에요. 상·하·좌·우로 조금 이동했을 때 밝기 변화가 모두 큰 점이 코너예요.</p>
+        <div class="card-blue">
+          <span class="badge b-blue">계산 방법</span>
+          <p style="margin-top:8px">각 방향으로 1칸 이동했을 때 밝기 차이의 제곱합 S를 구해요.</p>
+          <ul style="margin-top:8px">
+            <li>S(오른쪽) = Σ (f(x,y) − f(x+1,y))²</li>
+            <li>S(왼쪽)  = Σ (f(x,y) − f(x-1,y))²</li>
+            <li>S(아래)  = Σ (f(x,y) − f(x,y+1))²</li>
+            <li>S(위)   = Σ (f(x,y) − f(x,y-1))²</li>
+          </ul>
+          <p style="margin-top:8px;font-weight:600;color:var(--text)">특징맵 값 = min(S오, S왼, S아래, S위)</p>
+          <p style="font-size:13px;color:var(--text3)">최솟값을 쓰는 이유: 가장 약한 방향도 커야 진짜 코너!</p>
+        </div>
+        <div class="fig">
+          <svg width="100%" viewBox="0 0 400 185" style="max-width:400px">
+            <text x="60" y="14" text-anchor="middle" font-size="11" fill="#e8edf5" font-weight="600">0/1 이진 행렬 예시</text>
+            <g transform="translate(5,20)">
+              <rect x="0" y="0" width="110" height="110" rx="4" fill="#161b27" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <line x1="0" y1="22" x2="110" y2="22" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
+              <line x1="0" y1="44" x2="110" y2="44" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
+              <line x1="0" y1="66" x2="110" y2="66" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
+              <line x1="0" y1="88" x2="110" y2="88" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
+              <line x1="22" y1="0" x2="22" y2="110" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
+              <line x1="44" y1="0" x2="44" y2="110" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
+              <line x1="66" y1="0" x2="66" y2="110" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
+              <line x1="88" y1="0" x2="88" y2="110" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
+              <text x="11" y="15" text-anchor="middle" font-size="11" fill="#4a5568">0</text><text x="33" y="15" text-anchor="middle" font-size="11" fill="#4a5568">0</text>
+              <text x="55" y="15" text-anchor="middle" font-size="11" fill="#4a5568">0</text><text x="77" y="15" text-anchor="middle" font-size="11" fill="#4a5568">0</text><text x="99" y="15" text-anchor="middle" font-size="11" fill="#4a5568">0</text>
+              <text x="11" y="37" text-anchor="middle" font-size="11" fill="#4a5568">0</text><text x="33" y="37" text-anchor="middle" font-size="11" fill="#4a5568">0</text>
+              <text x="55" y="37" text-anchor="middle" font-size="11" fill="#b39dff">1</text><text x="77" y="37" text-anchor="middle" font-size="11" fill="#b39dff">1</text><text x="99" y="37" text-anchor="middle" font-size="11" fill="#4a5568">0</text>
+              <text x="11" y="59" text-anchor="middle" font-size="11" fill="#4a5568">0</text><text x="33" y="59" text-anchor="middle" font-size="11" fill="#b39dff">1</text>
+              <text x="55" y="59" text-anchor="middle" font-size="11" fill="#ff6b7a" font-weight="700">1</text>
+              <text x="77" y="59" text-anchor="middle" font-size="11" fill="#b39dff">1</text><text x="99" y="59" text-anchor="middle" font-size="11" fill="#4a5568">0</text>
+              <text x="11" y="81" text-anchor="middle" font-size="11" fill="#4a5568">0</text><text x="33" y="81" text-anchor="middle" font-size="11" fill="#b39dff">1</text>
+              <text x="55" y="81" text-anchor="middle" font-size="11" fill="#b39dff">1</text><text x="77" y="81" text-anchor="middle" font-size="11" fill="#4a5568">0</text><text x="99" y="81" text-anchor="middle" font-size="11" fill="#4a5568">0</text>
+              <text x="11" y="103" text-anchor="middle" font-size="11" fill="#4a5568">0</text><text x="33" y="103" text-anchor="middle" font-size="11" fill="#4a5568">0</text>
+              <text x="55" y="103" text-anchor="middle" font-size="11" fill="#4a5568">0</text><text x="77" y="103" text-anchor="middle" font-size="11" fill="#4a5568">0</text><text x="99" y="103" text-anchor="middle" font-size="11" fill="#4a5568">0</text>
+              <text x="55" y="125" text-anchor="middle" font-size="9" fill="#ff6b7a">중심점 (2,2)=1</text>
+            </g>
+            <rect x="130" y="20" width="262" height="150" rx="6" fill="rgba(125,218,88,0.06)" stroke="rgba(125,218,88,0.2)" stroke-width="1"/>
+            <text x="261" y="38" text-anchor="middle" font-size="11" fill="#7dda58" font-weight="600">중심 (2,2) 기준 S 계산</text>
+            <line x1="140" y1="46" x2="384" y2="46" stroke="rgba(125,218,88,0.2)" stroke-width=".5"/>
+            <text x="140" y="62" font-size="11" fill="#8090a0">오른쪽 (2,3)=1 → (1-1)² = 0</text>
+            <text x="140" y="79" font-size="11" fill="#8090a0">왼쪽  (2,1)=1 → (1-1)² = 0</text>
+            <text x="140" y="96" font-size="11" fill="#8090a0">아래  (3,2)=1 → (1-1)² = 0</text>
+            <text x="140" y="113" font-size="11" fill="#8090a0">위    (1,2)=1 → (1-1)² = 0</text>
+            <line x1="140" y1="123" x2="384" y2="123" stroke="rgba(125,218,88,0.2)" stroke-width=".5"/>
+            <text x="140" y="140" font-size="11" fill="#7dda58">min(0, 0, 0, 0) = <tspan font-weight="700">0</tspan></text>
+            <text x="140" y="158" font-size="10" fill="#5a6275">모든 이웃이 같은 값 → 변화 없음 → 코너 아님</text>
+          </svg>
+          <p class="fig-cap">특징점 = 특징맵에서 min(S) 값이 가장 큰 점!</p>
+        </div>
+        <div class="tip">특징점 판단: min(S)가 가장 큰 점들 = 어느 방향으로 가도 변화가 큼 = 코너!</div>
+      </div>
+
+      <div class="sub-page" id="sub-5-harris">
+        <div class="page-title">해리스 특징점</div>
+        <div class="page-sub">표 5-1 암기! a=코너, b=에지, c=평탄</div>
+        <p>모라벡의 단점을 개선한 알고리즘이에요. 2차 모멘트 행렬을 이용해서 더 정확하게 코너를 검출해요.</p>
+        <div class="card"><table>
+          <tr><th>점</th><th>2차 모멘트 행렬</th><th>C값</th><th>판단</th><th>의미</th></tr>
+          <tr><td style="font-weight:600;color:var(--text)">a</td><td class="mono-td">[0.52,-0.2; -0.2,0.53]</td><td><span class="badge b-red">C=0.1925</span></td><td style="color:var(--red);font-weight:600">코너</td><td style="color:var(--text3);font-size:12px">좋은 특징점!</td></tr>
+          <tr><td style="font-weight:600;color:var(--text)">b</td><td class="mono-td">[0.08,-0.08; -0.08,0.8]</td><td><span class="badge b-amber">C=0.0237</span></td><td style="color:var(--amber)">에지</td><td style="color:var(--text3);font-size:12px">특징점 아님</td></tr>
+          <tr><td style="font-weight:600;color:var(--text)">c</td><td class="mono-td">[0, 0; 0, 0]</td><td><span class="badge b-gray">C=0.0</span></td><td style="color:var(--text3)">평탄</td><td style="color:var(--text3);font-size:12px">특징점 아님</td></tr>
+        </table></div>
+        <div class="fig">
+          <svg width="100%" viewBox="0 0 400 120" style="max-width:400px">
+            <text x="200" y="14" text-anchor="middle" font-size="11" fill="#e8edf5" font-weight="600">C값으로 세 가지 경우 구별</text>
+            <rect x="10" y="22" width="115" height="85" rx="6" fill="rgba(255,107,122,0.08)" stroke="rgba(255,107,122,0.25)" stroke-width="1"/>
+            <text x="67" y="42" text-anchor="middle" font-size="12" fill="#ff6b7a" font-weight="600">C 큰 양수</text>
+            <circle cx="67" cy="68" r="18" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <line x1="52" y1="53" x2="67" y2="68" stroke="#ff6b7a" stroke-width="2.5"/>
+            <line x1="82" y1="53" x2="67" y2="68" stroke="#ff6b7a" stroke-width="2.5"/>
+            <text x="67" y="100" text-anchor="middle" font-size="11" fill="#ff6b7a" font-weight="600">코너(특징점)</text>
+            <rect x="143" y="22" width="115" height="85" rx="6" fill="rgba(255,179,71,0.08)" stroke="rgba(255,179,71,0.25)" stroke-width="1"/>
+            <text x="200" y="42" text-anchor="middle" font-size="12" fill="#ffb347" font-weight="600">C 음수</text>
+            <line x1="160" y1="65" x2="240" y2="65" stroke="#ffb347" stroke-width="3"/>
+            <text x="200" y="88" text-anchor="middle" font-size="11" fill="#ffb347">에지 (특징점 아님)</text>
+            <rect x="276" y="22" width="115" height="85" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+            <text x="333" y="42" text-anchor="middle" font-size="12" fill="#5a6275" font-weight="600">C ≈ 0</text>
+            <rect x="296" y="52" width="74" height="42" rx="2" fill="rgba(255,255,255,0.04)"/>
+            <text x="333" y="78" text-anchor="middle" font-size="10" fill="#4a5568">변화 없음</text>
+            <text x="333" y="100" text-anchor="middle" font-size="11" fill="#5a6275">평탄 (특징점 아님)</text>
+          </svg>
+          <p class="fig-cap">C 큰 양수=코너(특징점!) / C 음수=에지 / C≈0=평탄</p>
+        </div>
+        <div class="ok">기억법: 모든 방향으로 변화 큼=코너=C 큰 양수 / 한 방향만=에지=C 음수 / 변화 없음=평탄=C≈0</div>
+        <div class="code">harris = cv.cornerHarris(gray, blockSize=4, ksize=3, k=0.04)
+<span class="cm"># blockSize: 이웃 크기 / ksize: Sobel 커널 크기 / k: 보통 0.04</span>
+harris = cv.dilate(harris, None)   <span class="cm"># NMS용 팽창</span></div>
+      </div>
+
+      <div class="sub-page" id="sub-5-sift">
+        <div class="page-title">SIFT · 특징점 매칭</div>
+        <div class="page-sub">detectAndCompute, BFMatcher</div>
+        <p>크기(스케일)가 달라져도 같은 특징점을 찾을 수 있는 강력한 알고리즘이에요.</p>
+        <div class="code">sift = cv.SIFT_create()              <span class="cm"># SIFT 객체 생성</span>
+kp, des = sift.detectAndCompute(gray, None)
+<span class="cm"># kp: 키포인트 (위치, 크기, 방향 정보)
+# des: 기술자 (각 특징점을 128차원 벡터로 표현)</span>
+
+out = cv.drawKeypoints(img, kp, None, flags=cv.DRAW_RICH_KEYPOINTS)
+<span class="cm"># DRAW_RICH_KEYPOINTS: 크기와 방향까지 원으로 표시</span></div>
+
+        <h4>특징점 매칭</h4>
+        <div class="code">bf = cv.BFMatcher(cv.NORM_L2, crossCheck=True)   <span class="cm"># Brute Force 매칭</span>
+matches = bf.match(des1, des2)
+matches = sorted(matches, key=<span class="ck">lambda</span> x: x.distance)  <span class="cm"># 거리순 정렬</span>
+
+result = cv.drawMatches(img1, kp1, img2, kp2, matches[:10], None)
+<span class="cm"># matches[:10]: 가장 유사한 10개만 표시</span></div>
+        <div class="tip">distance가 작을수록 두 특징점이 더 유사(같은 점)! 거리순 정렬 후 상위 N개만 사용해요.</div>
+      </div>
+
+      <div class="sub-page" id="sub-5-funcs5">
+        <div class="page-title">Ch.5 함수 전체 정리</div>
+        <div class="page-sub">지역 특징 함수 레퍼런스</div>
+        <h4>Harris 특징점</h4>
+        <div class="card"><table>
+          <tr><th>함수</th><th>핵심 인자</th><th>주의사항</th></tr>
+          <tr><td class="mono-td">cv.cornerHarris(gray, blockSize, ksize, k)</td><td>k≈0.04</td><td>반환: float32 응답맵 R</td></tr>
+          <tr><td class="mono-td">cv.dilate(harris, None)</td><td>None=3×3 기본 커널</td><td>NMS용. 팽창으로 극대점 찾기</td></tr>
+        </table></div>
+        <h4>SIFT + 매칭</h4>
+        <div class="card"><table>
+          <tr><th>함수</th><th>핵심 인자</th><th>주의사항</th></tr>
+          <tr><td class="mono-td">cv.SIFT_create()</td><td>인자 없음</td><td>SIFT 객체 생성</td></tr>
+          <tr><td class="mono-td">sift.detectAndCompute(img, None)</td><td>None=마스크없음</td><td>반환: (keypoints, descriptors)</td></tr>
+          <tr><td class="mono-td">cv.drawKeypoints(img, kp, outImg, flags)</td><td>DRAW_RICH_KEYPOINTS</td><td>특징점 시각화</td></tr>
+          <tr><td class="mono-td">cv.BFMatcher(normType, crossCheck)</td><td>NORM_L2=SIFT용, crossCheck=True</td><td>Brute Force 매칭 객체</td></tr>
+          <tr><td class="mono-td">bf.match(des1, des2)</td><td>두 이미지의 기술자</td><td>반환: DMatch 리스트 (distance↓=유사)</td></tr>
+          <tr><td class="mono-td">cv.drawMatches(img1,kp1,img2,kp2,matches,None)</td><td>matches[:10] 상위만</td><td>매칭 결과 시각화</td></tr>
+        </table></div>
+        <h4>numpy 유틸 (전 챕터 공통)</h4>
+        <div class="card"><table>
+          <tr><th>코드</th><th>설명</th></tr>
+          <tr><td class="mono-td">np.array([[...]])</td><td>필터(커널) 직접 정의할 때</td></tr>
+          <tr><td class="mono-td">np.zeros((h,w), dtype)</td><td>0으로 채운 빈 배열 생성</td></tr>
+          <tr><td class="mono-td">np.uint8(arr) / arr.astype(np.uint8)</td><td>자료형 변환 (이미지 저장용)</td></tr>
+          <tr><td class="mono-td">np.clip(arr, 0, 255)</td><td>범위 벗어난 값 강제로 0~255로 자름</td></tr>
+          <tr><td class="mono-td">np.hstack([a, b])</td><td>이미지 가로로 이어붙이기</td></tr>
+          <tr><td class="mono-td">arr[:,:,np.newaxis]</td><td>차원 추가 (H,W)→(H,W,1). GrabCut 마스크 곱할 때</td></tr>
+        </table></div>
+      </div>
+
+    </div><!-- end ch-5 -->
+
+  </main>
+</div>
+
+<script>
+const state = { ch: 2, subs: { 2:'img', 3:'digital', 4:'edge', 5:'what' } };
+
+function showCh(ch) {
+  // 챕터 탭
+  document.querySelectorAll('.ch-tab').forEach(t => t.classList.remove('on'));
+  document.querySelector(`.ch-tab[data-ch="${ch}"]`).classList.add('on');
+  // 챕터 페이지
+  document.querySelectorAll('.ch-page').forEach(p => p.classList.remove('on'));
+  document.getElementById('ch-' + ch).classList.add('on');
+  // 사이드바 메뉴
+  document.querySelectorAll('#sidebar > div').forEach(d => d.style.display = 'none');
+  document.getElementById('menu-' + ch).style.display = 'block';
+  // 사이드바 색 클래스
+  const sidebar = document.getElementById('sidebar');
+  sidebar.className = 'sidebar ch' + ch;
+  // 현재 챕터의 마지막 선택된 서브탭 활성화
+  state.ch = ch;
+  showSub(ch, state.subs[ch]);
+}
+
+function showSub(ch, subId) {
+  state.subs[ch] = subId;
+  // 서브 탭 버튼
+  const menu = document.getElementById('menu-' + ch);
+  menu.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('on'));
+  // 해당 버튼 찾기 (onclick에 subId 포함된 버튼)
+  menu.querySelectorAll('.sub-tab').forEach(t => {
+    if (t.getAttribute('onclick') && t.getAttribute('onclick').includes("'" + subId + "'")) {
+      t.classList.add('on');
+    }
+  });
+  // 서브 페이지
+  const chPage = document.getElementById('ch-' + ch);
+  chPage.querySelectorAll('.sub-page').forEach(p => p.classList.remove('on'));
+  const target = document.getElementById('sub-' + ch + '-' + subId);
+  if (target) target.classList.add('on');
+}
+</script>
+</body>
+</html>
