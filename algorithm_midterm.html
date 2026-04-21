@@ -4,787 +4,285 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>알고리즘 시험 정리본</title>
+<link rel="stylesheet" href="shared.css">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
-  :root {
-    --bg: #0e1117; --surface: #161b27; --surface2: #1e2535;
-    --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.14);
-    --text: #e8edf5; --text2: #8b95a8; --text3: #5a6275;
-    --teal: #64ffda; --teal-dim: rgba(100,255,218,0.12);
-    --pink: #ff6b9d; --pink-dim: rgba(255,107,157,0.12);
-    --purple: #c792ea; --purple-dim: rgba(199,146,234,0.12);
-    --yellow: #ffcb6b; --yellow-dim: rgba(255,203,107,0.12);
-    --blue: #82aaff; --blue-dim: rgba(130,170,255,0.12);
-    --green: #7dda58; --green-dim: rgba(125,218,88,0.12);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.7; }
-  .back-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px 8px 10px; margin: 16px 24px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; color: rgba(255,255,255,0.5); font-size: 13px; font-weight: 500; text-decoration: none; font-family: inherit; transition: all 0.15s; }
-  .back-btn:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.9); }
-  .header { padding: 16px 32px 0; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(100,255,218,0.03) 0%, transparent 100%); }
-  .header-top { display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px; }
-  .header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
-  .header-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(100,255,218,0.25); font-weight: 500; }
-  .ch-tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
-  .ch-tabs::-webkit-scrollbar { display: none; }
-  .ch-tab { padding: 10px 22px; border: none; background: transparent; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; font-size: 13.5px; font-weight: 500; color: var(--text3); border-radius: 8px 8px 0 0; transition: all 0.2s; position: relative; top: 1px; white-space: nowrap; }
-  .ch-tab:hover { color: var(--text2); background: var(--surface); }
-  .ch-tab.on { color: var(--text); background: var(--surface); border: 1px solid var(--border); border-bottom-color: var(--surface); }
-  .ch-tab.on[data-ch="1"] { color: var(--teal); }
-  .ch-tab.on[data-ch="2"] { color: var(--blue); }
-  .ch-tab.on[data-ch="3"] { color: var(--purple); }
-  .ch-tab.on[data-ch="4"] { color: var(--yellow); }
-  .ch-tab.on[data-ch="hw"] { color: var(--pink); }
-  .main { display: flex; min-height: calc(100vh - 105px); }
-  .sidebar { width: 200px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); padding: 20px 0; position: sticky; top: 0; height: calc(100vh - 105px); overflow-y: auto; }
-  .sidebar-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--text3); padding: 8px 20px 4px; text-transform: uppercase; }
-  .sub-tab { display: block; width: 100%; text-align: left; border: none; background: transparent; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; color: var(--text2); padding: 8px 20px; transition: all 0.15s; border-left: 2px solid transparent; }
-  .sub-tab:hover { color: var(--text); background: var(--surface2); }
-  .sub-tab.on { color: var(--text); background: var(--surface2); font-weight: 500; }
-  .ch1 .sub-tab.on { border-left-color: var(--teal); color: var(--teal); }
-  .ch2 .sub-tab.on { border-left-color: var(--blue); color: var(--blue); }
-  .ch3 .sub-tab.on { border-left-color: var(--purple); color: var(--purple); }
-  .ch4 .sub-tab.on { border-left-color: var(--yellow); color: var(--yellow); }
-  .chHw .sub-tab.on { border-left-color: var(--pink); color: var(--pink); }
-  .content { flex: 1; padding: 32px 36px; overflow-y: auto; max-width: 860px; }
-  .ch-page { display: none; } .ch-page.on { display: block; }
-  .sub-page { display: none; } .sub-page.on { display: block; }
-  .page-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
-  .page-sub { font-size: 13px; color: var(--text2); margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
-  h3 { font-size: 16px; font-weight: 600; margin: 28px 0 10px; color: var(--text); }
-  h4 { font-size: 14px; font-weight: 600; margin: 20px 0 8px; color: var(--text2); }
-  p { font-size: 14px; color: var(--text2); margin: 6px 0; line-height: 1.8; }
-  li { font-size: 14px; color: var(--text2); line-height: 1.8; }
-  ul { padding-left: 20px; margin: 8px 0; }
-  strong { color: var(--text); }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin: 12px 0; }
-  .card-teal  { border-left: 3px solid var(--teal);   border-radius: 0 10px 10px 0; background: var(--surface); padding: 12px 16px; margin: 10px 0; }
-  .card-blue  { border-left: 3px solid var(--blue);   border-radius: 0 10px 10px 0; background: var(--surface); padding: 12px 16px; margin: 10px 0; }
-  .card-pink  { border-left: 3px solid var(--pink);   border-radius: 0 10px 10px 0; background: var(--surface); padding: 12px 16px; margin: 10px 0; }
-  .card-yellow{ border-left: 3px solid var(--yellow); border-radius: 0 10px 10px 0; background: var(--surface); padding: 12px 16px; margin: 10px 0; }
-  .card-purple{ border-left: 3px solid var(--purple); border-radius: 0 10px 10px 0; background: var(--surface); padding: 12px 16px; margin: 10px 0; }
-  .tip  { background: var(--purple-dim); border: 1px solid rgba(199,146,234,0.2); border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 13px; color: var(--purple); }
-  .warn { background: var(--pink-dim);   border: 1px solid rgba(255,107,157,0.2); border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 13px; color: var(--pink); }
-  .ok   { background: var(--teal-dim);   border: 1px solid rgba(100,255,218,0.2); border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 13px; color: var(--teal); }
-  .info { background: var(--blue-dim);   border: 1px solid rgba(130,170,255,0.2); border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 13px; color: var(--blue); }
-  .code { background: #0a0d14; border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.9; overflow-x: auto; white-space: pre; color: #c9d4e8; margin: 12px 0; }
-  .blank { background: rgba(255,107,157,0.2); border: 1px solid rgba(255,107,157,0.5); color: var(--pink); border-radius: 3px; padding: 0 0.3em; font-weight: 600; }
-  .basic-op { background: rgba(100,255,218,0.15); border: 1px solid rgba(100,255,218,0.4); color: var(--teal); border-radius: 3px; padding: 0 0.3em; font-weight: 600; }
-  .cm { color: #4a5568; font-style: italic; }
-  .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; margin: 0 4px 4px 0; letter-spacing: 0.3px; }
-  .b-teal   { background: var(--teal-dim);   color: var(--teal);   border: 1px solid rgba(100,255,218,0.2); }
-  .b-pink   { background: var(--pink-dim);   color: var(--pink);   border: 1px solid rgba(255,107,157,0.2); }
-  .b-purple { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(199,146,234,0.2); }
-  .b-yellow { background: var(--yellow-dim); color: var(--yellow); border: 1px solid rgba(255,203,107,0.2); }
-  .b-blue   { background: var(--blue-dim);   color: var(--blue);   border: 1px solid rgba(130,170,255,0.2); }
-  .b-gray   { background: rgba(255,255,255,0.06); color: var(--text2); border: 1px solid var(--border); }
-  .formula { background: var(--surface2); border: 1px solid var(--purple); border-radius: 8px; padding: 10px 16px; margin: 10px 0; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--purple); text-align: center; }
-  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
-  @media (max-width: 700px) { .g2 { grid-template-columns: 1fr; } .sidebar { width: 160px; } .content { padding: 20px 18px; } }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
-  th { padding: 9px 12px; text-align: left; font-weight: 600; background: var(--surface2); border-bottom: 1px solid var(--border2); color: var(--text); }
-  td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; }
-  tr:hover td { background: rgba(255,255,255,0.02); }
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+:root {
+  --a1:#64ffda;--a1d:rgba(100,255,218,0.12);
+  --a2:#82aaff;--a2d:rgba(130,170,255,0.12);
+  --a3:#c792ea;--a3d:rgba(199,146,234,0.12);
+  --a4:#ffcb6b;--a4d:rgba(255,203,107,0.12);
+  --ah:#ff6b9d;--ahd:rgba(255,107,157,0.12);
+}
+.header{background:linear-gradient(180deg,rgba(100,255,218,0.03) 0%,transparent 100%)}
+.header-badge{background:var(--a1d);color:var(--a1);border-color:rgba(100,255,218,0.25)}
+.ch-tab.on[data-ch="1"]{color:var(--a1)}
+.ch-tab.on[data-ch="2"]{color:var(--a2)}
+.ch-tab.on[data-ch="3"]{color:var(--a3)}
+.ch-tab.on[data-ch="4"]{color:var(--a4)}
+.ch-tab.on[data-ch="hw"]{color:var(--ah)}
+.ch1 .sub-tab.on{border-left-color:var(--a1);color:var(--a1)}
+.ch2 .sub-tab.on{border-left-color:var(--a2);color:var(--a2)}
+.ch3 .sub-tab.on{border-left-color:var(--a3);color:var(--a3)}
+.ch4 .sub-tab.on{border-left-color:var(--a4);color:var(--a4)}
+.chHw .sub-tab.on{border-left-color:var(--ah);color:var(--ah)}
+.cl-1{border-left-color:var(--a1)} .cl-2{border-left-color:var(--a2)}
+.cl-3{border-left-color:var(--a3)} .cl-4{border-left-color:var(--a4)}
+.cl-h{border-left-color:var(--ah)}
+.tip{background:var(--a3d);border-color:rgba(199,146,234,0.2);color:var(--a3)}
+.warn{background:var(--ahd);border-color:rgba(255,107,157,0.2);color:var(--ah)}
+.ok{background:var(--a1d);border-color:rgba(100,255,218,0.2);color:var(--a1)}
+.info{background:var(--a2d);border-color:rgba(130,170,255,0.2);color:var(--a2)}
+.formula{border-color:var(--a3);color:var(--a3)}
+.blank{color:var(--ah)}
+.basic-op{color:var(--a1)}
+.b-1{background:var(--a1d);color:var(--a1);border-color:rgba(100,255,218,0.2)}
+.b-2{background:var(--a2d);color:var(--a2);border-color:rgba(130,170,255,0.2)}
+.b-3{background:var(--a3d);color:var(--a3);border-color:rgba(199,146,234,0.2)}
+.b-4{background:var(--a4d);color:var(--a4);border-color:rgba(255,203,107,0.2)}
+.b-h{background:var(--ahd);color:var(--ah);border-color:rgba(255,107,157,0.2)}
+.b-gray{background:rgba(255,255,255,0.06);color:var(--tx2);border-color:var(--bor)}
 </style>
 </head>
 <body>
-
 <a class="back-btn" href="index.html">&#8249; 목록으로</a>
 
-<div class="header">
-  <div class="header-top">
-    <h1>알고리즘 시험 정리본</h1>
-    <span class="header-badge">Ch.1 ~ Ch.4.5.4 + 과제</span>
-  </div>
-  <div class="ch-tabs">
-    <button class="ch-tab on" data-ch="1" onclick="showCh('1')">Ch.1 기초·복잡도</button>
-    <button class="ch-tab" data-ch="2" onclick="showCh('2')">Ch.2 분할 정복</button>
-    <button class="ch-tab" data-ch="3" onclick="showCh('3')">Ch.3 Dynamic Programming</button>
-    <button class="ch-tab" data-ch="4" onclick="showCh('4')">Ch.4.5.4 Knapsack</button>
-    <button class="ch-tab" data-ch="hw" onclick="showCh('hw')">과제</button>
-  </div>
-</div>
 
-<div class="main">
-<nav class="sidebar ch1" id="sidebar">
-  <div id="menu-1">
-    <div class="sidebar-label">1.1 기본 정의</div>
-    <button class="sub-tab on" onclick="showSub('1','def')">Problem / Algorithm</button>
-    <div class="sidebar-label">1.3 복잡도 분석</div>
-    <button class="sub-tab" onclick="showSub('1','complexity')">Input Size / Basic Op</button>
-    <button class="sub-tab" onclick="showSub('1','seqsearch')">Sequential Search</button>
-    <button class="sub-tab" onclick="showSub('1','binsearch')">Binary Search</button>
-    <button class="sub-tab" onclick="showSub('1','fib')">Fibonacci</button>
-    <div class="sidebar-label">1.4 Order</div>
-    <button class="sub-tab" onclick="showSub('1','order')">Big O / Ω / Θ / small o</button>
-    <button class="sub-tab" onclick="showSub('1','examples')">T/F 예시 모음</button>
-    <button class="sub-tab" onclick="showSub('1','master')">Master Theorem</button>
-  </div>
-  <div id="menu-2" style="display:none">
-    <div class="sidebar-label">개념</div>
-    <button class="sub-tab on" onclick="showSub('2','dnc')">Divide and Conquer</button>
-    <div class="sidebar-label">2.1 Binary Search</div>
-    <button class="sub-tab" onclick="showSub('2','binsearch2')">재귀 버전</button>
-    <div class="sidebar-label">2.2 Merge Sort</div>
-    <button class="sub-tab" onclick="showSub('2','mergesort')">mergeSort 코드</button>
-    <button class="sub-tab" onclick="showSub('2','merge')">merge 코드</button>
-    <button class="sub-tab" onclick="showSub('2','mergecomp')">시간복잡도</button>
-    <div class="sidebar-label">2.4 Quick Sort</div>
-    <button class="sub-tab" onclick="showSub('2','quicksort')">quickSort 코드</button>
-    <button class="sub-tab" onclick="showSub('2','partition')">partition 코드</button>
-    <button class="sub-tab" onclick="showSub('2','partexample')">partition 실행 예시</button>
-    <button class="sub-tab" onclick="showSub('2','quickcomp')">시간복잡도</button>
-    <div class="sidebar-label">2.7 임계값</div>
-    <button class="sub-tab" onclick="showSub('2','threshold')">Threshold</button>
-  </div>
-  <div id="menu-3" style="display:none">
-    <div class="sidebar-label">개념</div>
-    <button class="sub-tab on" onclick="showSub('3','dp')">DP란?</button>
-    <div class="sidebar-label">3.1 Binomial</div>
-    <button class="sub-tab" onclick="showSub('3','binom')">이항계수</button>
-    <div class="sidebar-label">3.2 Floyd</div>
-    <button class="sub-tab" onclick="showSub('3','floyd')">최단 경로</button>
-    <div class="sidebar-label">3.4 Optimal BST</div>
-    <button class="sub-tab" onclick="showSub('3','obst')">최적 이진탐색트리</button>
-    <button class="sub-tab" onclick="showSub('3','obstex')">A값 계산 예시</button>
-    <div class="sidebar-label">3.6 TSP</div>
-    <button class="sub-tab" onclick="showSub('3','tsp')">외판원 문제</button>
-  </div>
-  <div id="menu-4" style="display:none">
-    <div class="sidebar-label">4.5.4 Knapsack</div>
-    <button class="sub-tab on" onclick="showSub('4','knap')">문제 정의</button>
-    <button class="sub-tab" onclick="showSub('4','knapform')">점화식</button>
-    <button class="sub-tab" onclick="showSub('4','knapex')">테이블 예시</button>
-    <button class="sub-tab" onclick="showSub('4','knapcomp')">시간복잡도</button>
-  </div>
-  <div id="menu-hw" style="display:none">
-    <div class="sidebar-label">문제 1: Three-way</div>
-    <button class="sub-tab on" onclick="showSub('hw','hw1q')">문제 해석</button>
-    <button class="sub-tab" onclick="showSub('hw','hw1code')">수도코드</button>
-    <button class="sub-tab" onclick="showSub('hw','hw1comp')">시간복잡도</button>
-    <div class="sidebar-label">문제 2: 동전 거스름돈</div>
-    <button class="sub-tab" onclick="showSub('hw','hw2q')">문제 해석</button>
-    <button class="sub-tab" onclick="showSub('hw','hw2idea')">아이디어</button>
-    <button class="sub-tab" onclick="showSub('hw','hw2code')">수도코드</button>
-    <button class="sub-tab" onclick="showSub('hw','hw2comp')">시간복잡도</button>
-  </div>
+<header>
+  <h1>📚 알고리즘 시험 정리본</h1>
+  <p>챕터 1 · 챕터 2 · 챕터 3 · 챕터 4.5.4 · 과제 | 기출 기반 완전 정리</p>
+</header>
+
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('ch1')">📌 챕터 1: 기초·복잡도</button>
+  <button class="tab-btn" onclick="showTab('ch2')">⚡ 챕터 2: 분할 정복</button>
+  <button class="tab-btn" onclick="showTab('ch3')">🧩 챕터 3: DP</button>
+  <button class="tab-btn" onclick="showTab('ch4')">🎒 챕터 4.5.4: Knapsack</button>
+  <button class="tab-btn" onclick="showTab('hw')">📝 과제</button>
 </nav>
 
-<main class="content">
-
-<!-- Ch.1 -->
-<div class="ch-page on" id="ch-1">
-  <div class="sub-page on" id="sub-1-def">
-    <div class="page-title">1.1 기본 정의</div>
-    <div class="page-sub">알고리즘을 이해하기 위한 세 가지 핵심 용어</div>
+<div id="ch1" class="tab-content active">
+  <div class="section">
+    <div class="section-title">1.1 알고리즘 기본 정의</div>
     <table>
       <tr><th>용어</th><th>뜻</th><th>예시</th></tr>
-      <tr><td><span class="badge b-teal">Problem</span></td><td>우리가 답을 구하고자 하는 질문</td><td>"리스트 S에서 숫자 x를 찾아라"</td></tr>
-      <tr><td><span class="badge b-blue">Problem Instance</span></td><td>각 매개변수에 구체적 값이 들어간 문제</td><td>"[10,7,11,5,13,8]에서 숫자 5를 찾아라"</td></tr>
-      <tr><td><span class="badge b-purple">Algorithm</span></td><td>각 문제 인스턴스의 해를 구하기 위한 단계별 절차</td><td>Sequential Search</td></tr>
+      <tr><td><span class="tag tag-green">Problem</span></td><td>우리가 답을 구하고자 하는 질문</td><td>"리스트 S에서 숫자 x를 찾아라"</td></tr>
+      <tr><td><span class="tag tag-blue">Problem Instance</span></td><td>각 매개변수에 구체적 값이 들어간 문제</td><td>"[10,7,11,5,13,8]에서 숫자 5를 찾아라"</td></tr>
+      <tr><td><span class="tag tag-purple">Algorithm</span></td><td>각 문제 인스턴스의 해를 구하기 위한 단계별 절차</td><td>Sequential Search</td></tr>
     </table>
-    <div class="card-teal" style="margin-top:16px"><span class="badge b-teal">비유</span><p style="margin-top:8px">Problem = "피자 만들기", Problem Instance = "페퍼로니 피자 2판", Algorithm = 레시피</p></div>
   </div>
-  <div class="sub-page" id="sub-1-complexity">
-    <div class="page-title">1.3 복잡도 분석의 두 매개변수</div>
-    <div class="page-sub">시간복잡도를 구하려면 이 두 가지를 먼저 정해야 해요</div>
-    <h3>📏 Input Size (입력 크기)</h3>
-    <table>
-      <tr><th>문제 종류</th><th>Input Size</th></tr>
-      <tr><td>배열 정렬/탐색</td><td>n (배열 크기)</td></tr>
-      <tr><td>피보나치</td><td>n (단일 숫자)</td></tr>
-      <tr><td>그래프 문제</td><td>정점 수 + 간선 수</td></tr>
-    </table>
-    <h3>⚙️ Basic Operation (기본 연산)</h3>
-    <div class="card-blue"><span class="badge b-blue">정의</span><p style="margin-top:8px">"수행 횟수가 전체 작업량에 비례하는 핵심 연산" → 이걸 몇 번 했는지 세면 = 시간복잡도!</p></div>
+  <div class="section">
+    <div class="section-title">1.3 복잡도 분석의 두 가지 매개변수</div>
+    <h3>📏 Input Size</h3>
+    <ul>
+      <li>배열 정렬/탐색 → <span class="tag tag-green">n</span></li>
+      <li>피보나치 → <span class="tag tag-green">n</span></li>
+      <li>그래프 → <span class="tag tag-green">정점 수 + 간선 수</span></li>
+    </ul>
+    <h3>⚙️ Basic Operation</h3>
+    <div class="concept-box"><div class="label">정의</div>"수행 횟수가 전체 작업량에 비례하는 핵심 연산"</div>
+    <div class="concept-box analogy"><div class="label">🍕 비유</div>피자 가게에서 피자를 몇 판 만들었는지가 Basic Operation.</div>
     <ul><li>탐색/정렬 → <strong>비교 연산</strong></li><li>행렬 곱셈 → <strong>곱셈 연산</strong></li></ul>
-    <h3>🕐 시간복잡도 종류</h3>
+    <h3>🕐 Time Complexity</h3>
     <table>
-      <tr><th>종류</th><th>설명</th><th>Sequential Search 예</th></tr>
-      <tr><td><span class="badge b-teal">Every Case</span></td><td>항상 같은 횟수</td><td>n개 합산 → 항상 n번</td></tr>
-      <tr><td><span class="badge b-yellow">Best B(n)</span></td><td>최솟값</td><td>첫 번째에 발견 → 1번</td></tr>
-      <tr><td><span class="badge b-pink">Worst W(n)</span></td><td>최댓값 (보장의 의미)</td><td>마지막에 있거나 없음 → n번</td></tr>
-      <tr><td><span class="badge b-blue">Average A(n)</span></td><td>평균값</td><td>확률 p 적용</td></tr>
+      <tr><th>종류</th><th>설명</th><th>예</th></tr>
+      <tr><td><span class="tag tag-green">Every Case</span></td><td>항상 같은 횟수</td><td>n개 합산 → 항상 n번</td></tr>
+      <tr><td><span class="tag tag-yellow">Best B(n)</span></td><td>최소 횟수</td><td>첫 번째에 발견 → 1번</td></tr>
+      <tr><td><span class="tag tag-pink">Worst W(n)</span></td><td>최대 횟수</td><td>마지막에 있거나 없음 → n번</td></tr>
+      <tr><td><span class="tag tag-blue">Average A(n)</span></td><td>평균 횟수</td><td>확률 p 적용</td></tr>
     </table>
-    <div class="ok">Sequential Search Average: A(n) = n(1 - p/2) + p/2 &nbsp;(p = x가 배열에 있을 확률)</div>
+    <div class="quiz-hint"><div class="q-label">📌 시험 포인트</div>Sequential Search Average: <code>A(n) = n(1 - p/2) + p/2</code></div>
   </div>
-  <div class="sub-page" id="sub-1-seqsearch">
-    <div class="page-title">Sequential Search (순차 탐색)</div>
-    <div class="page-sub">앞에서부터 하나씩 찾는 가장 단순한 탐색</div>
-    <div class="card-teal"><span class="badge b-teal">비유</span><p style="margin-top:6px">책장에서 책 찾기. 왼쪽부터 한 권씩 확인하다가 찾으면 멈춤.</p></div>
-    <div class="code">SeqSearch(int n, keyType[] S, keyType x) {
+  <div class="section">
+    <div class="section-title">Sequential Search</div>
+    <div class="code-wrap"><div class="code-header"><div class="dot"></div><span>Sequential Search 수도코드</span></div>
+    <pre><code>SeqSearch(int n, keyType[] S, keyType x) {
     index location = 1;
-    while (location &lt;= n &amp;&amp; <span class="blank">S[location] != x</span>)   <span class="cm">// ← 빈칸! 비교 조건</span>
+    while (location &lt;= n &amp;&amp; <span class="blank">S[location] != x</span>)
         location++;
     if (location &gt; n)
-        <span class="blank">location = 0</span>;   <span class="cm">// ← 빈칸! 못 찾은 경우 0 반환</span>
+        <span class="blank">location = 0</span>;
     return location;
-}</div>
-    <p><span class="badge b-teal">Basic Operation</span>: S[location]과 x의 비교</p>
-    <table style="margin-top:12px">
-      <tr><th>Case</th><th>공식</th><th>상황</th></tr>
-      <tr><td>Best</td><td>1</td><td>첫 번째에 바로 발견</td></tr>
-      <tr><td>Worst</td><td>n</td><td>마지막에 있거나 없음</td></tr>
-      <tr><td>Average</td><td>n(1-p/2) + p/2</td><td>확률 p 고려</td></tr>
-    </table>
-    <h4>실행 예시 — S=[10, 7, 11, 5, 13], x=11</h4>
-    <div class="card">
-      <p>① location=1, S[1]=10 ≠ 11 → location++</p>
-      <p>② location=2, S[2]=7 ≠ 11 → location++</p>
-      <p>③ location=3, <strong>S[3]=11 = 11</strong> → while 종료, return 3 ✓</p>
-    </div>
+}</code></pre></div>
+    <table><tr><th>Case</th><th>공식</th></tr><tr><td>Best</td><td>1</td></tr><tr><td>Worst</td><td>n</td></tr><tr><td>Average</td><td>n(1-p/2) + p/2</td></tr></table>
   </div>
-  <div class="sub-page" id="sub-1-binsearch">
-    <div class="page-title">Binary Search — 반복문 버전 (Ch.1)</div>
-    <div class="page-sub">정렬된 배열에서 절반씩 줄여가며 탐색</div>
-    <div class="card-blue"><span class="badge b-blue">비유</span><p style="margin-top:6px">전화번호부에서 'ㅎ' 찾기. 중간 펼치고 → 앞인지 뒤인지 결정 → 절반씩 버리기. <strong>반드시 정렬된 배열 필요!</strong></p></div>
-    <div class="code">BinSearch(int n, keyType[] S, keyType x) {
+  <div class="section">
+    <div class="section-title">Binary Search — 반복문</div>
+    <div class="code-wrap"><div class="code-header"><div class="dot"></div><span>BinSearch 수도코드</span></div>
+    <pre><code>BinSearch(int n, keyType[] S, keyType x) {
     index location, low, high, mid;
-    low = 1;  high = n;  location = 0;
+    low = 1; high = n; location = 0;
     while (low &lt;= high &amp;&amp; location == 0) {
         mid = floor((low + high) / 2);
-        if (x == S[mid])       <span class="blank">location = mid</span>;    <span class="cm">// ← 빈칸!</span>
+        if (x == S[mid])       <span class="blank">location = mid</span>;
         else if (x &lt; S[mid])   high = mid - 1;
-        else                   <span class="blank">low = mid + 1</span>;   <span class="cm">// ← 빈칸!</span>
+        else                   <span class="blank">low = mid + 1</span>;
     }
     return location;
-}</div>
-    <p><span class="badge b-teal">Basic Operation</span>: x와 S[mid] 비교</p>
+}</code></pre></div>
     <div class="formula">W(n) = ⌊lg n⌋ + 1 ≈ Θ(lg n)</div>
   </div>
-  <div class="sub-page" id="sub-1-fib">
-    <div class="page-title">Fibonacci (재귀 vs 반복)</div>
-    <div class="page-sub">같은 문제를 두 가지 방식으로 풀면 효율이 완전히 달라져요</div>
-    <div class="g2">
-      <div><h4>❌ 재귀 버전 (비효율)</h4>
-        <div class="code">Fib(int n) {
-    if (n &lt;= 1)  return n;
-    else
-        return Fib(n-1) + <span class="blank">Fib(n-2)</span>; <span class="cm">// ← 빈칸!</span>
-}</div>
-        <p><span class="badge b-pink">T(n) ≥ 2^(n/2)</span> 지수적 증가</p>
-      </div>
-      <div><h4>✅ 반복 버전 (효율)</h4>
-        <div class="code">Fib2(int n) {
-    f[0] = 0;
-    if (n &gt; 0) {
-        f[1] = 1;
-        for (i=2; i&lt;=n; i++)
-            f[i] = <span class="blank">f[i-1] + f[i-2]</span>; <span class="cm">// ← 빈칸!</span>
-    }
-    return f[n];
-}</div>
-        <p><span class="badge b-teal">T(n) = n+1</span> 선형 시간</p>
-      </div>
-    </div>
-  </div>
-  <div class="sub-page" id="sub-1-order">
-    <div class="page-title">1.4 Order — 점근 표기법</div>
-    <div class="page-sub">n이 충분히 커지면 최고차항이 전체를 지배해요</div>
-    <div class="card-blue"><span class="badge b-blue">핵심</span><p style="margin-top:6px">0.1n² + n + 100 → n이 커지면 결국 <strong>Θ(n²)</strong>처럼 행동. 나머지 항은 무시!</p></div>
+  <div class="section">
+    <div class="section-title">1.4 Order (점근 표기법)</div>
     <table>
-      <tr><th>표기</th><th>조건</th><th>의미</th></tr>
-      <tr><td><span class="badge b-teal">Big O</span></td><td>∃c&gt;0, ∃N≥0 s.t. g(n) ≤ c×f(n), ∀n≥N</td><td><strong>상한선</strong></td></tr>
-      <tr><td><span class="badge b-yellow">Omega Ω</span></td><td>∃c&gt;0, ∃N≥0 s.t. g(n) ≥ c×f(n), ∀n≥N</td><td><strong>하한선</strong></td></tr>
-      <tr><td><span class="badge b-purple">Theta Θ</span></td><td>O(f(n)) ∩ Ω(f(n))</td><td><strong>정확한 경계</strong></td></tr>
-      <tr><td><span class="badge b-pink">small o</span></td><td>∀c&gt;0, ∃N≥0 s.t. g(n) ≤ c×f(n), ∀n≥N</td><td><strong>엄격한 상한 (모든 c에 대해)</strong></td></tr>
+      <tr><th>표기</th><th>의미</th></tr>
+      <tr><td><span class="tag tag-green">Big O</span></td><td>상한선 — g(n) ≤ c×f(n)</td></tr>
+      <tr><td><span class="tag tag-yellow">Omega Ω</span></td><td>하한선 — g(n) ≥ c×f(n)</td></tr>
+      <tr><td><span class="tag tag-purple">Theta Θ</span></td><td>정확한 경계 — O ∩ Ω</td></tr>
+      <tr><td><span class="tag tag-pink">small o</span></td><td>엄격한 상한 — 모든 c에 대해 성립</td></tr>
     </table>
-    <div class="g2">
-      <div class="card-teal"><span class="badge b-teal">Big O: ∃c 하나면 됨</span><p style="margin-top:6px">n²+10n ∈ O(n²) → c=2, N=10 하나만 찾으면 OK</p></div>
-      <div class="card-pink"><span class="badge b-pink">small o: 모든 c에 대해</span><p style="margin-top:6px">n ∈ o(n²) → 어떤 c를 잡아도 결국 n ≤ cn² 성립</p></div>
-    </div>
-    <h3>복잡도 순서</h3>
     <div class="formula">1 &lt; lg n &lt; n &lt; n lg n &lt; n² &lt; n³ &lt; 2ⁿ &lt; n!</div>
-    <h3>Order의 주요 성질</h3>
-    <ul>
-      <li>g(n) ∈ O(f(n)) ↔ f(n) ∈ Ω(g(n))</li>
-      <li>g(n) ∈ Θ(f(n)) ↔ f(n) ∈ Θ(g(n))</li>
-      <li>로그 밑이 달라도 Θ는 같음: log_a(n) ∈ Θ(log_b(n))</li>
-      <li>b&gt;a&gt;0 이면 aⁿ ∈ o(bⁿ)</li>
-      <li>n!은 어떤 지수함수보다도 빠르게 증가: aⁿ ∈ o(n!)</li>
-    </ul>
-  </div>
-  <div class="sub-page" id="sub-1-examples">
-    <div class="page-title">T/F 예시 모음</div>
-    <div class="page-sub">시험 빈출! 보기 보고 Yes/No 판단하는 문제</div>
+    <h3>Master Theorem T(n) = aT(n/b) + f(n)</h3>
     <table>
-      <tr><th>문제</th><th>답</th><th>이유</th></tr>
-      <tr><td>n²+10n ∈ O(n²)</td><td><span class="badge b-teal">Yes</span></td><td>c=2, N=10 존재</td></tr>
-      <tr><td>5n² ∈ O(n²)</td><td><span class="badge b-teal">Yes</span></td><td>c=5, N=0 존재</td></tr>
-      <tr><td>n ∈ O(n²)</td><td><span class="badge b-teal">Yes</span></td><td>c=1, N=1 존재</td></tr>
-      <tr><td>n² ∈ O(n²+10n)</td><td><span class="badge b-teal">Yes</span></td><td>c=1, N=0 존재</td></tr>
-      <tr><td>n³ ∈ O(n²)</td><td><span class="badge b-pink">No</span></td><td>n³≤cn² → n≤c 불가 (모순)</td></tr>
-      <tr><td>n²+10n ∈ Ω(n²)</td><td><span class="badge b-teal">Yes</span></td><td>c=1, N=0 존재</td></tr>
-      <tr><td>n³ ∈ Ω(n²)</td><td><span class="badge b-teal">Yes</span></td><td>c=1, N=1 존재</td></tr>
-      <tr><td>n ∈ Ω(n²)</td><td><span class="badge b-pink">No</span></td><td>n≥cn² → 1/c≥n 불가 (모순)</td></tr>
-      <tr><td>n²+10n ∈ Θ(n²)</td><td><span class="badge b-teal">Yes</span></td><td>O이면서 Ω이므로</td></tr>
-      <tr><td>n ∈ Θ(n²)</td><td><span class="badge b-pink">No</span></td><td>Ω(n²) 불성립</td></tr>
-      <tr><td>n ∈ o(n²)</td><td><span class="badge b-teal">Yes</span></td><td>∀c, N=⌈1/c⌉ 존재</td></tr>
-      <tr><td>n³ ∈ o(n²)</td><td><span class="badge b-pink">No</span></td><td>n³≤cn² → n≤c 불가</td></tr>
-      <tr><td>n ∈ o(5n)</td><td><span class="badge b-pink">No</span></td><td>같은 성장률 → small o 불성립</td></tr>
+      <tr><th>조건</th><th>결론</th></tr>
+      <tr><td>f(n) ∈ O(n^(log_b a - ε))</td><td>T(n) = Θ(n^(log_b a))</td></tr>
+      <tr><td>f(n) ∈ Θ(n^(log_b a))</td><td>T(n) = Θ(n^(log_b a) lg n)</td></tr>
+      <tr><td>f(n) ∈ Ω(n^(log_b a + ε))</td><td>T(n) = Θ(f(n))</td></tr>
     </table>
-  </div>
-  <div class="sub-page" id="sub-1-master">
-    <div class="page-title">Master Theorem</div>
-    <div class="page-sub">T(n) = aT(n/b) + f(n) 형태의 점화식을 빠르게 풀어요</div>
-    <table>
-      <tr><th>Case</th><th>조건</th><th>결론</th></tr>
-      <tr><td>Case 1</td><td>f(n) ∈ O(n^(log_b a − ε))</td><td>T(n) = Θ(n^(log_b a))</td></tr>
-      <tr><td>Case 2</td><td>f(n) ∈ Θ(n^(log_b a))</td><td>T(n) = Θ(n^(log_b a) · lg n)</td></tr>
-      <tr><td>Case 3</td><td>f(n) ∈ Ω(n^(log_b a + ε))</td><td>T(n) = Θ(f(n))</td></tr>
-    </table>
-    <h4>시험 예시</h4>
-    <div class="card"><p><strong>T(n) = 4T(n/2) + 5n</strong><br>a=4, b=2, log₂4=2, f(n)=5n=O(n^(2-1)) → Case 1 → <strong>Θ(n²)</strong></p></div>
-    <div class="card"><p><strong>T(n) = 2T(n/2) + n</strong> (MergeSort)<br>a=2, b=2, log₂2=1, f(n)=n=Θ(n¹) → Case 2 → <strong>Θ(n lg n)</strong></p></div>
-    <div class="card"><p><strong>T(n) = 3T(n/3) + n</strong> (Three-way MergeSort)<br>a=3, b=3, log₃3=1, f(n)=n=Θ(n¹) → Case 2 → <strong>Θ(n lg n)</strong></p></div>
   </div>
 </div>
 
-<!-- Ch.2 -->
-<div class="ch-page" id="ch-2">
-  <div class="sub-page on" id="sub-2-dnc">
-    <div class="page-title">Divide and Conquer 개념</div>
-    <div class="page-sub">Ch.2의 핵심 알고리즘 설계 기법</div>
-    <div class="card-blue"><span class="badge b-blue">비유</span><p style="margin-top:6px">문제가 너무 크면 → 작게 쪼개고 → 각각 풀고 → 결합!</p></div>
+<div id="ch2" class="tab-content">
+  <div class="section">
+    <div class="section-title">Divide and Conquer 개념</div>
+    <div class="concept-box analogy"><div class="label">🍕 비유</div>문제가 너무 크면 → 작게 쪼개고 → 각각 풀고 → 결합!</div>
     <table>
       <tr><th>단계</th><th>설명</th></tr>
-      <tr><td><span class="badge b-teal">Step 1: Divide</span></td><td>더 작은 인스턴스로 나누기</td></tr>
-      <tr><td><span class="badge b-yellow">Step 2: Conquer</span></td><td>작으면 직접 해결, 아니면 재귀</td></tr>
-      <tr><td><span class="badge b-pink">Step 3: Combine</span></td><td>(필요한 경우) 작은 해들을 합쳐 전체 해 도출</td></tr>
+      <tr><td><span class="tag tag-green">Step 1: Divide</span></td><td>더 작은 인스턴스로 나누기</td></tr>
+      <tr><td><span class="tag tag-yellow">Step 2: Conquer</span></td><td>작으면 직접 해결, 아니면 재귀</td></tr>
+      <tr><td><span class="tag tag-pink">Step 3: Combine</span></td><td>작은 해들을 합쳐 전체 해 도출</td></tr>
     </table>
-    <div class="warn"><strong>D&amp;C 쓰면 안 되는 경우 (2.8)</strong><br>
-    Case 1: 크기 n이 각각 거의 크기 n인 2개 이상으로 분할 → 문제 크기 감소 없음<br>
-    Case 2: 크기 n이 거의 n개의 크기 n/c 인스턴스로 분할 → 부분 문제 수가 너무 많음</div>
   </div>
-  <div class="sub-page" id="sub-2-binsearch2">
-    <div class="page-title">2.1 Binary Search — 재귀 버전</div>
-    <div class="page-sub">Ch.1 반복문 버전과 같은 알고리즘, D&C 방식으로 재구현</div>
-    <div class="code">location(index low, index high) {
-    index mid;
-    if (low &gt; high)  return 0;                     <span class="cm">// 못 찾은 경우</span>
-    else {
-        mid = floor((low + high) / 2);
-        if (x == S[mid])       return mid;           <span class="cm">// 발견!</span>
-        else if (x &lt; S[mid])  return location(low, mid-1);   <span class="cm">// 왼쪽 재귀</span>
-        else                   return location(mid+1, high);  <span class="cm">// 오른쪽 재귀</span>
-    }
-}
-<span class="cm">// 초기 호출: location(1, n)</span></div>
-    <p><span class="badge b-teal">Basic Operation</span>: x와 S[mid] 비교</p>
-    <div class="formula">W(n) = 1 + lg n &nbsp; (n = 2ᵏ 가정) &nbsp;|&nbsp; 점화식: W(n) = W(n/2) + 1, W(1) = 1</div>
-  </div>
-  <div class="sub-page" id="sub-2-mergesort">
-    <div class="page-title">2.2 MergeSort — mergeSort 코드</div>
-    <div class="page-sub">배열을 절반씩 나눠서 각각 정렬 후 합치기</div>
-    <div class="card-blue"><span class="badge b-blue">비유</span><p style="margin-top:6px">카드 더미를 절반씩 나눠서 각각 정렬한 뒤, 두 더미를 크기 순으로 합치기.</p></div>
-    <div class="code">mergeSort(int n, keytype[] S) {
+  <div class="section">
+    <div class="section-title">2.2 Merge Sort</div>
+    <div class="code-wrap"><div class="code-header"><div class="dot"></div><span>mergeSort</span></div>
+    <pre><code>mergeSort(int n, keytype[] S) {
     if (n &gt; 1) {
         const int h = floor(n/2), m = n - h;
-        keytype[] U = new keytype[1..h],
-                  V = new keytype[1..m];
-        copy S[1:h]     to U[1:h];      <span class="cm">// 왼쪽 절반 복사</span>
-        copy <span class="blank">S[h+1:n]</span>  to V[1:m];   <span class="cm">// ← 빈칸! 오른쪽 절반</span>
+        copy S[1:h]       to U[1:h];
+        copy <span class="blank">S[h+1:n]</span>    to V[1:m];
         mergeSort(h, U);
-        mergeSort(<span class="blank">m, V</span>);            <span class="cm">// ← 빈칸!</span>
+        mergeSort(<span class="blank">m, V</span>);
         merge(h, m, U, V, S);
     }
-}</div>
+}</code></pre></div>
+    <p>W(n) = n lg n − (n-1) ∈ <strong>Θ(n lg n)</strong></p>
   </div>
-  <div class="sub-page" id="sub-2-merge">
-    <div class="page-title">2.2 MergeSort — merge 코드</div>
-    <div class="page-sub">정렬된 두 배열을 하나로 합치는 핵심 함수</div>
-    <div class="code">merge(int h, int m, keytype[] U, keytype[] V, keytype[] S) {
-    index i=1, j=1, k=1;
-    while (i &lt;= h &amp;&amp; j &lt;= m) {
-        if (U[i] &lt; V[j]) { S[k] = U[i]; i++; }
-        else              { S[k] = V[j]; j++; }
-        k++;
-    }
-    if (i &gt; h)  copy V[j:m] to S[k:h+m];       <span class="cm">// U 소진 → 나머지 V 복사</span>
-    else        copy <span class="blank">U[i:h]</span> to S[k:h+m];   <span class="cm">// ← 빈칸! V 소진</span>
-}</div>
-    <p><span class="badge b-teal">Basic Operation</span>: U[i]와 V[j] 비교</p>
-    <table>
-      <tr><th>Case</th><th>공식</th></tr>
-      <tr><td>Best B(h,m)</td><td>min(h,m)</td></tr>
-      <tr><td>Worst W(h,m)</td><td>h+m-1</td></tr>
-    </table>
-  </div>
-  <div class="sub-page" id="sub-2-mergecomp">
-    <div class="page-title">2.2 MergeSort — 시간복잡도</div>
-    <div class="page-sub">전체 MergeSort의 Worst Case 분석</div>
-    <div class="formula">W(n) = 2W(n/2) + n − 1 &nbsp; → &nbsp; W(n) = n lg n − (n−1) ∈ Θ(n lg n)</div>
-    <h4>실행 예시 — [27, 10, 12, 20, 25, 13]</h4>
-    <div class="card">
-      <p>① Divide: [27,10,12] | [20,25,13]</p>
-      <p>② 각각 재귀 정렬 → [10,12,27] | [13,20,25]</p>
-      <p>③ merge 결과: <strong>[10, 12, 13, 20, 25, 27]</strong></p>
-    </div>
-  </div>
-  <div class="sub-page" id="sub-2-quicksort">
-    <div class="page-title">2.4 QuickSort — quickSort 코드</div>
-    <div class="page-sub">pivot을 기준으로 작은 것은 왼쪽, 큰 것은 오른쪽. combine 불필요!</div>
-    <div class="code">quickSort(index low, index high) {
-    index pivotPoint;
-    if (high &gt; low) {
-        pivotPoint = partition(low, high);
-        quickSort(low, pivotPoint - 1);
-        quickSort(<span class="blank">pivotPoint + 1, high</span>);  <span class="cm">// ← 빈칸!</span>
-    }
-}</div>
-  </div>
-  <div class="sub-page" id="sub-2-partition">
-    <div class="page-title">2.4 QuickSort — partition 코드 (In-Place)</div>
-    <div class="page-sub">시험에서 수도코드 보고 In-Place인지 Local Array인지 구분해야 해요!</div>
-    <div class="warn"><strong>구분법</strong><br>In-Place: S 배열 자체에서 swap, j는 low에서 시작해서 ++<br>Local Array: 별도 배열 L 사용</div>
-    <div class="code">partition(index low, index high) {
-    index i, j, pivotPoint;
-    keytype pivotItem;
-    pivotItem = S[low];    <span class="cm">// 첫 원소를 pivot으로</span>
+  <div class="section">
+    <div class="section-title">2.4 Quick Sort</div>
+    <div class="code-wrap"><div class="code-header"><div class="dot"></div><span>partition (In-Place)</span></div>
+    <pre><code>partition(index low, index high) {
+    pivotItem = S[low];
     j = low;
     for (i = low+1; i &lt;= high; i++)
-        if (S[i] &lt; <span class="blank">pivotItem</span>) {          <span class="cm">// ← 빈칸!</span>
-            exchange S[i] and S[++j];  <span class="cm">// 작은 원소를 왼쪽으로</span>
-        }
-    pivotPoint = j;
-    exchange S[<span class="blank">low</span>] and S[pivotPoint]; <span class="cm">// ← 빈칸! pivot 최종 위치로</span>
-    return pivotPoint;
-}</div>
-    <p><span class="badge b-teal">Basic Operation</span>: S[i]와 pivotItem 비교 &nbsp;|&nbsp; T(m) = m−1 (Every Case)</p>
-  </div>
-  <div class="sub-page" id="sub-2-partexample">
-    <div class="page-title">partition 실행 예시</div>
-    <div class="page-sub">S=[15, 22, 13, 27, 12, 10, 20, 25]에서 partition(1,8)</div>
-    <div class="card">
-      <p>pivot = S[1] = <strong>15</strong>, j=1</p>
-      <p>i=2: 22 ≥ 15 → skip</p>
-      <p>i=3: 13 &lt; 15 → j=2, swap(S[3],S[2]) → [15,<strong>13</strong>,22,27,12,10,20,25]</p>
-      <p>i=5: 12 &lt; 15 → j=3, swap → [15,13,<strong>12</strong>,27,22,10,20,25]</p>
-      <p>i=6: 10 &lt; 15 → j=4, swap → [15,13,12,<strong>10</strong>,22,27,20,25]</p>
-      <p>마지막: swap(S[1],S[4]) → [<strong>10</strong>,13,12,<strong>15</strong>,22,27,20,25]</p>
-      <p>→ pivotPoint=4. 15 왼쪽 모두 &lt;15, 오른쪽 모두 ≥15 ✓</p>
-    </div>
-  </div>
-  <div class="sub-page" id="sub-2-quickcomp">
-    <div class="page-title">QuickSort 시간복잡도</div>
-    <div class="page-sub">Worst와 Average가 다른 이유</div>
+        if (S[i] &lt; <span class="blank">pivotItem</span>)
+            exchange S[i] and S[++j];
+    exchange S[<span class="blank">low</span>] and S[j];
+    return j;
+}</code></pre></div>
     <table>
-      <tr><th>케이스</th><th>조건</th><th>복잡도</th></tr>
-      <tr><td>Partition T(m)</td><td>Every Case</td><td>m−1</td></tr>
-      <tr><td>QuickSort W(n)</td><td>이미 정렬된 배열 (pivot이 항상 최솟값)</td><td>n(n-1)/2 ∈ <strong>Θ(n²)</strong></td></tr>
-      <tr><td>QuickSort A(n)</td><td>pivot이 균등하게 분포</td><td>∈ <strong>Θ(n lg n)</strong></td></tr>
+      <tr><th>케이스</th><th>복잡도</th></tr>
+      <tr><td>Worst</td><td>Θ(n²) — 이미 정렬된 배열</td></tr>
+      <tr><td>Average</td><td>Θ(n lg n)</td></tr>
     </table>
-  </div>
-  <div class="sub-page" id="sub-2-threshold">
-    <div class="page-title">2.7 Determining Thresholds (임계값)</div>
-    <div class="page-sub">작은 n에서는 단순한 알고리즘이 더 빠를 수 있어요</div>
-    <div class="card-yellow"><span class="badge b-yellow">아이디어</span>
-    <p style="margin-top:8px">MergeSort/QuickSort는 재귀 오버헤드가 있어서, <strong>n이 작을 때는 Exchange Sort(Θ(n²))가 더 빠를 수 있음!</strong></p></div>
-    <div class="formula">t = 4α &nbsp; (α = 오버헤드 상수)</div>
-    <p>α가 크다 = 재귀 오버헤드가 크다 = 더 일찍 Exchange Sort로 전환해야 함</p>
   </div>
 </div>
 
-<!-- Ch.3 -->
-<div class="ch-page" id="ch-3">
-  <div class="sub-page on" id="sub-3-dp">
-    <div class="page-title">Dynamic Programming이란?</div>
-    <div class="page-sub">Bottom-Up 방식으로 작은 문제부터 차례로 풀어나가는 기법</div>
-    <div class="card-purple"><span class="badge b-purple">비유</span><p style="margin-top:6px">집을 지을 때 기초부터 차근차근 쌓듯이, 작은 문제의 답을 먼저 구해 테이블에 저장하고, 그걸 이용해 점점 큰 문제를 풂.</p></div>
-    <table>
-      <tr><th></th><th>D&C (Top-Down)</th><th>DP (Bottom-Up)</th></tr>
-      <tr><td>접근</td><td>큰 문제를 쪼개 재귀</td><td>작은 것부터 차례로 계산</td></tr>
-      <tr><td>중복 계산</td><td>있음</td><td>없음 (테이블에 저장)</td></tr>
-    </table>
-    <div class="card-blue"><span class="badge b-blue">DP 풀이 스텝</span>
-    <p style="margin-top:8px">Step 1: 점화식(재귀적 관계식) 수립<br>Step 2: 작은 것부터 차례로 테이블에 계산</p></div>
+<div id="ch3" class="tab-content">
+  <div class="section">
+    <div class="section-title">Dynamic Programming 핵심</div>
+    <div class="concept-box analogy"><div class="label">🏗️ 비유</div>작은 문제의 답을 테이블에 저장하고, 그걸 이용해 점점 큰 문제를 풂.</div>
+    <div class="concept-box"><div class="label">DP 풀이 스텝</div>Step 1: 점화식 수립<br>Step 2: 작은 것부터 테이블에 계산</div>
   </div>
-  <div class="sub-page" id="sub-3-binom">
-    <div class="page-title">3.1 Binomial Coefficient (이항계수)</div>
-    <div class="page-sub">C(n,k) = n개 중 k개 고르는 경우의 수</div>
-    <div class="formula">C(n,k) = C(n-1,k-1) + C(n-1,k) &nbsp;(0&lt;k&lt;n) &nbsp;|&nbsp; C(n,0) = C(n,n) = 1</div>
-    <div class="code">bin2(int n, int k) {
-    for i=0 to n:
-        for j=0 to min(i,k):
-            if (j==0 || j==i)  B[i][j] = 1;
-            else               B[i][j] = B[i-1][j-1] + B[i-1][j];
-    return B[n][k];
-}</div>
-    <p><span class="badge b-pink">T(n,k) ∈ Θ(nk)</span></p>
-  </div>
-  <div class="sub-page" id="sub-3-floyd">
-    <div class="page-title">3.2 Floyd's Algorithm (최단 경로)</div>
-    <div class="page-sub">모든 쌍(pair) 간 최단 경로를 한 번에 구해요</div>
-    <div class="card-purple"><span class="badge b-purple">비유</span><p style="margin-top:6px">서울→부산 갈 때, 대구를 거치는 게 더 빠른지 확인. 모든 중간 도시를 하나씩 추가하면서 최단 경로 업데이트.</p></div>
-    <div class="card-blue"><span class="badge b-blue">D(k)[i][j] 의미</span><p style="margin-top:6px">{v1,...,vk}만 경유 허용 시 vi→vj 최단 거리. D(0)[i][j] = W[i][j]</p></div>
+  <div class="section">
+    <div class="section-title">3.2 Floyd's Algorithm</div>
     <div class="formula">D(k)[i][j] = min( D(k-1)[i][j] , D(k-1)[i][k] + D(k-1)[k][j] )</div>
-    <div class="code">floyd(int n, number W[][], number D[][]) {
+    <div class="code-wrap"><div class="code-header"><div class="dot"></div><span>Floyd</span></div>
+    <pre><code>floyd(int n, number W[][], number D[][]) {
     D = W;
     for k=1 to n:
         for i=1 to n:
             for j=1 to n:
                 <span class="basic-op">D[i][j] = min(D[i][j], D[i][k] + D[k][j]);</span>
-}</div>
-    <p><span class="badge b-pink">T(n) = n³</span> &nbsp;|&nbsp; 경로 복원: P[i][j]에 경유 노드 k 저장</p>
+}</code></pre></div>
+    <p><span class="tag tag-pink">T(n) = n³</span></p>
   </div>
-  <div class="sub-page" id="sub-3-obst">
-    <div class="page-title">3.4 Optimal Binary Search Tree</div>
-    <div class="page-sub">자주 검색하는 키를 위쪽에 배치해서 전체 탐색 비용 최소화</div>
-    <div class="card-blue"><span class="badge b-blue">A[i][j] 의미</span><p style="margin-top:6px">Keyi ~ Keyj로 만든 최적 BST의 최소 ΣPl×Cl</p></div>
+  <div class="section">
+    <div class="section-title">3.4 Optimal BST</div>
     <div class="formula">A[i][j] = min(i≤k≤j) { A[i][k-1] + A[k+1][j] } + Σ(m=i~j) Pm</div>
-    <h4>기저 조건</h4>
-    <ul>
-      <li>A[i][i] = Pi (키 1개짜리)</li>
-      <li>A[i][i-1] = 0, A[j+1][j] = 0 (빈 트리 = 0)</li>
-    </ul>
-    <h4>테이블 범위 & 채우기 순서</h4>
-    <ul>
-      <li>행: 1 ~ <strong>n+1</strong> &nbsp; 열: <strong>0</strong> ~ n (빈 트리 케이스 저장용)</li>
-      <li>채우는 순서: <strong>대각선 방향</strong> (키 1개 → 2개 → ... → n개)</li>
-    </ul>
-    <div class="warn">왜 n+1까지? 점화식에서 A[n+1][n] 같은 빈 트리 케이스가 등장하기 때문!</div>
-    <p><span class="badge b-pink">T(n) ∈ Θ(n³)</span> &nbsp;|&nbsp; R[i][j]: 최솟값 달성한 k → 트리 복원에 사용</p>
+    <p><span class="tag tag-pink">T(n) ∈ Θ(n³)</span></p>
   </div>
-  <div class="sub-page" id="sub-3-obstex">
-    <div class="page-title">Optimal BST — A값 계산 예시</div>
-    <div class="page-sub">P1=0.1, P2=0.3, P3=0.6일 때 단계별 계산</div>
-    <div class="card"><p><strong>기저값</strong><br>A[1][1]=0.1, A[2][2]=0.3, A[3][3]=0.6<br>A[i][i-1]=0 (빈 트리들)</p></div>
-    <div class="card">
-      <p><strong>A[1][2]</strong> (P1+P2=0.4)</p>
-      <p>k=1: A[1][0]+A[2][2]+0.4 = 0+0.3+0.4 = 0.7</p>
-      <p>k=2: A[1][1]+A[3][2]+0.4 = 0.1+0+0.4 = <strong>0.5</strong> ← min</p>
-    </div>
-    <div class="card">
-      <p><strong>A[2][3]</strong> (P2+P3=0.9)</p>
-      <p>k=2: 0+0.6+0.9 = 1.5 &nbsp; k=3: 0.3+0+0.9 = <strong>1.2</strong> ← min</p>
-    </div>
-    <div class="card">
-      <p><strong>A[1][3]</strong> (P1+P2+P3=1.0)</p>
-      <p>k=1: 0+1.2+1.0=2.2 &nbsp; k=2: 0.1+0.6+1.0=1.7 &nbsp; k=3: 0.5+0+1.0=<strong>1.5</strong> ← min</p>
-    </div>
-  </div>
-  <div class="sub-page" id="sub-3-tsp">
-    <div class="page-title">3.6 TSP — 외판원 문제</div>
-    <div class="page-sub">모든 도시를 한 번씩 방문하고 돌아오는 최단 경로</div>
-    <div class="card-blue"><span class="badge b-blue">D[vi][A] 의미</span><p style="margin-top:6px">A의 모든 정점을 경유하여 vi → v1 최단 경로 길이<br>D[vi][∅] = W[i][1]</p></div>
-    <div class="formula">D[vi][A] = min(j: vj∈A) { W[i][j] + D[vj][A−{vj}] }</div>
-    <h4>최적 투어 길이</h4>
-    <div class="formula">min(2≤j≤n) { W[1][j] + D[vj][V−{v1,vj}] }</div>
-    <p>계산 순서: A 크기 0 → 1 → ... → n-2</p>
-    <p><span class="badge b-pink">T(n) ∈ Θ(n² · 2ⁿ)</span></p>
-    <div class="warn">더 좋은 알고리즘은 아직 없음 (NP-hard). Factorial에서 n²·2ⁿ으로 줄인 것.</div>
+  <div class="section">
+    <div class="section-title">3.6 TSP</div>
+    <div class="formula">D[vi][A] = min(j: vj∈A) { W[i][j] + D[vj][A-{vj}] }</div>
+    <p><span class="tag tag-pink">T(n) ∈ Θ(n² · 2ⁿ)</span></p>
   </div>
 </div>
 
-<!-- Ch.4 -->
-<div class="ch-page" id="ch-4">
-  <div class="sub-page on" id="sub-4-knap">
-    <div class="page-title">4.5.4 Knapsack — 문제 정의</div>
-    <div class="page-sub">무게 제한이 있는 배낭에 이익을 최대화하도록 물건 선택</div>
-    <div class="card-yellow"><span class="badge b-yellow">비유</span><p style="margin-top:8px">값비싼 것만 고르면 무거울 수 있고, 가벼운 것만 고르면 이익이 적을 수 있음 → 최적 조합 찾기!</p></div>
-    <ul>
-      <li>n개 물건, 각각 무게 wi, 이익 pi</li>
-      <li>배낭 최대 무게 W</li>
-      <li>목표: Σwi ≤ W 조건에서 Σpi <strong>최대화</strong></li>
-      <li>모든 값은 양의 정수</li>
-    </ul>
-  </div>
-  <div class="sub-page" id="sub-4-knapform">
-    <div class="page-title">Knapsack — 점화식</div>
-    <div class="page-sub">P[i][w]의 의미와 두 가지 경우로 나누는 핵심 아이디어</div>
-    <div class="card-blue"><span class="badge b-blue">P[i][w] 의미</span><p style="margin-top:6px">처음 i개 물건만 사용 가능하고, 무게 제한이 w일 때 달성 가능한 최대 이익</p></div>
-    <div class="formula">wi &gt; w 이면: P[i][w] = P[i-1][w]<br><br>wi ≤ w 이면: P[i][w] = max( P[i-1][w] , pi + P[i-1][w-wi] )</div>
-    <div class="card">
-      <p><span class="badge b-teal">P[i-1][w]</span>: i번 물건 안 넣는 경우</p>
-      <p><span class="badge b-blue">pi + P[i-1][w-wi]</span>: i번 물건 넣는 경우</p>
+<div id="ch4" class="tab-content">
+  <div class="section">
+    <div class="section-title">4.5.4 0/1 Knapsack Problem</div>
+    <div class="concept-box analogy"><div class="label">🎒 비유</div>무게 제한 배낭에 이익 최대화하도록 물건 선택.</div>
+    <div class="formula">
+      wi &gt; w: P[i][w] = P[i-1][w]<br>
+      wi ≤ w: P[i][w] = max( P[i-1][w], pi + P[i-1][w-wi] )
     </div>
-    <h4>기저 조건</h4>
-    <ul><li>P[0][w] = 0 &nbsp; P[i][0] = 0</li></ul>
-    <p>최종 답: <span class="badge b-pink">P[n][W]</span></p>
-  </div>
-  <div class="sub-page" id="sub-4-knapex">
-    <div class="page-title">Knapsack — 테이블 예시</div>
-    <div class="page-sub">n=3, W=5, (w1=2,p1=3), (w2=3,p2=4), (w3=4,p3=5)</div>
-    <table>
-      <tr><th></th><th>w=0</th><th>w=1</th><th>w=2</th><th>w=3</th><th>w=4</th><th>w=5</th></tr>
-      <tr><td>i=0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-      <tr><td>i=1 (w=2,p=3)</td><td>0</td><td>0</td><td>3</td><td>3</td><td>3</td><td>3</td></tr>
-      <tr><td>i=2 (w=3,p=4)</td><td>0</td><td>0</td><td>3</td><td>4</td><td>4</td><td>7</td></tr>
-      <tr><td>i=3 (w=4,p=5)</td><td>0</td><td>0</td><td>3</td><td>4</td><td>5</td><td><strong style="color:var(--teal)">7</strong></td></tr>
-    </table>
-    <div class="ok">P[3][5] = 7. 물건1(무게2,이익3) + 물건2(무게3,이익4) = 무게5, 이익7 ✓</div>
-  </div>
-  <div class="sub-page" id="sub-4-knapcomp">
-    <div class="page-title">Knapsack — 시간복잡도</div>
-    <div class="page-sub">이중 for문 → Θ(nW)</div>
-    <div class="code">for i=1 to n:      <span class="cm">// n번</span>
-    for w=1 to W:  <span class="cm">// W번</span>
-        P[i][w] = ...  <span class="cm">// O(1)</span></div>
-    <div class="formula">T(n, W) = Θ(nW)</div>
-    <div class="warn">이론적으로 n만으로 보면 Θ(2ⁿ). W가 매우 크면 느릴 수 있어 이론상 보장은 못함.<br>현실적으로는 W가 크지 않아서 잘 동작!</div>
+    <p>기저: P[0][w]=0, P[i][0]=0 &nbsp;|&nbsp; 답: <span class="tag tag-pink">P[n][W]</span> &nbsp;|&nbsp; <span class="tag tag-pink">T = Θ(nW)</span></p>
+    <div class="example-box">
+      <div class="example-title">예시 — n=3, W=5, (w1=2,p1=3),(w2=3,p2=4),(w3=4,p3=5)</div>
+      <table>
+        <tr><th></th><th>w=0</th><th>w=1</th><th>w=2</th><th>w=3</th><th>w=4</th><th>w=5</th></tr>
+        <tr><td>i=0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>i=1</td><td>0</td><td>0</td><td>3</td><td>3</td><td>3</td><td>3</td></tr>
+        <tr><td>i=2</td><td>0</td><td>0</td><td>3</td><td>4</td><td>4</td><td>7</td></tr>
+        <tr><td>i=3</td><td>0</td><td>0</td><td>3</td><td>4</td><td>5</td><td><strong>7</strong></td></tr>
+      </table>
+    </div>
   </div>
 </div>
 
-<!-- 과제 -->
-<div class="ch-page" id="ch-hw">
-  <div class="sub-page on" id="sub-hw-hw1q">
-    <div class="page-title">과제 #1-1: Three-way MergeSort — 문제</div>
-    <div class="page-sub">기존 Two-way MergeSort를 Three-way로 확장하는 문제</div>
-    <div class="card-pink"><span class="badge b-pink">문제 원문</span>
-    <p style="margin-top:8px">We have already studied a balanced <strong>two-way mergesort</strong> in the lecture. Now (1) give the pseudo-code of a balanced <strong>three-way mergesort</strong> and (2) compute its worst-case time complexity.</p></div>
-    <div class="card-teal"><span class="badge b-teal">한국어 해석</span>
-    <p style="margin-top:8px">강의에서 이미 균형 잡힌 이분할 병합정렬을 배웠습니다.<br>
-    이제 (1) 균형 잡힌 <strong>삼분할 병합정렬</strong>의 수도코드를 작성하고, (2) 최악의 경우 시간복잡도를 계산하시오.</p></div>
-    <div class="card-yellow"><span class="badge b-yellow">풀이 아이디어</span>
-    <p style="margin-top:8px">달라지는 것은 딱 두 가지!<br>① 2등분 → <strong>3등분</strong><br>② merge(두 배열) → <strong>merge3(세 배열)</strong></p></div>
-  </div>
-  <div class="sub-page" id="sub-hw-hw1code">
-    <div class="page-title">과제 #1-1: Three-way MergeSort — 수도코드</div>
-    <div class="page-sub">교수님 Two-way 스타일을 그대로 확장</div>
-    <div class="code">mergesort3(int n, keytype[] S) {
+<div id="hw" class="tab-content">
+  <div class="section">
+    <div class="section-title">과제 #1-1: Three-way MergeSort</div>
+    <div class="code-wrap"><div class="code-header"><div class="dot"></div><span>mergesort3</span></div>
+    <pre><code>mergesort3(int n, keytype[] S) {
     if (n > 1) {
-        const int h = floor(n/3), m = floor(n/3), p = n-h-m;
-        keytype[] U = new keytype[1..h],
-                  V = new keytype[1..m],
-                  W = new keytype[1..p];
-        copy S[1:h]       to U[1:h];
-        copy S[h+1:h+m]   to V[1:m];
-        copy S[h+m+1:n]   to W[1:p];
-        mergesort3(h, U);
-        mergesort3(m, V);
-        mergesort3(p, W);
-        merge3(h, m, p, U, V, W, S);
+        const int h=floor(n/3), m=floor(n/3), p=n-h-m;
+        copy S[1:h]       to U; copy S[h+1:h+m] to V; copy S[h+m+1:n] to W;
+        mergesort3(h,U); mergesort3(m,V); mergesort3(p,W);
+        merge3(h,m,p,U,V,W,S);
     }
-}
-
-merge3(int p, int q, int r,
-       keytype[] U, keytype[] V, keytype[] W, keytype[] S) {
-    index i=1, j=1, k=1, l=1;
-
-    <span class="cm">// 셋 다 남아있는 동안 — 세 원소 중 최솟값 선택</span>
-    while (i&lt;=p &amp;&amp; j&lt;=q &amp;&amp; k&lt;=r) {
-        if (U[i] &lt;= V[j] &amp;&amp; U[i] &lt;= W[k])      { S[l]=U[i]; i++; }
-        else if (V[j] &lt;= U[i] &amp;&amp; V[j] &lt;= W[k]) { S[l]=V[j]; j++; }
-        else                                      { S[l]=W[k]; k++; }
-        l++;
-    }
-    <span class="cm">// 두 개만 남은 경우 — two-way merge</span>
-    while (i&lt;=p &amp;&amp; j&lt;=q) {
-        if (U[i]&lt;=V[j]) { S[l]=U[i]; i++; } else { S[l]=V[j]; j++; } l++;
-    }
-    while (i&lt;=p &amp;&amp; k&lt;=r) {
-        if (U[i]&lt;=W[k]) { S[l]=U[i]; i++; } else { S[l]=W[k]; k++; } l++;
-    }
-    while (j&lt;=q &amp;&amp; k&lt;=r) {
-        if (V[j]&lt;=W[k]) { S[l]=V[j]; j++; } else { S[l]=W[k]; k++; } l++;
-    }
-    <span class="cm">// 하나만 남은 경우 — 그대로 복사</span>
-    if (i&lt;=p) copy U[i:p] to S[l:l+p-i];
-    if (j&lt;=q) copy V[j:q] to S[l:l+q-j];
-    if (k&lt;=r) copy W[k:r] to S[l:l+r-k];
-}</div>
+}</code></pre></div>
+    <div class="concept-box"><div class="label">시간복잡도</div>T(n) = 3T(n/3) + n → Master Theorem Case 2 → <strong>Θ(n log n)</strong></div>
   </div>
-  <div class="sub-page" id="sub-hw-hw1comp">
-    <div class="page-title">과제 #1-1: Three-way MergeSort — 시간복잡도</div>
-    <div class="page-sub">Master Theorem으로 빠르게 풀기</div>
-    <div class="card-blue"><span class="badge b-blue">점화식</span><p style="margin-top:8px">T(n) = 3T(n/3) + n &nbsp; (3번 재귀 + merge3에서 n번 비교)</p></div>
-    <p>Master Theorem: a=3, b=3, log₃3=1, f(n)=n=Θ(n¹) → Case 2</p>
-    <div class="formula">T(n) = Θ(n log n)</div>
-    <div class="ok">Two-way MergeSort와 시간복잡도가 같아요! (상수 계수만 다름)</div>
-  </div>
-  <div class="sub-page" id="sub-hw-hw2q">
-    <div class="page-title">과제 #1-2: 동전 거스름돈 — 문제</div>
-    <div class="page-sub">DP로 경우의 수를 구하는 문제</div>
-    <div class="card-pink"><span class="badge b-pink">문제 원문</span>
-    <p style="margin-top:8px">Given a value N, if we want to make change for N cents, and we have infinite supply of each of S = {S1, S2, ..., Sm} valued coins, <strong>how many ways can we make the change?</strong> The order of coins does not matter.<br><br>
-    For N=4 and S={1,2,3}, there are four ways: {1,1,1,1}, {1,1,2}, {2,2}, {1,3}. Output = 4.</p></div>
-    <div class="card-teal"><span class="badge b-teal">한국어 해석</span>
-    <p style="margin-top:8px">N센트를 S={S1,...,Sm} 동전으로 만들 수 있는 <strong>경우의 수</strong>를 구하라. (순서 무관, 무한 공급)<br><br>
-    (1) 알고리즘 아이디어를 자세히 설명하고<br>
-    (2) 수도코드를 작성하고<br>
-    (3) 시간복잡도를 분석하시오.</p></div>
-  </div>
-  <div class="sub-page" id="sub-hw-hw2idea">
-    <div class="page-title">과제 #1-2: 동전 거스름돈 — 아이디어</div>
-    <div class="page-sub">DP 테이블 C[i][j]의 의미와 점화식 유도</div>
-    <div class="card-blue"><span class="badge b-blue">C[i][j] 의미</span><p style="margin-top:6px">동전 S1~Si만 사용해서 j원을 만드는 경우의 수</p></div>
-    <div class="card-yellow"><span class="badge b-yellow">핵심 아이디어</span>
-    <p style="margin-top:8px"><strong>Si를 한 번도 안 쓰는 경우</strong> → C[i-1][j]<br>
-    <strong>Si를 최소 1번 쓰는 경우</strong> → C[i][j-Si] (Si 또 쓸 수 있으니 i 유지!)<br><br>
-    두 경우를 더하면 전체 경우의 수!</p></div>
-    <div class="formula">j &lt; Si 이면: C[i][j] = C[i-1][j]<br><br>j ≥ Si 이면: C[i][j] = C[i-1][j] + C[i][j-Si]</div>
-    <h4>기저 조건</h4>
-    <ul>
-      <li>C[i][0] = 1 (0원 만드는 방법: 아무것도 안 쓰는 1가지)</li>
-      <li>C[0][j] = 0 (동전 없으면 0가지)</li>
-    </ul>
-    <p>최종 답: <span class="badge b-pink">C[m][N]</span></p>
-  </div>
-  <div class="sub-page" id="sub-hw-hw2code">
-    <div class="page-title">과제 #1-2: 동전 거스름돈 — 수도코드</div>
-    <div class="page-sub">점화식을 그대로 코드로 옮기면 돼요</div>
-    <div class="code">coinChange(int N, int S[], int m) {
-    for i=0 to m:  C[i][0] = 1;   <span class="cm">// 0원 만드는 방법: 1가지</span>
-    for j=1 to N:  C[0][j] = 0;   <span class="cm">// 동전 없으면 0가지</span>
-
+  <div class="section">
+    <div class="section-title">과제 #1-2: 동전 거스름돈 경우의 수</div>
+    <div class="formula">
+      j &lt; Si: C[i][j] = C[i-1][j]<br>
+      j ≥ Si: C[i][j] = C[i-1][j] + C[i][j-Si]
+    </div>
+    <div class="code-wrap"><div class="code-header"><div class="dot"></div><span>coinChange</span></div>
+    <pre><code>coinChange(int N, int S[], int m) {
+    for i=0 to m: C[i][0] = 1;
+    for j=1 to N: C[0][j] = 0;
     for i=1 to m:
         for j=1 to N:
             C[i][j] = C[i-1][j];
-            if (j &gt;= S[i])
-                C[i][j] += C[i][j - S[i]];
-
+            if (j >= S[i]) C[i][j] += C[i][j - S[i]];
     return C[m][N];
-}</div>
-    <h4>검증 — N=4, S={1,2,3}</h4>
-    <table>
-      <tr><th></th><th>j=0</th><th>j=1</th><th>j=2</th><th>j=3</th><th>j=4</th></tr>
-      <tr><td>i=0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-      <tr><td>i=1 (S1=1)</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
-      <tr><td>i=2 (S2=2)</td><td>1</td><td>1</td><td>2</td><td>2</td><td>3</td></tr>
-      <tr><td>i=3 (S3=3)</td><td>1</td><td>1</td><td>2</td><td>3</td><td><strong style="color:var(--teal)">4</strong></td></tr>
-    </table>
-    <div class="ok">C[3][4] = 4 ✓</div>
-  </div>
-  <div class="sub-page" id="sub-hw-hw2comp">
-    <div class="page-title">과제 #1-2: 동전 거스름돈 — 시간복잡도</div>
-    <div class="page-sub">이중 for문 → Θ(mN)</div>
-    <div class="code">for i=1 to m:      <span class="cm">// m번 반복</span>
-    for j=1 to N:  <span class="cm">// N번 반복</span>
-        O(1)       <span class="cm">// 각 칸은 상수 시간</span></div>
-    <p>이중 for문이므로</p>
+}</code></pre></div>
     <div class="formula">T(m, N) = Θ(mN)</div>
   </div>
 </div>
 
-</main>
-</div>
+<button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
-const state = { ch: '1', subs: { '1':'def', '2':'dnc', '3':'dp', '4':'knap', 'hw':'hw1q' } };
-function showCh(ch) {
-  document.querySelectorAll('.ch-tab').forEach(t => t.classList.remove('on'));
-  document.querySelector(`.ch-tab[data-ch="${ch}"]`).classList.add('on');
-  document.querySelectorAll('.ch-page').forEach(p => p.classList.remove('on'));
-  document.getElementById('ch-' + ch).classList.add('on');
-  document.querySelectorAll('#sidebar > div').forEach(d => d.style.display = 'none');
-  document.getElementById('menu-' + ch).style.display = 'block';
-  document.getElementById('sidebar').className = 'sidebar ch' + ch;
-  state.ch = ch;
-  showSub(ch, state.subs[ch]);
-}
-function showSub(ch, subId) {
-  state.subs[ch] = subId;
-  const menu = document.getElementById('menu-' + ch);
-  menu.querySelectorAll('.sub-tab').forEach(t => {
-    t.classList.remove('on');
-    if (t.getAttribute('onclick') && t.getAttribute('onclick').includes("'" + subId + "'")) t.classList.add('on');
-  });
-  document.getElementById('ch-' + ch).querySelectorAll('.sub-page').forEach(p => p.classList.remove('on'));
-  const t = document.getElementById('sub-' + ch + '-' + subId);
-  if (t) t.classList.add('on');
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
 }
 </script>
 </body>
