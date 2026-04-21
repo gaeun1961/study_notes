@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>스마트기기시스템 중간고사 정리</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+:root {
+  --c1:#4a9eff;--c1d:rgba(74,158,255,0.12);
+  --c2:#30d9a0;--c2d:rgba(48,217,160,0.12);
+  --c3:#ffb347;--c3d:rgba(255,179,71,0.12);
+  --c4:#ff6b7a;--c4d:rgba(255,107,122,0.12);
+  --c5:#b39dff;--c5d:rgba(179,157,255,0.12);
+  --c6:#7dda58;--c6d:rgba(125,218,88,0.12);
+  --c7:#ff64b4;--c7d:rgba(255,100,180,0.12);
+  --c8:#64ffda;--c8d:rgba(100,255,218,0.12);
+}
+.header{background:linear-gradient(180deg,rgba(74,158,255,0.04) 0%,transparent 100%)}
+.header-badge{background:rgba(74,158,255,0.12);color:var(--c1);border-color:rgba(74,158,255,0.25)}
+.ch-tab.on[data-ch="1"]{color:var(--c1)}
+.ch-tab.on[data-ch="2"]{color:var(--c2)}
+.ch-tab.on[data-ch="3"]{color:var(--c3)}
+.ch-tab.on[data-ch="4"]{color:var(--c4)}
+.ch-tab.on[data-ch="5"]{color:var(--c5)}
+.ch-tab.on[data-ch="6"]{color:var(--c6)}
+.ch-tab.on[data-ch="7"]{color:var(--c7)}
+.ch-tab.on[data-ch="8"]{color:var(--c8)}
+.ch1 .sub-tab.on{border-left-color:var(--c1);color:var(--c1)}
+.ch2 .sub-tab.on{border-left-color:var(--c2);color:var(--c2)}
+.ch3 .sub-tab.on{border-left-color:var(--c3);color:var(--c3)}
+.ch4 .sub-tab.on{border-left-color:var(--c4);color:var(--c4)}
+.ch5 .sub-tab.on{border-left-color:var(--c5);color:var(--c5)}
+.ch6 .sub-tab.on{border-left-color:var(--c6);color:var(--c6)}
+.ch7 .sub-tab.on{border-left-color:var(--c7);color:var(--c7)}
+.ch8 .sub-tab.on{border-left-color:var(--c8);color:var(--c8)}
+.cl-1{border-left-color:var(--c1)} .cl-2{border-left-color:var(--c2)}
+.cl-3{border-left-color:var(--c3)} .cl-4{border-left-color:var(--c4)}
+.cl-5{border-left-color:var(--c5)} .cl-6{border-left-color:var(--c6)}
+.cl-7{border-left-color:var(--c7)} .cl-8{border-left-color:var(--c8)}
+.tip{background:var(--c5d);border-color:rgba(179,157,255,0.25);color:var(--c5)}
+.warn{background:var(--c4d);border-color:rgba(255,107,122,0.25);color:var(--c4)}
+.ok{background:var(--c2d);border-color:rgba(48,217,160,0.25);color:var(--c2)}
+.info{background:var(--c1d);border-color:rgba(74,158,255,0.25);color:var(--c1)}
+.formula{border-color:var(--c1);color:var(--c1)}
+.b-1{background:var(--c1d);color:var(--c1);border-color:rgba(74,158,255,0.25)}
+.b-2{background:var(--c2d);color:var(--c2);border-color:rgba(48,217,160,0.25)}
+.b-3{background:var(--c3d);color:var(--c3);border-color:rgba(255,179,71,0.25)}
+.b-4{background:var(--c4d);color:var(--c4);border-color:rgba(255,107,122,0.25)}
+.b-5{background:var(--c5d);color:var(--c5);border-color:rgba(179,157,255,0.25)}
+.b-6{background:var(--c6d);color:var(--c6);border-color:rgba(125,218,88,0.25)}
+.b-7{background:var(--c7d);color:var(--c7);border-color:rgba(255,100,180,0.25)}
+.b-8{background:var(--c8d);color:var(--c8);border-color:rgba(100,255,218,0.25)}
+.b-gray{background:rgba(255,255,255,0.06);color:var(--tx2);border-color:var(--bor)}
+.imp{color:var(--star);font-weight:600}
+/* 다이어그램 공통 */
+.fig{margin:12px 0;text-align:center}
+.fig-cap{font-size:12px;color:var(--tx3);margin-top:6px;text-align:center}
+/* 핀 테이블 색상 */
+.pin-power{color:#ff6b7a}
+.pin-gnd{color:#8b95a8}
+.pin-gpio{color:#4a9eff}
+.pin-spi{color:#30d9a0}
+.pin-i2c{color:#b39dff}
+.pin-uart{color:#ffb347}
+.pin-pwm{color:#7dda58}
+/* 애니메이션 */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.blink{animation:pulse 2s infinite}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="index.html">&#8249; 목록으로</a>
+
+<div class="header">
+  <div class="header-top">
+    <h1>스마트기기시스템</h1>
+    <span class="header-badge">중간고사 정리</span>
+  </div>
+  <div class="ch-tabs">
+    <button class="ch-tab on" data-ch="1" onclick="showCh(1)">라즈베리파이</button>
+    <button class="ch-tab" data-ch="2" onclick="showCh(2)">GPIO 기초</button>
+    <button class="ch-tab" data-ch="3" onclick="showCh(3)">이벤트·스위치</button>
+    <button class="ch-tab" data-ch="4" onclick="showCh(4)">버저·PWM</button>
+    <button class="ch-tab" data-ch="5" onclick="showCh(5)">초음파 센서</button>
+    <button class="ch-tab" data-ch="6" onclick="showCh(6)">조도 센서</button>
+    <button class="ch-tab" data-ch="7" onclick="showCh(7)">SPI 통신</button>
+    <button class="ch-tab" data-ch="8" onclick="showCh(8)">MCP3208</button>
+  </div>
+</div>
+
+<div class="main">
+<nav class="sidebar ch1" id="sidebar">
+
+<!-- Ch.1 메뉴 -->
+<div id="menu-1">
+  <div class="sidebar-label">개요</div>
+  <button class="sub-tab on" onclick="showSub(1,'intro')">라즈베리파이란?<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(1,'spec')">모델별 스펙</button>
+  <div class="sidebar-label">통신 방식</div>
+  <button class="sub-tab" onclick="showSub(1,'comm')">GPIO 통신 종류<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(1,'i2c')">I2C 통신 원리<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(1,'spi_intro')">SPI 통신 원리<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(1,'uart')">UART 통신</button>
+</div>
+
+<!-- Ch.2 메뉴 -->
+<div id="menu-2" style="display:none">
+  <div class="sidebar-label">핀 개념</div>
+  <button class="sub-tab on" onclick="showSub(2,'gpio_def')">GPIO란?<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(2,'pinmap')">핀 번호 체계</button>
+  <button class="sub-tab" onclick="showSub(2,'setup')">GPIO.setup()<span class="star">★</span></button>
+  <div class="sidebar-label">저항 설정</div>
+  <button class="sub-tab" onclick="showSub(2,'pud')">PUD_UP / PUD_DOWN<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(2,'output')">GPIO.output()</button>
+  <div class="sidebar-label">부품</div>
+  <button class="sub-tab" onclick="showSub(2,'bread')">빵판(Breadboard)</button>
+</div>
+
+<!-- Ch.3 메뉴 -->
+<div id="menu-3" style="display:none">
+  <div class="sidebar-label">이벤트 방식</div>
+  <button class="sub-tab on" onclick="showSub(3,'poll')">폴링(Polling)<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(3,'event')">이벤트(Event)<span class="star">★</span></button>
+  <div class="sidebar-label">엣지 감지</div>
+  <button class="sub-tab" onclick="showSub(3,'edge')">RISING·FALLING·BOTH<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(3,'bounce')">디바운스(bouncetime)</button>
+</div>
+
+<!-- Ch.4 메뉴 -->
+<div id="menu-4" style="display:none">
+  <div class="sidebar-label">PWM 이론</div>
+  <button class="sub-tab on" onclick="showSub(4,'pwm')">PWM이란?<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(4,'duty')">DutyCycle<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(4,'freq')">주파수와 소리<span class="star">★</span></button>
+  <div class="sidebar-label">버저</div>
+  <button class="sub-tab" onclick="showSub(4,'buzzer')">버저 종류·원리</button>
+  <button class="sub-tab" onclick="showSub(4,'notes')">음표 주파수 표</button>
+  <div class="sidebar-label">LED 밝기</div>
+  <button class="sub-tab" onclick="showSub(4,'led_bright')">LED 밝기 공식<span class="star">★</span></button>
+</div>
+
+<!-- Ch.5 메뉴 -->
+<div id="menu-5" style="display:none">
+  <div class="sidebar-label">센서 이론</div>
+  <button class="sub-tab on" onclick="showSub(5,'us_intro')">HC-SR04란?<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(5,'us_how')">거리 측정 순서<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(5,'us_calc')">거리 계산 공식<span class="star">★</span></button>
+  <div class="sidebar-label">원리</div>
+  <button class="sub-tab" onclick="showSub(5,'us_detail')">Echo 핀 동작</button>
+  <button class="sub-tab" onclick="showSub(5,'iot_app')">IoT 활용 분야</button>
+</div>
+
+<!-- Ch.6 메뉴 -->
+<div id="menu-6" style="display:none">
+  <div class="sidebar-label">센서 이론</div>
+  <button class="sub-tab on" onclick="showSub(6,'ldr')">LDR 광저항 원리<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(6,'do')">디지털(DO) 출력<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(6,'ao')">아날로그(AO) 출력</button>
+  <button class="sub-tab" onclick="showSub(6,'adc_need')">왜 ADC가 필요한가<span class="star">★</span></button>
+</div>
+
+<!-- Ch.7 메뉴 -->
+<div id="menu-7" style="display:none">
+  <div class="sidebar-label">SPI 이론</div>
+  <button class="sub-tab on" onclick="showSub(7,'spi_what')">SPI란?<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(7,'spi_pins')">MOSI·MISO·CLK·CS<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(7,'spi_mode')">SPI 모드 0~3<span class="star">★</span></button>
+  <div class="sidebar-label">비교</div>
+  <button class="sub-tab" onclick="showSub(7,'vs')">I2C vs SPI 비교<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(7,'spi_bus')">SPI0 vs SPI1 핀</button>
+</div>
+
+<!-- Ch.8 메뉴 -->
+<div id="menu-8" style="display:none">
+  <div class="sidebar-label">MCP3208</div>
+  <button class="sub-tab on" onclick="showSub(8,'mcp_what')">MCP3208이란?<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(8,'protocol')">24비트 프로토콜<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(8,'cmd')">CMD 만드는 법<span class="star">★</span></button>
+  <div class="sidebar-label">데이터 처리</div>
+  <button class="sub-tab" onclick="showSub(8,'response')">응답 데이터 파싱<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(8,'voltage')">전압 변환 공식</button>
+  <button class="sub-tab" onclick="showSub(8,'diff')">단일 vs 차동<span class="star">★</span></button>
+</div>
+
+</nav>
+
+<main class="content">
+
+<!-- ══════════════════ CH.1 라즈베리파이 ══════════════════ -->
+<div class="ch-page on" id="ch-1">
+
+<div class="sub-page on" id="sub-1-intro">
+  <div class="page-title">라즈베리파이란? <span class="exam-badge">★</span></div>
+  <div class="page-sub">영국 라즈베리파이 재단 · 교육 목적 · IoT 핵심 플랫폼</div>
+  <div class="g2">
+    <div class="cl cl-1">
+      <span class="badge b-1">정의</span>
+      <ul style="margin-top:8px">
+        <li>영국 <strong>라즈베리파이 재단</strong>이 <strong>교육 목적</strong>으로 개발</li>
+        <li><strong>신용카드 크기</strong>의 저비용 단일 보드 컴퓨터</li>
+        <li>GPIO 핀으로 센서·액추에이터 연결 → <strong>IoT 분야</strong> 광범위 활용</li>
+        <li>Python, Scratch 등 다양한 언어 지원</li>
+      </ul>
+    </div>
+    <div class="cl cl-2">
+      <span class="badge b-2">특징</span>
+      <ul style="margin-top:8px">
+        <li>✅ 매우 저렴, 다양한 모델</li>
+        <li>✅ 신용카드 크기로 소형</li>
+        <li>✅ GPIO 핀 = 외부 장치 연결</li>
+        <li>✅ 전 세계 넓은 커뮤니티</li>
+        <li>✅ 임베디드·IoT 분야 최적</li>
+      </ul>
+    </div>
+  </div>
+  <div class="fig">
+    <svg viewBox="0 0 420 200" width="100%" style="max-width:420px">
+      <!-- 보드 외형 -->
+      <rect x="30" y="20" width="360" height="160" rx="12" fill="rgba(74,158,255,0.07)" stroke="rgba(74,158,255,0.3)" stroke-width="1.5"/>
+      <!-- CPU -->
+      <rect x="160" y="60" width="80" height="60" rx="6" fill="rgba(74,158,255,0.2)" stroke="rgba(74,158,255,0.5)" stroke-width="1.5"/>
+      <text x="200" y="86" text-anchor="middle" font-size="11" fill="#4a9eff" font-weight="700">Broadcom</text>
+      <text x="200" y="100" text-anchor="middle" font-size="10" fill="#8b95a8">BCM2711</text>
+      <text x="200" y="113" text-anchor="middle" font-size="10" fill="#5a6275">1.5GHz × 4</text>
+      <!-- GPIO 핀 -->
+      <rect x="40" y="25" width="8" height="150" rx="2" fill="rgba(255,179,71,0.3)" stroke="rgba(255,179,71,0.5)" stroke-width="1"/>
+      <text x="28" y="105" text-anchor="middle" font-size="9" fill="#ffb347" transform="rotate(-90,28,105)">GPIO 40핀</text>
+      <!-- USB -->
+      <rect x="340" y="40" width="40" height="24" rx="3" fill="rgba(48,217,160,0.2)" stroke="rgba(48,217,160,0.4)" stroke-width="1"/>
+      <text x="360" y="56" text-anchor="middle" font-size="9" fill="#30d9a0">USB×4</text>
+      <!-- HDMI -->
+      <rect x="340" y="80" width="40" height="18" rx="3" fill="rgba(179,157,255,0.2)" stroke="rgba(179,157,255,0.4)" stroke-width="1"/>
+      <text x="360" y="93" text-anchor="middle" font-size="9" fill="#b39dff">HDMI</text>
+      <!-- RAM -->
+      <rect x="100" y="70" width="45" height="40" rx="4" fill="rgba(255,107,122,0.15)" stroke="rgba(255,107,122,0.4)" stroke-width="1"/>
+      <text x="122" y="88" text-anchor="middle" font-size="10" fill="#ff6b7a">RAM</text>
+      <text x="122" y="101" text-anchor="middle" font-size="9" fill="#5a6275">4GB</text>
+      <!-- MicroSD -->
+      <rect x="130" y="170" width="60" height="10" rx="2" fill="rgba(125,218,88,0.2)" stroke="rgba(125,218,88,0.4)" stroke-width="1"/>
+      <text x="160" y="179" text-anchor="middle" font-size="8" fill="#7dda58">MicroSD</text>
+      <!-- WiFi -->
+      <rect x="260" y="70" width="60" height="40" rx="4" fill="rgba(255,179,71,0.15)" stroke="rgba(255,179,71,0.4)" stroke-width="1"/>
+      <text x="290" y="88" text-anchor="middle" font-size="9" fill="#ffb347">WiFi</text>
+      <text x="290" y="101" text-anchor="middle" font-size="9" fill="#5a6275">Bluetooth</text>
+    </svg>
+    <p class="fig-cap">라즈베리파이 4B 주요 구성 요소</p>
+  </div>
+  <div class="star-box">⭐ 시험 포인트: 영국 라즈베리파이 재단 / 교육 목적 / 신용카드 크기 / GPIO로 IoT 활용</div>
+</div>
+
+<div class="sub-page" id="sub-1-spec">
+  <div class="page-title">주요 모델 스펙</div>
+  <div class="page-sub">Raspberry Pi 역대 모델 비교</div>
+  <table>
+    <tr><th>모델</th><th>출시</th><th>CPU</th><th>메모리</th><th>GPIO</th><th>WiFi/BT</th></tr>
+    <tr><td>Pi 3 B</td><td>2016</td><td>1.2GHz 쿼드</td><td>1GB</td><td>40핀</td><td class="imp">내장</td></tr>
+    <tr><td class="imp">Pi 4 B</td><td>2019</td><td class="imp">1.5GHz 쿼드</td><td class="imp">2/4/8GB</td><td>40핀</td><td class="imp">내장</td></tr>
+    <tr><td>Pi 5</td><td>2023</td><td>2.4GHz 쿼드 A76</td><td>4/8GB</td><td>40핀</td><td>내장</td></tr>
+    <tr><td>Pi Zero 2 W</td><td>2021</td><td>Cortex-A53 쿼드</td><td>512MB</td><td>40핀</td><td>내장</td></tr>
+  </table>
+  <div class="info">현재 실습에 사용하는 모델: <strong>Raspberry Pi 4 B</strong></div>
+</div>
+
+<div class="sub-page" id="sub-1-comm">
+  <div class="page-title">GPIO가 지원하는 통신 종류 <span class="exam-badge">★</span></div>
+  <div class="page-sub">5가지 핵심 — 동기/비동기, 속도, 용도 구분</div>
+  <div class="fig">
+    <svg viewBox="0 0 480 220" width="100%" style="max-width:480px">
+      <!-- I2C -->
+      <rect x="10" y="10" width="85" height="90" rx="8" fill="rgba(179,157,255,0.1)" stroke="rgba(179,157,255,0.4)" stroke-width="1.5"/>
+      <text x="52" y="35" text-anchor="middle" font-size="13" fill="#b39dff" font-weight="700">I2C</text>
+      <text x="52" y="52" text-anchor="middle" font-size="9" fill="#8b95a8">2선 (SCL+SDA)</text>
+      <text x="52" y="66" text-anchor="middle" font-size="9" fill="#8b95a8">동기 · 저속</text>
+      <text x="52" y="80" text-anchor="middle" font-size="9" fill="#8b95a8">다중 슬레이브</text>
+      <text x="52" y="93" text-anchor="middle" font-size="9" fill="#5a6275">센서·디스플레이</text>
+      <!-- SPI -->
+      <rect x="105" y="10" width="85" height="90" rx="8" fill="rgba(48,217,160,0.1)" stroke="rgba(48,217,160,0.4)" stroke-width="1.5"/>
+      <text x="147" y="35" text-anchor="middle" font-size="13" fill="#30d9a0" font-weight="700">SPI</text>
+      <text x="147" y="52" text-anchor="middle" font-size="9" fill="#8b95a8">4선 (MOSI+MISO</text>
+      <text x="147" y="63" text-anchor="middle" font-size="9" fill="#8b95a8">+CLK+CS)</text>
+      <text x="147" y="77" text-anchor="middle" font-size="9" fill="#8b95a8">동기 · <tspan fill="#30d9a0" font-weight="600">고속</tspan></text>
+      <text x="147" y="91" text-anchor="middle" font-size="9" fill="#5a6275">ADC·디스플레이</text>
+      <!-- UART -->
+      <rect x="200" y="10" width="85" height="90" rx="8" fill="rgba(255,179,71,0.1)" stroke="rgba(255,179,71,0.4)" stroke-width="1.5"/>
+      <text x="242" y="35" text-anchor="middle" font-size="13" fill="#ffb347" font-weight="700">UART</text>
+      <text x="242" y="52" text-anchor="middle" font-size="9" fill="#8b95a8">2선 (TX+RX)</text>
+      <text x="242" y="66" text-anchor="middle" font-size="9" fill="#ff6b7a" font-weight="600">비동기</text>
+      <text x="242" y="80" text-anchor="middle" font-size="9" fill="#8b95a8">보장 없음</text>
+      <text x="242" y="93" text-anchor="middle" font-size="9" fill="#5a6275">디버그·시리얼</text>
+      <!-- PWM -->
+      <rect x="295" y="10" width="85" height="90" rx="8" fill="rgba(125,218,88,0.1)" stroke="rgba(125,218,88,0.4)" stroke-width="1.5"/>
+      <text x="337" y="35" text-anchor="middle" font-size="13" fill="#7dda58" font-weight="700">PWM</text>
+      <text x="337" y="52" text-anchor="middle" font-size="9" fill="#8b95a8">1선 출력</text>
+      <text x="337" y="66" text-anchor="middle" font-size="9" fill="#7dda58" font-weight="600">출력 전용</text>
+      <text x="337" y="80" text-anchor="middle" font-size="9" fill="#8b95a8">주파수 출력</text>
+      <text x="337" y="93" text-anchor="middle" font-size="9" fill="#5a6275">LED·버저·모터</text>
+      <!-- GPIO -->
+      <rect x="390" y="10" width="85" height="90" rx="8" fill="rgba(74,158,255,0.1)" stroke="rgba(74,158,255,0.4)" stroke-width="1.5"/>
+      <text x="432" y="35" text-anchor="middle" font-size="13" fill="#4a9eff" font-weight="700">GPIO</text>
+      <text x="432" y="52" text-anchor="middle" font-size="9" fill="#8b95a8">1핀 = 1신호</text>
+      <text x="432" y="66" text-anchor="middle" font-size="9" fill="#8b95a8">HIGH / LOW</text>
+      <text x="432" y="80" text-anchor="middle" font-size="9" fill="#8b95a8">디지털 입출력</text>
+      <text x="432" y="93" text-anchor="middle" font-size="9" fill="#5a6275">LED·버튼 직접</text>
+      <!-- 속도 비교 바 -->
+      <text x="10" y="125" font-size="10" fill="#5a6275">속도</text>
+      <rect x="10" y="132" width="85" height="6" rx="3" fill="rgba(179,157,255,0.2)"/>
+      <rect x="10" y="132" width="40" height="6" rx="3" fill="#b39dff"/>
+      <rect x="105" y="132" width="85" height="6" rx="3" fill="rgba(48,217,160,0.2)"/>
+      <rect x="105" y="132" width="80" height="6" rx="3" fill="#30d9a0"/>
+      <rect x="200" y="132" width="85" height="6" rx="3" fill="rgba(255,179,71,0.2)"/>
+      <rect x="200" y="132" width="55" height="6" rx="3" fill="#ffb347"/>
+      <rect x="295" y="132" width="85" height="6" rx="3" fill="rgba(125,218,88,0.2)"/>
+      <rect x="295" y="132" width="35" height="6" rx="3" fill="#7dda58"/>
+      <rect x="390" y="132" width="85" height="6" rx="3" fill="rgba(74,158,255,0.2)"/>
+      <rect x="390" y="132" width="20" height="6" rx="3" fill="#4a9eff"/>
+      <text x="52" y="152" text-anchor="middle" font-size="9" fill="#b39dff">중속</text>
+      <text x="147" y="152" text-anchor="middle" font-size="9" fill="#30d9a0" font-weight="700">고속 ✓</text>
+      <text x="242" y="152" text-anchor="middle" font-size="9" fill="#ffb347">중속</text>
+      <text x="337" y="152" text-anchor="middle" font-size="9" fill="#7dda58">—</text>
+      <text x="432" y="152" text-anchor="middle" font-size="9" fill="#4a9eff">즉시</text>
+    </svg>
+  </div>
+  <table>
+    <tr><th>통신</th><th>동기/비동기</th><th>선 수</th><th>속도</th><th>주용도</th></tr>
+    <tr><td class="badge b-5" style="border-radius:4px">I2C</td><td>동기</td><td>2선</td><td>저속</td><td>센서, 메모리, 디스플레이</td></tr>
+    <tr><td class="badge b-2" style="border-radius:4px">SPI</td><td>동기</td><td>4선</td><td class="imp">고속</td><td>ADC, 빠른 장치</td></tr>
+    <tr><td class="badge b-3" style="border-radius:4px">UART</td><td class="imp">비동기</td><td>2선</td><td>중속</td><td>디버그, 시리얼</td></tr>
+    <tr><td class="badge b-6" style="border-radius:4px">PWM</td><td>출력전용</td><td>1선</td><td>—</td><td>LED 밝기, 버저, 모터</td></tr>
+    <tr><td class="badge b-1" style="border-radius:4px">GPIO</td><td>—</td><td>1핀</td><td>즉시</td><td>LED on/off, 버튼</td></tr>
+  </table>
+</div>
+
+<div class="sub-page" id="sub-1-i2c">
+  <div class="page-title">I2C 통신 원리 <span class="exam-badge">★</span></div>
+  <div class="page-sub">SCL + SDA 2선 · 동기 · 브로드캐스트 방식</div>
+  <div class="fig">
+    <svg viewBox="0 0 460 200" width="100%" style="max-width:460px">
+      <!-- 마스터 -->
+      <rect x="10" y="70" width="90" height="60" rx="8" fill="rgba(74,158,255,0.15)" stroke="rgba(74,158,255,0.4)" stroke-width="1.5"/>
+      <text x="55" y="97" text-anchor="middle" font-size="12" fill="#4a9eff" font-weight="700">MASTER</text>
+      <text x="55" y="113" text-anchor="middle" font-size="10" fill="#8b95a8">라즈베리파이</text>
+      <!-- SCL 선 -->
+      <line x1="100" y1="85" x2="360" y2="85" stroke="rgba(255,179,71,0.6)" stroke-width="2" stroke-dasharray="6,3"/>
+      <text x="230" y="80" text-anchor="middle" font-size="10" fill="#ffb347" font-weight="600">SCL (클럭선) — 타이밍 동기화</text>
+      <!-- SDA 선 -->
+      <line x1="100" y1="115" x2="360" y2="115" stroke="rgba(48,217,160,0.6)" stroke-width="2" stroke-dasharray="6,3"/>
+      <text x="230" y="128" text-anchor="middle" font-size="10" fill="#30d9a0" font-weight="600">SDA (데이터선) — 데이터 송수신</text>
+      <!-- 슬레이브들 -->
+      <rect x="360" y="20" width="85" height="45" rx="6" fill="rgba(179,157,255,0.12)" stroke="rgba(179,157,255,0.35)" stroke-width="1.5"/>
+      <text x="402" y="40" text-anchor="middle" font-size="10" fill="#b39dff">Slave 1</text>
+      <text x="402" y="56" text-anchor="middle" font-size="9" fill="#5a6275">주소: 0x48</text>
+      <rect x="360" y="78" width="85" height="45" rx="6" fill="rgba(179,157,255,0.12)" stroke="rgba(179,157,255,0.35)" stroke-width="1.5"/>
+      <text x="402" y="98" text-anchor="middle" font-size="10" fill="#b39dff">Slave 2</text>
+      <text x="402" y="114" text-anchor="middle" font-size="9" fill="#5a6275">주소: 0x50</text>
+      <rect x="360" y="136" width="85" height="45" rx="6" fill="rgba(179,157,255,0.12)" stroke="rgba(179,157,255,0.35)" stroke-width="1.5"/>
+      <text x="402" y="156" text-anchor="middle" font-size="10" fill="#b39dff">Slave 3</text>
+      <text x="402" y="172" text-anchor="middle" font-size="9" fill="#5a6275">주소: 0x68</text>
+      <!-- 연결선 -->
+      <line x1="360" y1="85" x2="360" y2="42" stroke="rgba(179,157,255,0.4)" stroke-width="1.5"/>
+      <line x1="360" y1="115" x2="360" y2="158" stroke="rgba(179,157,255,0.4)" stroke-width="1.5"/>
+    </svg>
+    <p class="fig-cap">I2C: 마스터 1개 + 슬레이브 여러개 → SDA 한 선을 공유</p>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">I2C 통신 과정 (4단계) <span class="exam-badge">★</span></h3>
+    <div class="cl cl-1" style="margin-bottom:8px">
+      <strong>① Start 신호</strong> — 마스터가 통신 시작 선언
+    </div>
+    <div class="cl cl-5">
+      <strong>② 슬레이브 주소 7비트</strong> 전송 — 통신 대상 장치 선택 (모든 슬레이브가 듣지만 해당 주소만 응답)
+    </div>
+    <div class="cl cl-3" style="margin-top:8px">
+      <strong>③ R/W 비트</strong><br>
+      &nbsp;&nbsp;&nbsp;0 → 마스터 → 슬레이브 (쓰기)<br>
+      &nbsp;&nbsp;&nbsp;1 → 슬레이브 → 마스터 (읽기)
+    </div>
+    <div class="cl cl-2" style="margin-top:8px">
+      <strong>④ ACK</strong> — 슬레이브가 수신 확인 응답
+    </div>
+  </div>
+  <div class="warn">⚠️ SDA 선 하나를 공유하므로 한 번에 하나의 슬레이브만 통신 가능 → 상대적으로 느림</div>
+  <div class="info">용도: 센서, 메모리, LED 디스플레이 등 <strong>저속 주변 장치</strong></div>
+</div>
+
+<div class="sub-page" id="sub-1-spi_intro">
+  <div class="page-title">SPI 통신 원리 <span class="exam-badge">★</span></div>
+  <div class="page-sub">4선 · 동기 · 전이중 · 고속</div>
+  <div class="fig">
+    <svg viewBox="0 0 460 180" width="100%" style="max-width:460px">
+      <!-- 마스터 -->
+      <rect x="10" y="50" width="100" height="80" rx="8" fill="rgba(74,158,255,0.15)" stroke="rgba(74,158,255,0.4)" stroke-width="1.5"/>
+      <text x="60" y="82" text-anchor="middle" font-size="11" fill="#4a9eff" font-weight="700">MASTER</text>
+      <text x="60" y="97" text-anchor="middle" font-size="9" fill="#8b95a8">라즈베리파이</text>
+      <text x="60" y="117" text-anchor="middle" font-size="8" fill="#5a6275">CLK 생성</text>
+      <!-- MOSI -->
+      <line x1="110" y1="70" x2="330" y2="70" stroke="rgba(48,217,160,0.7)" stroke-width="2"/>
+      <polygon points="330,65 345,70 330,75" fill="#30d9a0"/>
+      <text x="220" y="65" text-anchor="middle" font-size="10" fill="#30d9a0" font-weight="600">MOSI (마스터→슬레이브)</text>
+      <!-- MISO -->
+      <line x1="110" y1="100" x2="330" y2="100" stroke="rgba(255,107,122,0.7)" stroke-width="2"/>
+      <polygon points="110,95 95,100 110,105" fill="#ff6b7a"/>
+      <text x="220" y="114" text-anchor="middle" font-size="10" fill="#ff6b7a" font-weight="600">MISO (슬레이브→마스터)</text>
+      <!-- CLK -->
+      <line x1="110" y1="130" x2="330" y2="130" stroke="rgba(255,179,71,0.5)" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="220" y="145" text-anchor="middle" font-size="9" fill="#ffb347">CLK (타이밍 클럭)</text>
+      <!-- CS -->
+      <line x1="110" y1="55" x2="330" y2="55" stroke="rgba(179,157,255,0.5)" stroke-width="1.5" stroke-dasharray="3,3"/>
+      <text x="220" y="50" text-anchor="middle" font-size="9" fill="#b39dff">CS/CE (슬레이브 선택 — LOW=활성)</text>
+      <!-- 슬레이브 -->
+      <rect x="345" y="50" width="100" height="80" rx="8" fill="rgba(48,217,160,0.12)" stroke="rgba(48,217,160,0.35)" stroke-width="1.5"/>
+      <text x="395" y="82" text-anchor="middle" font-size="11" fill="#30d9a0" font-weight="700">SLAVE</text>
+      <text x="395" y="97" text-anchor="middle" font-size="9" fill="#8b95a8">MCP3208</text>
+      <text x="395" y="117" text-anchor="middle" font-size="8" fill="#5a6275">CLK 수신</text>
+    </svg>
+    <p class="fig-cap">MOSI와 MISO 두 선 → 동시에 송수신 가능 (전이중)</p>
+  </div>
+  <div class="g2">
+    <div class="cl cl-2">
+      <span class="badge b-2">I2C와 차이점</span>
+      <ul style="margin-top:8px">
+        <li>선이 4개 → 송수신 <strong>동시 가능</strong></li>
+        <li>I2C보다 <strong>빠름</strong></li>
+        <li>슬레이브마다 <strong>CS 핀 필요</strong></li>
+      </ul>
+    </div>
+    <div class="cl cl-3">
+      <span class="badge b-3">SPI 통신 시작 조건</span>
+      <ul style="margin-top:8px">
+        <li><strong>CS(CE) 핀 LOW</strong> → 통신 시작</li>
+        <li>CLK에 맞춰 1비트씩 송수신</li>
+        <li>CS HIGH → 통신 종료</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="sub-page" id="sub-1-uart">
+  <div class="page-title">UART 통신</div>
+  <div class="page-sub">Universal Asynchronous Receiver/Transmitter · 비동기</div>
+  <div class="cl cl-3">
+    <span class="badge b-3">UART의 특징</span>
+    <ul style="margin-top:8px">
+      <li><strong>비동기(Asynchronous)</strong> 통신 — 클럭 없이 미리 정한 속도(baud rate)로 통신</li>
+      <li>요청-응답 <strong>보장 없음</strong> (버퍼에 쌓임 → 프린터 스풀처럼)</li>
+      <li>TX(송신)와 RX(수신) 2선 사용</li>
+    </ul>
+  </div>
+  <div class="warn">⚠️ UART는 타이밍 보장이 안 됨 → 실시간성 필요한 센서엔 부적합</div>
+</div>
+
+</div><!-- end ch-1 -->
+
+
+<!-- ══════════════════ CH.2 GPIO 기초 ══════════════════ -->
+<div class="ch-page" id="ch-2">
+
+<div class="sub-page on" id="sub-2-gpio_def">
+  <div class="page-title">GPIO(General Purpose Input/Output)란? <span class="exam-badge">★</span></div>
+  <div class="page-sub">범용 입출력 핀 — 라즈베리파이와 외부 장치를 연결하는 관문</div>
+  <div class="cl cl-1">
+    <span class="badge b-1">정의</span>
+    <p style="margin-top:6px">컴퓨터에서 <strong>범용 입력/출력 핀</strong>을 의미하며, 라즈베리파이 같은 단일 보드 컴퓨터에서 다양한 전자 부품과의 <strong>물리적 연결</strong>을 가능하게 하는 핀</p>
+    <ul style="margin-top:8px">
+      <li>GPIO 핀으로 센서, 모터, LED 등 외부 장치를 연결</li>
+      <li>프로그래밍을 통해 데이터를 읽거나 장치를 제어</li>
+      <li><strong>디지털 신호 입력(읽기) / 출력(쓰기)</strong> 용도</li>
+    </ul>
+  </div>
+  <div class="fig">
+    <svg viewBox="0 0 460 160" width="100%" style="max-width:460px">
+      <!-- 라즈베리파이 박스 -->
+      <rect x="10" y="30" width="200" height="100" rx="8" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.3)" stroke-width="1.5"/>
+      <text x="110" y="55" text-anchor="middle" font-size="12" fill="#4a9eff" font-weight="700">라즈베리파이</text>
+      <!-- GPIO 핀들 -->
+      <rect x="195" y="45" width="10" height="8" rx="1" fill="#ffb347"/>
+      <rect x="195" y="58" width="10" height="8" rx="1" fill="#4a9eff"/>
+      <rect x="195" y="71" width="10" height="8" rx="1" fill="#4a9eff"/>
+      <rect x="195" y="84" width="10" height="8" rx="1" fill="#ff6b7a"/>
+      <rect x="195" y="97" width="10" height="8" rx="1" fill="#8b95a8"/>
+      <rect x="195" y="110" width="10" height="8" rx="1" fill="#4a9eff"/>
+      <text x="160" y="145" text-anchor="middle" font-size="9" fill="#ffb347">3.3V</text>
+      <text x="160" y="155" text-anchor="middle" font-size="9" fill="#4a9eff">GPIO</text>
+      <!-- 화살표들 -->
+      <line x1="205" y1="49" x2="270" y2="49" stroke="rgba(255,179,71,0.5)" stroke-width="1.5"/>
+      <line x1="205" y1="62" x2="270" y2="75" stroke="rgba(74,158,255,0.6)" stroke-width="1.5"/>
+      <line x1="205" y1="75" x2="270" y2="105" stroke="rgba(74,158,255,0.6)" stroke-width="1.5"/>
+      <line x1="205" y1="88" x2="270" y2="130" stroke="rgba(255,107,122,0.5)" stroke-width="1.5"/>
+      <!-- 외부 장치들 -->
+      <circle cx="290" cy="49" r="12" fill="rgba(255,179,71,0.2)" stroke="rgba(255,179,71,0.5)" stroke-width="1.5"/>
+      <text x="290" y="54" text-anchor="middle" font-size="9" fill="#ffb347">전원</text>
+      <rect x="275" y="63" width="50" height="22" rx="4" fill="rgba(74,158,255,0.15)" stroke="rgba(74,158,255,0.4)" stroke-width="1.5"/>
+      <text x="300" y="78" text-anchor="middle" font-size="9" fill="#4a9eff">LED</text>
+      <rect x="275" y="93" width="50" height="22" rx="4" fill="rgba(74,158,255,0.15)" stroke="rgba(74,158,255,0.4)" stroke-width="1.5"/>
+      <text x="300" y="108" text-anchor="middle" font-size="9" fill="#4a9eff">버튼</text>
+      <rect x="275" y="119" width="50" height="22" rx="4" fill="rgba(255,107,122,0.15)" stroke="rgba(255,107,122,0.4)" stroke-width="1.5"/>
+      <text x="300" y="134" text-anchor="middle" font-size="9" fill="#ff6b7a">센서</text>
+      <text x="380" y="80" font-size="11" fill="#4a9eff">← 출력</text>
+      <text x="380" y="110" font-size="11" fill="#30d9a0">↔ 입력</text>
+    </svg>
+  </div>
+</div>
+
+<div class="sub-page" id="sub-2-pinmap">
+  <div class="page-title">핀 번호 체계 — BOARD vs BCM</div>
+  <div class="page-sub">GPIO.setmode()로 선택 · 헷갈리면 BCM 기준 외우기</div>
+  <div class="g2">
+    <div class="cl cl-3">
+      <span class="badge b-3">GPIO.BOARD</span>
+      <p style="margin-top:6px">보드 <strong>물리적 위치</strong>로 지정<br>핀 1번~40번 순서대로</p>
+    </div>
+    <div class="cl cl-1">
+      <span class="badge b-1">GPIO.BCM</span>
+      <p style="margin-top:6px">Broadcom SOC <strong>채널 번호</strong>로 지정<br>소프트웨어적 GPIO 번호 (실습에서 주로 사용)</p>
+    </div>
+  </div>
+  <div class="card">
+    <table>
+      <tr><th>물리적 핀</th><th>BCM 번호</th><th>기능</th></tr>
+      <tr><td>11</td><td class="pin-gpio imp">GPIO 17</td><td>일반 GPIO</td></tr>
+      <tr><td>12</td><td class="pin-pwm imp">GPIO 18</td><td>PWM 출력 가능</td></tr>
+      <tr><td>13</td><td class="pin-gpio">GPIO 27</td><td>일반 GPIO</td></tr>
+      <tr><td>15</td><td class="pin-gpio">GPIO 22</td><td>일반 GPIO</td></tr>
+      <tr><td>19</td><td class="pin-spi imp">GPIO 10 (MOSI)</td><td>SPI0 MOSI</td></tr>
+      <tr><td>21</td><td class="pin-spi imp">GPIO 9 (MISO)</td><td>SPI0 MISO</td></tr>
+      <tr><td>23</td><td class="pin-spi imp">GPIO 11 (SCLK)</td><td>SPI0 CLK</td></tr>
+      <tr><td>24</td><td class="pin-spi imp">GPIO 8 (CE0)</td><td>SPI0 슬레이브0</td></tr>
+      <tr><td>26</td><td class="pin-spi">GPIO 7 (CE1)</td><td>SPI0 슬레이브1</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="sub-page" id="sub-2-setup">
+  <div class="page-title">GPIO.setup() 인자 <span class="exam-badge">★</span></div>
+  <div class="page-sub">핀을 입력/출력으로 설정하는 핵심 함수</div>
+  <table>
+    <tr><th>인자</th><th>값</th><th>설명</th></tr>
+    <tr><td>channel</td><td>int / list</td><td>설정할 GPIO 핀 번호</td></tr>
+    <tr><td>direction</td><td><span class="badge b-2">GPIO.IN</span> / <span class="badge b-1">GPIO.OUT</span></td><td>입력 모드 / 출력 모드</td></tr>
+    <tr><td>pull_up_down</td><td>PUD_UP / PUD_DOWN / PUD_OFF</td><td>내부 저항 설정 (선택)</td></tr>
+    <tr><td>initial</td><td>HIGH / LOW</td><td>초기 출력 상태 (선택)</td></tr>
+  </table>
+</div>
+
+<div class="sub-page" id="sub-2-pud">
+  <div class="page-title">PUD_UP / PUD_DOWN <span class="exam-badge">★</span></div>
+  <div class="page-sub">내부 저항 설정 — 플로팅(floating) 방지</div>
+  <div class="warn">⚠️ 왜 필요한가? 버튼을 안 눌렀을 때 핀이 아무것도 연결 안 된 상태(floating)가 되면 노이즈로 값이 불안정해짐 → 저항으로 기본값 고정!</div>
+  <div class="fig">
+    <svg viewBox="0 0 460 200" width="100%" style="max-width:460px">
+      <!-- PUD_UP 영역 -->
+      <rect x="10" y="10" width="210" height="180" rx="8" fill="rgba(48,217,160,0.05)" stroke="rgba(48,217,160,0.25)" stroke-width="1"/>
+      <text x="115" y="30" text-anchor="middle" font-size="11" fill="#30d9a0" font-weight="700">PUD_UP (풀업)</text>
+      <!-- 회로 -->
+      <line x1="115" y1="40" x2="115" y2="60" stroke="#30d9a0" stroke-width="2"/>
+      <text x="130" y="53" font-size="9" fill="#ffb347">3.3V</text>
+      <!-- 저항 -->
+      <rect x="100" y="60" width="30" height="18" rx="3" fill="rgba(48,217,160,0.2)" stroke="#30d9a0" stroke-width="1.5"/>
+      <text x="115" y="73" text-anchor="middle" font-size="8" fill="#30d9a0">R↑</text>
+      <line x1="115" y1="78" x2="115" y2="110" stroke="#30d9a0" stroke-width="2"/>
+      <text x="135" y="100" font-size="9" fill="#4a9eff">GPIO 핀</text>
+      <!-- 버튼 -->
+      <line x1="115" y1="110" x2="115" y2="130" stroke="#30d9a0" stroke-width="2"/>
+      <rect x="100" y="130" width="30" height="18" rx="3" fill="rgba(255,179,71,0.2)" stroke="#ffb347" stroke-width="1.5"/>
+      <text x="115" y="143" text-anchor="middle" font-size="8" fill="#ffb347">BTN</text>
+      <line x1="115" y1="148" x2="115" y2="165" stroke="#30d9a0" stroke-width="2"/>
+      <text x="130" y="168" font-size="9" fill="#8b95a8">GND</text>
+      <!-- 상태 -->
+      <text x="115" y="185" text-anchor="middle" font-size="10" fill="#8b95a8">미입력: <tspan fill="#30d9a0" font-weight="700">HIGH</tspan></text>
+      <text x="115" y="197" text-anchor="middle" font-size="10" fill="#8b95a8">눌렸을 때: <tspan fill="#ff6b7a" font-weight="700">LOW</tspan></text>
+      <!-- PUD_DOWN 영역 -->
+      <rect x="240" y="10" width="210" height="180" rx="8" fill="rgba(255,107,122,0.05)" stroke="rgba(255,107,122,0.25)" stroke-width="1"/>
+      <text x="345" y="30" text-anchor="middle" font-size="11" fill="#ff6b7a" font-weight="700">PUD_DOWN (풀다운)</text>
+      <!-- 회로 -->
+      <line x1="345" y1="40" x2="345" y2="70" stroke="#ff6b7a" stroke-width="2"/>
+      <text x="360" y="53" font-size="9" fill="#ffb347">3.3V</text>
+      <rect x="330" y="70" width="30" height="18" rx="3" fill="rgba(255,179,71,0.2)" stroke="#ffb347" stroke-width="1.5"/>
+      <text x="345" y="83" text-anchor="middle" font-size="8" fill="#ffb347">BTN</text>
+      <line x1="345" y1="88" x2="345" y2="110" stroke="#ff6b7a" stroke-width="2"/>
+      <text x="360" y="100" font-size="9" fill="#4a9eff">GPIO 핀</text>
+      <rect x="330" y="110" width="30" height="18" rx="3" fill="rgba(255,107,122,0.2)" stroke="#ff6b7a" stroke-width="1.5"/>
+      <text x="345" y="123" text-anchor="middle" font-size="8" fill="#ff6b7a">R↓</text>
+      <line x1="345" y1="128" x2="345" y2="165" stroke="#ff6b7a" stroke-width="2"/>
+      <text x="360" y="168" font-size="9" fill="#8b95a8">GND</text>
+      <text x="345" y="185" text-anchor="middle" font-size="10" fill="#8b95a8">미입력: <tspan fill="#ff6b7a" font-weight="700">LOW</tspan></text>
+      <text x="345" y="197" text-anchor="middle" font-size="10" fill="#8b95a8">눌렸을 때: <tspan fill="#30d9a0" font-weight="700">HIGH</tspan></text>
+    </svg>
+    <p class="fig-cap">풀업: 기본 HIGH (눌리면 LOW) / 풀다운: 기본 LOW (눌리면 HIGH)</p>
+  </div>
+  <table>
+    <tr><th>설정</th><th>기본 상태</th><th>버튼 누를 때</th><th>주로 사용</th></tr>
+    <tr><td><span class="badge b-2">GPIO.PUD_UP</span></td><td class="imp">HIGH</td><td>LOW</td><td>실습에서 주로 사용</td></tr>
+    <tr><td><span class="badge b-4">GPIO.PUD_DOWN</span></td><td>LOW</td><td class="imp">HIGH</td><td>—</td></tr>
+  </table>
+  <div class="star-box">⭐ PUD_UP 쓸 때: FALLING = 버튼 누름 / RISING = 버튼 뗌</div>
+</div>
+
+<div class="sub-page" id="sub-2-output">
+  <div class="page-title">GPIO.output() — 핀 출력</div>
+  <div class="page-sub">출력 모드로 설정된 핀의 High/Low 제어</div>
+  <div class="cl cl-1">
+    <span class="badge b-1">사용법</span>
+    <ul style="margin-top:8px">
+      <li>핀 하나: <code>GPIO.output(17, GPIO.HIGH)</code></li>
+      <li>여러 핀: <code>GPIO.output([17,22,27], [1,0,1])</code></li>
+    </ul>
+  </div>
+</div>
+
+<div class="sub-page" id="sub-2-bread">
+  <div class="page-title">빵판(Breadboard)</div>
+  <div class="page-sub">무납땜 전자회로 시제품 제작 장치</div>
+  <div class="fig">
+    <svg viewBox="0 0 400 160" width="100%" style="max-width:400px">
+      <!-- 빵판 외형 -->
+      <rect x="20" y="20" width="360" height="120" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+      <!-- 중앙 홈 -->
+      <rect x="20" y="77" width="360" height="6" rx="1" fill="rgba(0,0,0,0.4)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+      <text x="200" y="83" text-anchor="middle" font-size="9" fill="#5a6275">— 중앙 홈 (여기를 넘어서 IC 칩 꽂기) —</text>
+      <!-- 상단 구멍들 -->
+      <text x="40" y="50" font-size="9" fill="#ff6b7a">+</text>
+      <text x="60" y="50" font-size="9" fill="#ff6b7a">+</text>
+      <text x="80" y="50" font-size="9" fill="#ff6b7a">+</text>
+      <text x="30" y="45" font-size="8" fill="#ff6b7a">전원(+)</text>
+      <text x="40" y="62" font-size="9" fill="#4a5268">-</text>
+      <text x="60" y="62" font-size="9" fill="#4a5268">-</text>
+      <text x="80" y="62" font-size="9" fill="#4a5268">-</text>
+      <text x="30" y="57" font-size="8" fill="#8b95a8">GND(-)</text>
+      <!-- 중간 구멍들 (연결 방향 표시) -->
+      <line x1="180" y1="35" x2="180" y2="75" stroke="rgba(74,158,255,0.3)" stroke-width="10" stroke-dasharray="4,4"/>
+      <text x="185" y="55" font-size="9" fill="#4a9eff">↕ 세로 연결</text>
+      <!-- 하단 -->
+      <line x1="30" y1="100" x2="370" y2="100" stroke="rgba(255,179,71,0.2)" stroke-width="6"/>
+      <text x="200" y="103" text-anchor="middle" font-size="9" fill="#ffb347">↔ 가로 연결</text>
+    </svg>
+    <p class="fig-cap">중앙 홈을 기준으로 좌우 분리 / 세로 방향(열)으로 연결됨</p>
+  </div>
+  <div class="warn">⚠️ IC 칩(MCP3208 등)은 반드시 중앙 홈을 넘어 꽂아야 함! 안 넘으면 양쪽 다리가 연결되어 회로 단락(고장)</div>
+</div>
+
+</div><!-- end ch-2 -->
+
+
+<!-- ══════════════════ CH.3 이벤트·스위치 ══════════════════ -->
+<div class="ch-page" id="ch-3">
+
+<div class="sub-page on" id="sub-3-poll">
+  <div class="page-title">폴링(Polling) 방식 <span class="exam-badge">★</span></div>
+  <div class="page-sub">메인 루프에서 직접 핀 상태를 반복해서 확인</div>
+  <div class="cl cl-3">
+    <span class="badge b-3">폴링이란?</span>
+    <p style="margin-top:6px">메인 루프가 핀 상태를 계속 읽어가며 변화를 감지하는 방식. 버튼을 직접 감시함.</p>
+  </div>
+  <div class="g2" style="margin-top:12px">
+    <div class="cl cl-2">
+      <span class="badge b-2">장점</span>
+      <ul style="margin-top:8px">
+        <li>구현이 단순</li>
+        <li>타이밍 직접 제어 가능</li>
+      </ul>
+    </div>
+    <div class="cl cl-4">
+      <span class="badge b-4">단점</span>
+      <ul style="margin-top:8px">
+        <li>CPU 낭비 (입력 없어도 루프 실행)</li>
+        <li>메인 스레드 블로킹 (다른 작업 병행 불가)</li>
+        <li>짧은 신호 누락 가능</li>
+        <li>응답 지연 (polling 간격만큼)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="sub-page" id="sub-3-event">
+  <div class="page-title">이벤트(Event) 방식 <span class="exam-badge">★</span></div>
+  <div class="page-sub">GPIO.add_event_detect() — 비동기 콜백</div>
+  <div class="cl cl-2">
+    <span class="badge b-2">이벤트 방식이란?</span>
+    <p style="margin-top:6px">특정 핀의 신호 변화를 <strong>비동기적으로 감지</strong>하여 자동으로 콜백 함수를 호출. 메인 루프를 점유하지 않음.</p>
+  </div>
+  <div class="fig">
+    <svg viewBox="0 0 440 130" width="100%" style="max-width:440px">
+      <!-- 타임라인 -->
+      <line x1="30" y1="60" x2="410" y2="60" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+      <!-- 버튼 신호 -->
+      <text x="15" y="40" text-anchor="middle" font-size="9" fill="#8b95a8" transform="rotate(-90,15,60)">GPIO</text>
+      <polyline points="30,60 80,60 80,35 180,35 180,60 300,60 300,35 380,35 380,60 410,60" fill="none" stroke="#ffb347" stroke-width="2.5"/>
+      <!-- FALLING 화살표 -->
+      <line x1="80" y1="35" x2="80" y2="65" stroke="#ff6b7a" stroke-width="2" stroke-dasharray="4,2"/>
+      <polygon points="76,65 80,75 84,65" fill="#ff6b7a"/>
+      <text x="80" y="90" text-anchor="middle" font-size="9" fill="#ff6b7a" font-weight="600">FALLING</text>
+      <text x="80" y="102" text-anchor="middle" font-size="8" fill="#5a6275">콜백 호출!</text>
+      <!-- RISING 화살표 -->
+      <line x1="180" y1="55" x2="180" y2="20" stroke="#30d9a0" stroke-width="2" stroke-dasharray="4,2"/>
+      <polygon points="176,20 180,10 184,20" fill="#30d9a0"/>
+      <text x="180" y="90" text-anchor="middle" font-size="9" fill="#30d9a0" font-weight="600">RISING</text>
+      <text x="180" y="102" text-anchor="middle" font-size="8" fill="#5a6275">콜백 호출!</text>
+      <!-- HIGH/LOW 레이블 -->
+      <text x="130" y="30" text-anchor="middle" font-size="8" fill="#ffb347">HIGH (눌림)</text>
+      <text x="55" y="70" text-anchor="middle" font-size="8" fill="#8b95a8">LOW</text>
+      <!-- 두번째 구간 -->
+      <line x1="300" y1="35" x2="300" y2="65" stroke="#ff6b7a" stroke-width="2" stroke-dasharray="4,2"/>
+      <polygon points="296,65 300,75 304,65" fill="#ff6b7a"/>
+      <text x="300" y="90" text-anchor="middle" font-size="9" fill="#ff6b7a">FALLING</text>
+      <line x1="380" y1="55" x2="380" y2="20" stroke="#30d9a0" stroke-width="2" stroke-dasharray="4,2"/>
+      <polygon points="376,20 380,10 384,20" fill="#30d9a0"/>
+      <text x="380" y="90" text-anchor="middle" font-size="9" fill="#30d9a0">RISING</text>
+    </svg>
+    <p class="fig-cap">신호가 변화하는 순간(엣지)에 자동으로 콜백 함수 실행</p>
+  </div>
+  <table>
+    <tr><th>인자</th><th>설명</th></tr>
+    <tr><td>channel</td><td>감지할 GPIO 핀 번호</td></tr>
+    <tr><td>edge</td><td>RISING / FALLING / BOTH</td></tr>
+    <tr><td>callback</td><td>이벤트 발생 시 호출할 함수</td></tr>
+    <tr><td>bouncetime</td><td>디바운스 시간(ms) — 중복 이벤트 방지</td></tr>
+  </table>
+</div>
+
+<div class="sub-page" id="sub-3-edge">
+  <div class="page-title">RISING · FALLING · BOTH <span class="exam-badge">★</span></div>
+  <div class="page-sub">어느 순간에 이벤트를 감지할지 선택</div>
+  <div class="fig">
+    <svg viewBox="0 0 440 120" width="100%" style="max-width:440px">
+      <line x1="30" y1="80" x2="410" y2="80" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text x="15" y="45" font-size="9" fill="#30d9a0">HIGH</text>
+      <text x="15" y="85" font-size="9" fill="#ff6b7a">LOW</text>
+      <!-- 파형 -->
+      <polyline points="30,80 80,80 80,30 200,30 200,80 280,80 280,30 380,30 380,80 410,80" fill="none" stroke="rgba(255,179,71,0.6)" stroke-width="2.5"/>
+      <!-- FALLING 포인트 -->
+      <circle cx="80" cy="55" r="6" fill="none" stroke="#ff6b7a" stroke-width="2"/>
+      <text x="80" y="110" text-anchor="middle" font-size="10" fill="#ff6b7a" font-weight="700">FALLING</text>
+      <text x="80" y="120" text-anchor="middle" font-size="8" fill="#5a6275">HIGH→LOW</text>
+      <!-- RISING 포인트 -->
+      <circle cx="200" cy="55" r="6" fill="none" stroke="#30d9a0" stroke-width="2"/>
+      <text x="200" y="110" text-anchor="middle" font-size="10" fill="#30d9a0" font-weight="700">RISING</text>
+      <text x="200" y="120" text-anchor="middle" font-size="8" fill="#5a6275">LOW→HIGH</text>
+      <!-- FALLING2 -->
+      <circle cx="280" cy="55" r="6" fill="none" stroke="#ff6b7a" stroke-width="2"/>
+      <text x="280" y="110" text-anchor="middle" font-size="10" fill="#ff6b7a" font-weight="700">FALLING</text>
+      <!-- RISING2 -->
+      <circle cx="380" cy="55" r="6" fill="none" stroke="#30d9a0" stroke-width="2"/>
+      <text x="380" y="110" text-anchor="middle" font-size="10" fill="#30d9a0" font-weight="700">RISING</text>
+      <!-- BOTH 화살표 -->
+      <text x="330" y="20" text-anchor="middle" font-size="9" fill="#b39dff">BOTH = 둘 다</text>
+    </svg>
+    <p class="fig-cap">PUD_UP 기준: 버튼 누름=FALLING, 버튼 뗌=RISING</p>
+  </div>
+  <table>
+    <tr><th>이벤트</th><th>신호 변화</th><th>PUD_UP 기준</th></tr>
+    <tr><td><span class="badge b-4">GPIO.FALLING</span></td><td>HIGH → LOW</td><td class="imp">버튼 누를 때</td></tr>
+    <tr><td><span class="badge b-2">GPIO.RISING</span></td><td>LOW → HIGH</td><td>버튼 뗄 때</td></tr>
+    <tr><td><span class="badge b-5">GPIO.BOTH</span></td><td>양방향</td><td>누를 때 + 뗄 때</td></tr>
+  </table>
+  <div class="star-box">⭐ 실습에서: GPIO.FALLING 이벤트로 버튼 누름 감지 (PUD_UP 설정 상태)</div>
+</div>
+
+<div class="sub-page" id="sub-3-bounce">
+  <div class="page-title">디바운스(bouncetime)</div>
+  <div class="page-sub">버튼 채터링(bouncing) 방지</div>
+  <div class="fig">
+    <svg viewBox="0 0 440 120" width="100%" style="max-width:440px">
+      <!-- 채터링 발생 신호 -->
+      <text x="30" y="20" font-size="10" fill="#ff6b7a">채터링 발생 (실제 신호)</text>
+      <polyline points="30,70 80,70 80,40 95,40 95,70 110,70 110,40 170,40 170,70 200,70" fill="none" stroke="#ff6b7a" stroke-width="2"/>
+      <!-- 디바운스 후 신호 -->
+      <text x="230" y="20" font-size="10" fill="#30d9a0">디바운스 후 (처리 신호)</text>
+      <polyline points="230,70 280,70 280,40 390,40 390,70 420,70" fill="none" stroke="#30d9a0" stroke-width="2.5"/>
+      <!-- 화살표 -->
+      <text x="205" y="55" font-size="14" fill="#5a6275">→</text>
+      <!-- 타이머 표시 -->
+      <rect x="280" y="75" width="110" height="14" rx="2" fill="rgba(255,179,71,0.15)"/>
+      <text x="335" y="86" text-anchor="middle" font-size="9" fill="#ffb347">bouncetime (ms)</text>
+    </svg>
+    <p class="fig-cap">버튼을 물리적으로 누를 때 수ms 동안 신호가 불안정하게 진동 → bouncetime으로 무시</p>
+  </div>
+  <div class="info">bouncetime=300 → 콜백 실행 후 300ms 동안 추가 이벤트 무시</div>
+</div>
+
+</div><!-- end ch-3 -->
+
+
+<!-- ══════════════════ CH.4 버저·PWM ══════════════════ -->
+<div class="ch-page" id="ch-4">
+
+<div class="sub-page on" id="sub-4-pwm">
+  <div class="page-title">PWM(Pulse Width Modulation)이란? <span class="exam-badge">★</span></div>
+  <div class="page-sub">펄스폭 변조 — 디지털로 아날로그 효과 내기</div>
+  <div class="cl cl-1">
+    <span class="badge b-1">정의</span>
+    <p style="margin-top:6px">디지털 핀에서 <strong>ON/OFF 비율을 조절</strong>하여 아날로그처럼 동작하게 하는 방식</p>
+  </div>
+  <div class="fig">
+    <svg viewBox="0 0 460 200" width="100%" style="max-width:460px">
+      <!-- 25% 듀티 -->
+      <text x="10" y="22" font-size="10" fill="#ff6b7a">25% DutyCycle</text>
+      <line x1="10" y1="55" x2="450" y2="55" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+      <polyline points="10,55 10,28 50,28 50,55 150,55 150,28 190,28 190,55 290,55 290,28 330,28 330,55 430,55" fill="none" stroke="#ff6b7a" stroke-width="2.5"/>
+      <text x="235" y="14" text-anchor="middle" font-size="9" fill="#ff6b7a">ON 25%</text>
+      <text x="235" y="68" text-anchor="middle" font-size="9" fill="#5a6275">OFF 75%</text>
+      <!-- 50% 듀티 -->
+      <text x="10" y="98" font-size="10" fill="#ffb347">50% DutyCycle</text>
+      <line x1="10" y1="135" x2="450" y2="135" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+      <polyline points="10,135 10,108 90,108 90,135 170,135 170,108 250,108 250,135 330,135 330,108 410,108 410,135 450,135" fill="none" stroke="#ffb347" stroke-width="2.5"/>
+      <text x="235" y="92" text-anchor="middle" font-size="9" fill="#ffb347">ON 50% = OFF 50%</text>
+      <!-- 75% 듀티 -->
+      <text x="10" y="162" font-size="10" fill="#30d9a0">75% DutyCycle</text>
+      <line x1="10" y1="195" x2="450" y2="195" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+      <polyline points="10,195 10,168 120,168 120,195 170,195 170,168 290,168 290,195 340,195 340,168 450,168" fill="none" stroke="#30d9a0" stroke-width="2.5"/>
+      <text x="235" y="158" text-anchor="middle" font-size="9" fill="#30d9a0">ON 75%</text>
+    </svg>
+    <p class="fig-cap">DutyCycle이 높을수록 평균 전력 ↑ → LED 밝기↑ / 버저 음색 변화</p>
+  </div>
+  <div class="g2">
+    <div class="cl cl-1">
+      <span class="badge b-1">주파수(Hz)</span>
+      <p style="margin-top:6px">1초당 PWM 신호가 반복되는 횟수<br>→ 소리의 <strong>높낮이</strong> 결정</p>
+    </div>
+    <div class="cl cl-3">
+      <span class="badge b-3">DutyCycle(%)</span>
+      <p style="margin-top:6px">한 주기에서 ON 상태 비율<br>→ LED <strong>밝기</strong> / 버저 <strong>음색</strong> 결정</p>
+    </div>
+  </div>
+  <table>
+    <tr><th>PWM 응용</th><th>주파수 역할</th><th>DutyCycle 역할</th></tr>
+    <tr><td>🔊 버저</td><td class="imp">음정(높낮이) 결정</td><td>음색 (얇음↔두꺼움)</td></tr>
+    <tr><td>💡 LED</td><td>깜빡임 속도</td><td class="imp">밝기 결정</td></tr>
+    <tr><td>⚙️ 모터</td><td>진동 주파수</td><td>속도 결정</td></tr>
+  </table>
+</div>
+
+<div class="sub-page" id="sub-4-duty">
+  <div class="page-title">DutyCycle 상세 <span class="exam-badge">★</span></div>
+  <div class="page-sub">PWM 한 주기에서 ON(HIGH) 상태가 차지하는 비율(%)</div>
+  <div class="formula">DutyCycle(%) = ON 시간 / 전체 주기 × 100</div>
+  <div class="formula">평균 전류 Iavg = I × DutyCycle &nbsp;&nbsp;→&nbsp;&nbsp; Iavg ∝ LED 밝기</div>
+  <div class="card">
+    <h3 style="margin-top:0">빨강 LED 기준 예시 (I=26mA, Vsupply=3.3V, R=50Ω)</h3>
+    <table>
+      <tr><th>DutyCycle</th><th>평균전류 Iavg</th><th>밝기</th></tr>
+      <tr><td>0%</td><td>0 mA</td><td>꺼짐</td></tr>
+      <tr><td>25%</td><td>6.5 mA</td><td>어두움</td></tr>
+      <tr><td>50%</td><td>13 mA</td><td>중간</td></tr>
+      <tr><td>75%</td><td>19.5 mA</td><td>밝음</td></tr>
+      <tr><td class="imp">100%</td><td class="imp">26 mA</td><td class="imp">최대 밝기</td></tr>
+    </table>
+  </div>
+  <div class="star-box">⭐ DutyCycle 높을수록 → 평균 전류 ↑ → LED 더 밝음</div>
+</div>
+
+<div class="sub-page" id="sub-4-freq">
+  <div class="page-title">주파수와 소리의 관계 <span class="exam-badge">★</span></div>
+  <div class="page-sub">물리적 원리 — 공기 진동 → 소리 인식</div>
+  <div class="fig">
+    <svg viewBox="0 0 460 160" width="100%" style="max-width:460px">
+      <!-- 저주파 파형 -->
+      <text x="50" y="20" text-anchor="middle" font-size="10" fill="#4a9eff">낮은 주파수 (261Hz, 도)</text>
+      <text x="50" y="30" text-anchor="middle" font-size="9" fill="#5a6275">낮은 음</text>
+      <path d="M 10,55 Q 35,20 60,55 Q 85,90 110,55 Q 135,20 160,55 Q 185,90 210,55" fill="none" stroke="#4a9eff" stroke-width="2.5"/>
+      <!-- 고주파 파형 -->
+      <text x="340" y="20" text-anchor="middle" font-size="10" fill="#ff6b7a">높은 주파수 (523Hz, 높은도)</text>
+      <text x="340" y="30" text-anchor="middle" font-size="9" fill="#5a6275">높은 음</text>
+      <path d="M 240,55 Q 252,30 264,55 Q 276,80 288,55 Q 300,30 312,55 Q 324,80 336,55 Q 348,30 360,55 Q 372,80 384,55 Q 396,30 408,55 Q 420,80 432,55 Q 444,30 456,55" fill="none" stroke="#ff6b7a" stroke-width="2.5"/>
+      <!-- 화살표 -->
+      <text x="218" y="58" font-size="16" fill="#5a6275">→</text>
+      <!-- 레이블 -->
+      <text x="110" y="120" text-anchor="middle" font-size="11" fill="#4a9eff">↕ 파형 길이 김 = 저주파</text>
+      <text x="350" y="120" text-anchor="middle" font-size="11" fill="#ff6b7a">↕ 파형 촘촘 = 고주파</text>
+      <text x="230" y="150" text-anchor="middle" font-size="10" fill="#8b95a8">가청 주파수: 20Hz ~ 20,000Hz (20kHz)</text>
+    </svg>
+  </div>
+  <table>
+    <tr><th>항목</th><th>설명</th></tr>
+    <tr><td>진동수(Hz)</td><td>초당 공기 압력 변화 횟수</td></tr>
+    <tr><td class="imp">주파수 높음</td><td class="imp">음이 높아짐 (도→미→솔→높은도)</td></tr>
+    <tr><td>주파수 낮음</td><td>음이 낮아짐</td></tr>
+    <tr><td>부저(PWM) 원리</td><td>전기 ON/OFF로 공기 진동 → 귀가 음으로 인식</td></tr>
+    <tr><td class="imp">가청 주파수</td><td class="imp">약 20Hz ~ 20,000Hz (20kHz)</td></tr>
+  </table>
+  <div class="star-box">⭐ 시험 포인트: 주파수 ↑ = 음 높아짐 / 가청 주파수 20Hz~20kHz / PWM으로 주파수 바꾸면 부저에서 다른 음 출력</div>
+</div>
+
+<div class="sub-page" id="sub-4-buzzer">
+  <div class="page-title">버저(Buzzer) 종류와 원리</div>
+  <div class="page-sub">액티브 버저 vs 패시브 버저</div>
+  <div class="g2">
+    <div class="cl cl-3">
+      <span class="badge b-3">액티브 버저</span>
+      <ul style="margin-top:8px">
+        <li><strong>내장 발진 회로</strong> 보유</li>
+        <li>전원만 공급하면 <strong>특정 주파수</strong>로 소리</li>
+        <li>단순 ON/OFF 제어</li>
+        <li>실습 사용: 주로 이 방식</li>
+      </ul>
+    </div>
+    <div class="cl cl-1">
+      <span class="badge b-1">패시브 버저</span>
+      <ul style="margin-top:8px">
+        <li>발진 회로 없음</li>
+        <li>외부에서 <strong>PWM 신호 필요</strong></li>
+        <li>주파수 변경으로 다양한 음정 출력</li>
+        <li>멜로디 재생 가능</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info">💡 실습에서는 패시브 버저에 PWM 신호를 줘서 음정을 제어했어요</div>
+  <h3>기본 사양</h3>
+  <table>
+    <tr><th>항목</th><th>값</th></tr>
+    <tr><td>전원</td><td>3.3V 또는 5V DC</td></tr>
+    <tr><td>작동 주파수</td><td>약 2kHz 내외 (최대)</td></tr>
+    <tr><td>소리 크기</td><td>약 85 dB</td></tr>
+    <tr><td>가청 주파수</td><td>20Hz ~ 20,000Hz</td></tr>
+  </table>
+</div>
+
+<div class="sub-page" id="sub-4-notes">
+  <div class="page-title">음표 주파수 표</div>
+  <div class="page-sub">도레미파솔라시도 = 각각 정해진 Hz</div>
+  <div class="fig">
+    <svg viewBox="0 0 460 80" width="100%" style="max-width:460px">
+      <text x="10" y="15" font-size="9" fill="#5a6275">C4(도) D4(레) E4(미) F4(파) G4(솔) A4(라) B4(시) C5(높은도)</text>
+      <!-- 피아노 건반 표현 -->
+      <rect x="10" y="20" width="50" height="50" rx="3" fill="rgba(74,158,255,0.2)" stroke="rgba(74,158,255,0.4)" stroke-width="1.5"/>
+      <text x="35" y="42" text-anchor="middle" font-size="13" fill="#4a9eff">도</text>
+      <text x="35" y="58" text-anchor="middle" font-size="9" fill="#8b95a8">261Hz</text>
+      <rect x="65" y="20" width="50" height="50" rx="3" fill="rgba(48,217,160,0.15)" stroke="rgba(48,217,160,0.3)" stroke-width="1.5"/>
+      <text x="90" y="42" text-anchor="middle" font-size="13" fill="#30d9a0">레</text>
+      <text x="90" y="58" text-anchor="middle" font-size="9" fill="#8b95a8">294Hz</text>
+      <rect x="120" y="20" width="50" height="50" rx="3" fill="rgba(255,179,71,0.15)" stroke="rgba(255,179,71,0.3)" stroke-width="1.5"/>
+      <text x="145" y="42" text-anchor="middle" font-size="13" fill="#ffb347">미</text>
+      <text x="145" y="58" text-anchor="middle" font-size="9" fill="#8b95a8">330Hz</text>
+      <rect x="175" y="20" width="50" height="50" rx="3" fill="rgba(255,107,122,0.15)" stroke="rgba(255,107,122,0.3)" stroke-width="1.5"/>
+      <text x="200" y="42" text-anchor="middle" font-size="13" fill="#ff6b7a">파</text>
+      <text x="200" y="58" text-anchor="middle" font-size="9" fill="#8b95a8">349Hz</text>
+      <rect x="230" y="20" width="50" height="50" rx="3" fill="rgba(179,157,255,0.15)" stroke="rgba(179,157,255,0.3)" stroke-width="1.5"/>
+      <text x="255" y="42" text-anchor="middle" font-size="13" fill="#b39dff">솔</text>
+      <text x="255" y="58" text-anchor="middle" font-size="9" fill="#8b95a8">392Hz</text>
+      <rect x="285" y="20" width="50" height="50" rx="3" fill="rgba(125,218,88,0.15)" stroke="rgba(125,218,88,0.3)" stroke-width="1.5"/>
+      <text x="310" y="42" text-anchor="middle" font-size="13" fill="#7dda58">라</text>
+      <text x="310" y="58" text-anchor="middle" font-size="9" fill="#8b95a8">440Hz</text>
+      <rect x="340" y="20" width="50" height="50" rx="3" fill="rgba(255,100,180,0.15)" stroke="rgba(255,100,180,0.3)" stroke-width="1.5"/>
+      <text x="365" y="42" text-anchor="middle" font-size="13" fill="#ff64b4">시</text>
+      <text x="365" y="58" text-anchor="middle" font-size="9" fill="#8b95a8">494Hz</text>
+      <rect x="395" y="20" width="55" height="50" rx="3" fill="rgba(74,158,255,0.25)" stroke="rgba(74,158,255,0.5)" stroke-width="1.5"/>
+      <text x="422" y="42" text-anchor="middle" font-size="11" fill="#4a9eff">높은도</text>
+      <text x="422" y="58" text-anchor="middle" font-size="9" fill="#8b95a8">523Hz</text>
+    </svg>
+  </div>
+</div>
+
+<div class="sub-page" id="sub-4-led_bright">
+  <div class="page-title">LED 밝기 공식 <span class="exam-badge">★</span></div>
+  <div class="page-sub">옴의 법칙 + DutyCycle 적용</div>
+  <div class="formula" style="font-size:14px">순간 전류: I = (Vsupply − Vf) / R</div>
+  <div class="formula" style="font-size:14px">평균 전류(≈밝기): Iavg = I × DutyCycle</div>
+  <table>
+    <tr><th>항목</th><th>값</th><th>비유</th></tr>
+    <tr><td>전압 (V)</td><td>3.3V (GPIO 기준)</td><td>수압 (물 미는 힘)</td></tr>
+    <tr><td>전류 (A)</td><td>계산값</td><td>수량 (흐르는 물)</td></tr>
+    <tr><td>저항 (Ω)</td><td>GPIO 내부 ≈50Ω</td><td>파이프 좁기</td></tr>
+    <tr><td>전력 (W)</td><td>V × I</td><td>물레방아 회전력</td></tr>
+  </table>
+  <div class="g3" style="margin-top:12px">
+    <div class="card" style="text-align:center">
+      <div style="font-size:20px">🔴</div>
+      <div style="font-size:12px;color:var(--tx2);margin-top:4px">빨강</div>
+      <div style="font-size:11px;color:var(--tx3)">Vf≈2.0V</div>
+      <div style="font-size:11px;color:var(--tx3)">I≈26mA</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:20px">🟢</div>
+      <div style="font-size:12px;color:var(--tx2);margin-top:4px">초록</div>
+      <div style="font-size:11px;color:var(--tx3)">Vf≈2.7V</div>
+      <div style="font-size:11px;color:var(--tx3)">I≈12mA</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:20px">🔵</div>
+      <div style="font-size:12px;color:var(--tx2);margin-top:4px">파랑</div>
+      <div style="font-size:11px;color:var(--tx3)">Vf≈2.7V</div>
+      <div style="font-size:11px;color:var(--tx3)">I≈12mA</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end ch-4 -->
+
+
+<!-- ══════════════════ CH.5 초음파 센서 ══════════════════ -->
+<div class="ch-page" id="ch-5">
+
+<div class="sub-page on" id="sub-5-us_intro">
+  <div class="page-title">HC-SR04 초음파 센서 <span class="exam-badge">★</span></div>
+  <div class="page-sub">초음파 발사 → 반사 → 수신 시간으로 거리 측정</div>
+  <div class="fig">
+    <svg viewBox="0 0 460 180" width="100%" style="max-width:460px">
+      <!-- 센서 본체 -->
+      <rect x="30" y="60" width="130" height="70" rx="8" fill="rgba(74,158,255,0.1)" stroke="rgba(74,158,255,0.3)" stroke-width="1.5"/>
+      <text x="95" y="85" text-anchor="middle" font-size="11" fill="#4a9eff" font-weight="700">HC-SR04</text>
+      <!-- 송신부 T -->
+      <ellipse cx="65" cy="100" rx="22" ry="22" fill="rgba(255,179,71,0.15)" stroke="#ffb347" stroke-width="1.5"/>
+      <text x="65" y="97" text-anchor="middle" font-size="11" fill="#ffb347" font-weight="700">T</text>
+      <text x="65" y="110" text-anchor="middle" font-size="8" fill="#ffb347">송신</text>
+      <!-- 수신부 R -->
+      <ellipse cx="125" cy="100" rx="22" ry="22" fill="rgba(48,217,160,0.15)" stroke="#30d9a0" stroke-width="1.5"/>
+      <text x="125" y="97" text-anchor="middle" font-size="11" fill="#30d9a0" font-weight="700">R</text>
+      <text x="125" y="110" text-anchor="middle" font-size="8" fill="#30d9a0">수신</text>
+      <!-- 초음파 발사 -->
+      <path d="M 87,85 Q 120,60 160,75" fill="none" stroke="rgba(255,179,71,0.5)" stroke-width="2" stroke-dasharray="5,3"/>
+      <path d="M 87,95 Q 140,70 200,80" fill="none" stroke="rgba(255,179,71,0.5)" stroke-width="2" stroke-dasharray="5,3"/>
+      <path d="M 87,105 Q 160,80 230,90" fill="none" stroke="rgba(255,179,71,0.5)" stroke-width="2" stroke-dasharray="5,3"/>
+      <!-- 물체 -->
+      <rect x="310" y="50" width="40" height="90" rx="5" fill="rgba(255,107,122,0.15)" stroke="rgba(255,107,122,0.4)" stroke-width="1.5"/>
+      <text x="330" y="100" text-anchor="middle" font-size="10" fill="#ff6b7a">물체</text>
+      <!-- 반사 -->
+      <path d="M 310,75 Q 250,65 125,78" fill="none" stroke="rgba(48,217,160,0.5)" stroke-width="2" stroke-dasharray="5,3"/>
+      <path d="M 310,90 Q 240,80 125,92" fill="none" stroke="rgba(48,217,160,0.5)" stroke-width="2" stroke-dasharray="5,3"/>
+      <!-- 핀 레이블 -->
+      <text x="95" y="155" text-anchor="middle" font-size="10" fill="#ffb347">→ 초음파 발사</text>
+      <text x="260" y="155" text-anchor="middle" font-size="10" fill="#30d9a0">← 반사파 수신</text>
+    </svg>
+  </div>
+  <div class="g2">
+    <table>
+      <tr><th>핀</th><th>역할</th><th>GPIO 연결</th></tr>
+      <tr><td>VCC</td><td>5V 전원</td><td>핀 2 (5V)</td></tr>
+      <tr><td>GND</td><td>접지</td><td>핀 14</td></tr>
+      <tr><td class="imp">Trig</td><td class="imp">측정 시작 입력</td><td>GPIO 23 (핀16)</td></tr>
+      <tr><td class="imp">Echo</td><td class="imp">결과 출력</td><td>GPIO 24 (핀18)</td></tr>
+    </table>
+    <div>
+      <div class="cl cl-3" style="margin-bottom:8px">
+        <span class="badge b-3">Trig 핀</span>
+        <p style="margin-top:6px">10µs 이상 HIGH 신호 입력 시 초음파 발사 시작</p>
+      </div>
+      <div class="cl cl-2">
+        <span class="badge b-2">Echo 핀</span>
+        <p style="margin-top:6px">발사 시작 → HIGH / 수신 완료 → LOW<br>HIGH 유지 시간 = 왕복 시간</p>
+      </div>
+    </div>
+  </div>
+  <h3>기본 사양</h3>
+  <table>
+    <tr><th>항목</th><th>값</th></tr>
+    <tr><td>작동 주파수</td><td class="imp">40kHz 초음파</td></tr>
+    <tr><td>측정 범위</td><td>2cm ~ 4m</td></tr>
+    <tr><td>소비 전류</td><td>15mA</td></tr>
+    <tr><td>측정 각도</td><td>약 15도</td></tr>
+  </table>
+</div>
+
+<div class="sub-page" id="sub-5-us_how">
+  <div class="page-title">거리 측정 순서 <span class="exam-badge">★</span></div>
+  <div class="page-sub">5단계 순서 — 시험 단골 문제!</div>
+  <div class="card">
+    <div class="cl cl-1" style="margin-bottom:8px">
+      <strong>① Trig에 10µs 이상 HIGH 신호 입력</strong>
+      <p style="margin-top:4px;font-size:13px">→ 초음파 발사 시작 트리거</p>
+    </div>
+    <div class="cl cl-3" style="margin-bottom:8px">
+      <strong>② 초음파 발사</strong>
+      <p style="margin-top:4px;font-size:13px">→ 40kHz 초음파 8사이클(약 200µs) 생성 후 송신부(T)로 방사</p>
+    </div>
+    <div class="cl cl-2" style="margin-bottom:8px">
+      <strong>③ Echo 핀 HIGH 전환 → 타이머 시작</strong>
+      <p style="margin-top:4px;font-size:13px">→ 초음파 발사와 동시에 Echo 핀이 HIGH로 변환</p>
+    </div>
+    <div class="cl cl-4" style="margin-bottom:8px">
+      <strong>④ 반사파 수신 → Echo 핀 LOW 전환 → 타이머 종료</strong>
+      <p style="margin-top:4px;font-size:13px">→ 초음파가 물체에 반사되어 수신부(R)에 도달하는 순간</p>
+    </div>
+    <div class="cl cl-5">
+      <strong>⑤ 거리 계산</strong>
+      <p style="margin-top:4px;font-size:13px">→ Echo HIGH 유지 시간 = 초음파의 왕복 시간으로 거리 계산</p>
+    </div>
+  </div>
+  <div class="fig">
+    <svg viewBox="0 0 460 130" width="100%" style="max-width:460px">
+      <text x="10" y="18" font-size="9" fill="#ffb347">Trig</text>
+      <polyline points="30,30 30,30 70,30 70,10 90,10 90,30 430,30" fill="none" stroke="#ffb347" stroke-width="2"/>
+      <rect x="70" y="10" width="20" height="20" fill="rgba(255,179,71,0.2)"/>
+      <text x="80" y="50" text-anchor="middle" font-size="8" fill="#ffb347">10µs HIGH</text>
+      <text x="10" y="78" font-size="9" fill="#30d9a0">Echo</text>
+      <polyline points="30,90 30,90 100,90 100,65 300,65 300,90 430,90" fill="none" stroke="#30d9a0" stroke-width="2.5"/>
+      <line x1="100" y1="65" x2="100" y2="95" stroke="#30d9a0" stroke-width="1.5" stroke-dasharray="3,2"/>
+      <line x1="300" y1="65" x2="300" y2="95" stroke="#ff6b7a" stroke-width="1.5" stroke-dasharray="3,2"/>
+      <text x="100" y="112" text-anchor="middle" font-size="8" fill="#30d9a0">HIGH↑ 발사</text>
+      <text x="300" y="112" text-anchor="middle" font-size="8" fill="#ff6b7a">LOW↓ 수신</text>
+      <text x="200" y="58" text-anchor="middle" font-size="9" fill="#30d9a0">HIGH 유지 시간 = 왕복 시간</text>
+      <rect x="100" y="65" width="200" height="25" fill="rgba(48,217,160,0.1)"/>
+      <text x="200" y="128" text-anchor="middle" font-size="9" fill="#8b95a8">← 이 시간을 측정하면 거리 계산 가능 →</text>
+    </svg>
+    <p class="fig-cap">Echo HIGH 구간 전체 = 초음파가 T(송신기)에서 출발해 물체를 거쳐 R(수신기)에 도달하는 왕복 시간</p>
+  </div>
+  <div class="star-box">⭐ 순서 외우기: Trig HIGH → 초음파 발사 → Echo HIGH(타이머 시작) → 반사 수신 → Echo LOW(타이머 종료) → 거리 계산</div>
+</div>
+
+<div class="sub-page" id="sub-5-us_calc">
+  <div class="page-title">거리 계산 공식 <span class="exam-badge">★</span></div>
+  <div class="page-sub">음속 34300cm/s · 왕복 거리이므로 ÷2</div>
+  <div class="formula" style="font-size:15px">거리(cm) = (Echo HIGH 시간(sec) × 34300) / 2</div>
+  <div class="formula">또는: 거리(cm) = Echo HIGH 시간(µs) / 58</div>
+  <div class="cl cl-3">
+    <span class="badge b-3">왜 2로 나누나?</span>
+    <p style="margin-top:6px">초음파가 <strong>센서 → 물체 → 센서(왕복)</strong>로 이동하므로 측정된 시간은 편도 거리의 2배. 실제 거리는 절반!</p>
+  </div>
+  <div class="fig">
+    <svg viewBox="0 0 460 80" width="100%" style="max-width:460px">
+      <rect x="20" y="25" width="70" height="40" rx="6" fill="rgba(74,158,255,0.15)" stroke="rgba(74,158,255,0.3)" stroke-width="1.5"/>
+      <text x="55" y="48" text-anchor="middle" font-size="10" fill="#4a9eff">HC-SR04</text>
+      <!-- 화살표 왕복 -->
+      <line x1="90" y1="38" x2="350" y2="38" stroke="#ffb347" stroke-width="2"/>
+      <polygon points="350,33 365,38 350,43" fill="#ffb347"/>
+      <line x1="90" y1="52" x2="350" y2="52" stroke="#30d9a0" stroke-width="2"/>
+      <polygon points="90,47 75,52 90,57" fill="#30d9a0"/>
+      <text x="220" y="32" text-anchor="middle" font-size="9" fill="#ffb347">→ 발사</text>
+      <text x="220" y="65" text-anchor="middle" font-size="9" fill="#30d9a0">← 수신</text>
+      <!-- 물체 -->
+      <rect x="365" y="20" width="30" height="50" rx="4" fill="rgba(255,107,122,0.2)" stroke="rgba(255,107,122,0.4)" stroke-width="1.5"/>
+      <text x="380" y="50" text-anchor="middle" font-size="9" fill="#ff6b7a">물체</text>
+      <!-- 거리 표시 -->
+      <line x1="55" y1="75" x2="380" y2="75" stroke="rgba(255,255,255,0.15)" stroke-width="1" marker-start="url(#ar)" marker-end="url(#ar)"/>
+      <text x="220" y="75" text-anchor="middle" font-size="10" fill="#8b95a8">실제 거리 d</text>
+    </svg>
+    <p class="fig-cap">왕복 시간 t → 실제 거리 d = (t × 음속) / 2</p>
+  </div>
+</div>
+
+<div class="sub-page" id="sub-5-us_detail">
+  <div class="page-title">Echo 핀 동작 상세</div>
+  <div class="page-sub">Rising Edge · Falling Edge 포착</div>
+  <table>
+    <tr><th>상태</th><th>의미</th><th>코드에서</th></tr>
+    <tr><td>Echo <span class="badge b-4">LOW→HIGH</span></td><td>초음파 발사됨 (타이머 시작)</td><td>RISING Edge 감지 → pulse_start = time.time()</td></tr>
+    <tr><td>Echo <span class="badge b-2">HIGH→LOW</span></td><td>반사파 수신됨 (타이머 종료)</td><td>FALLING Edge 감지 → pulse_end = time.time()</td></tr>
+    <tr><td>pulse_duration</td><td>HIGH 유지 시간 = 왕복 시간</td><td>pulse_end - pulse_start</td></tr>
+  </table>
+</div>
+
+<div class="sub-page" id="sub-5-iot_app">
+  <div class="page-title">IoT 활성화 분야 <span class="exam-badge">★</span></div>
+  <div class="page-sub">현재 IoT 산업에서 가장 활성화된 분야와 작동 원리</div>
+  <div class="g2">
+    <div class="cl cl-1">
+      <span class="badge b-1">스마트 홈</span>
+      <ul style="margin-top:8px">
+        <li>조도 센서 → 조도 측정 → 자동 조명</li>
+        <li>온도 센서 → 자동 에어컨/난방</li>
+        <li>모션 감지 → 보안 시스템</li>
+      </ul>
+    </div>
+    <div class="cl cl-2">
+      <span class="badge b-2">스마트 팩토리</span>
+      <ul style="margin-top:8px">
+        <li>초음파 센서 → 거리/위치 감지</li>
+        <li>진동 센서 → 기계 이상 감지</li>
+        <li>데이터 수집 → 클라우드 분석</li>
+      </ul>
+    </div>
+    <div class="cl cl-3">
+      <span class="badge b-3">자동 주차 시스템</span>
+      <ul style="margin-top:8px">
+        <li>초음파 센서(HC-SR04)로 장애물 거리 측정</li>
+        <li>Trig → 발사 → Echo 시간 측정 → 거리 계산</li>
+        <li>거리에 따라 경보음 제어</li>
+      </ul>
+    </div>
+    <div class="cl cl-4">
+      <span class="badge b-4">웨어러블/헬스케어</span>
+      <ul style="margin-top:8px">
+        <li>심박 센서, 혈압 센서</li>
+        <li>실시간 데이터 → 스마트폰 연동</li>
+        <li>이상 감지 시 알림</li>
+      </ul>
+    </div>
+  </div>
+  <div class="star-box">⭐ 자동 주차 시스템: 초음파 센서 → Trig에 10µs HIGH → 초음파 발사 → Echo 시간 측정 → 거리 = (시간×34300)/2</div>
+</div>
+
+</div><!-- end ch-5 -->
+
+
+<!-- ══════════════════ CH.6 조도 센서 ══════════════════ -->
+<div class="ch-page" id="ch-6">
+
+<div class="sub-page on" id="sub-6-ldr">
+  <div class="page-title">LDR(광저항) 원리 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Light Dependent Resistor — 빛이 밝을수록 저항 감소</div>
+  <div class="fig">
+    <svg viewBox="0 0 460 160" width="100%" style="max-width:460px">
+      <!-- 밝을 때 -->
+      <rect x="10" y="20" width="200" height="130" rx="8" fill="rgba(255,215,0,0.05)" stroke="rgba(255,215,0,0.2)" stroke-width="1"/>
+      <text x="110" y="40" text-anchor="middle" font-size="11" fill="#ffd700" font-weight="700">☀️ 밝을 때</text>
+      <!-- 회로 -->
+      <line x1="110" y1="50" x2="110" y2="65" stroke="#ffb347" stroke-width="2"/>
+      <text x="130" y="58" font-size="9" fill="#ffb347">3.3V</text>
+      <!-- LDR 저항 작음 -->
+      <rect x="90" y="65" width="40" height="22" rx="4" fill="rgba(255,215,0,0.2)" stroke="#ffd700" stroke-width="1.5"/>
+      <text x="110" y="80" text-anchor="middle" font-size="9" fill="#ffd700">LDR</text>
+      <text x="155" y="80" font-size="8" fill="#30d9a0">저항↓ 작음</text>
+      <line x1="110" y1="87" x2="110" y2="110" stroke="#ffb347" stroke-width="4"/>
+      <text x="130" y="103" font-size="9" fill="#30d9a0">전류 잘 흐름 ↑↑</text>
+      <line x1="110" y1="110" x2="110" y2="130" stroke="#8b95a8" stroke-width="2"/>
+      <text x="130" y="123" font-size="9" fill="#8b95a8">GND</text>
+      <text x="110" y="147" text-anchor="middle" font-size="10" fill="#30d9a0">AO 전압 <tspan font-weight="700">낮음</tspan> → ADC 값 <tspan font-weight="700">작음</tspan></text>
+      <!-- 어두울 때 -->
+      <rect x="250" y="20" width="200" height="130" rx="8" fill="rgba(74,158,255,0.05)" stroke="rgba(74,158,255,0.2)" stroke-width="1"/>
+      <text x="350" y="40" text-anchor="middle" font-size="11" fill="#4a9eff" font-weight="700">🌙 어두울 때</text>
+      <line x1="350" y1="50" x2="350" y2="65" stroke="#ffb347" stroke-width="2"/>
+      <text x="370" y="58" font-size="9" fill="#ffb347">3.3V</text>
+      <rect x="330" y="65" width="40" height="22" rx="4" fill="rgba(74,158,255,0.2)" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="350" y="80" text-anchor="middle" font-size="9" fill="#4a9eff">LDR</text>
+      <text x="280" y="80" font-size="8" fill="#ff6b7a">저항↑ 큼</text>
+      <line x1="350" y1="87" x2="350" y2="110" stroke="#ffb347" stroke-width="1.5"/>
+      <text x="275" y="103" font-size="9" fill="#ff6b7a">전류 못 흐름 ↓↓</text>
+      <line x1="350" y1="110" x2="350" y2="130" stroke="#8b95a8" stroke-width="2"/>
+      <text x="370" y="123" font-size="9" fill="#8b95a8">GND</text>
+      <text x="350" y="147" text-anchor="middle" font-size="10" fill="#ff6b7a">AO 전압 <tspan font-weight="700">높음</tspan> → ADC 값 <tspan font-weight="700">큼 (최대4095)</tspan></text>
+    </svg>
+    <p class="fig-cap">LDR은 빛을 받으면 저항이 줄어 전류가 잘 흐름. 소비 전압(AO)으로 밝기를 역으로 추정</p>
+  </div>
+  <table>
+    <tr><th>조도</th><th>LDR 저항</th><th>전류</th><th>AO 전압</th><th>ADC 값</th></tr>
+    <tr><td>☀️ 밝음</td><td class="imp">작음 ↓</td><td>많이 흐름</td><td class="imp">낮음 ↓</td><td>작음 (0에 가까움)</td></tr>
+    <tr><td>🌙 어둠</td><td class="imp">큼 ↑</td><td>못 흐름</td><td class="imp">높음 ↑</td><td class="imp">큼 (최대 4095)</td></tr>
+  </table>
+  <div class="star-box">⭐ 어두울수록 AO 전압↑, ADC값↑ (최대 4095). 밝을수록 ADC값↓</div>
+</div>
+
+<div class="sub-page" id="sub-6-do">
+  <div class="page-title">디지털(DO) 출력 <span class="exam-badge">★</span></div>
+  <div class="page-sub">임계값 기준으로 HIGH/LOW만 출력</div>
+  <div class="cl cl-3">
+    <span class="badge b-3">DO 방식</span>
+    <ul style="margin-top:8px">
+      <li>조도가 설정 임계값 초과 → <strong>LOW</strong> (밝음)</li>
+      <li>조도가 임계값 미만 → <strong>HIGH</strong> (어둠)</li>
+      <li>내장 가변 저항(트리머)으로 임계값 조절</li>
+    </ul>
+  </div>
+  <div class="g2">
+    <div class="cl cl-2">
+      <span class="badge b-2">트리머 시계 방향</span>
+      <p style="margin-top:6px">임계값 높임 → 더 밝아야 LOW 출력</p>
+    </div>
+    <div class="cl cl-4">
+      <span class="badge b-4">트리머 반시계 방향</span>
+      <p style="margin-top:6px">임계값 낮춤 → 조금만 밝아도 LOW 출력</p>
+    </div>
+  </div>
+  <div class="info">용도: 가로등, 야간 자동 조명 — 어두워지면 HIGH 신호로 조명 ON</div>
+</div>
+
+<div class="sub-page" id="sub-6-ao">
+  <div class="page-title">아날로그(AO) 출력</div>
+  <div class="page-sub">빛의 강도에 비례하는 연속 전압 신호</div>
+  <div class="cl cl-1">
+    <span class="badge b-1">AO 특징</span>
+    <ul style="margin-top:8px">
+      <li>빛의 강도에 따라 <strong>연속적으로 변하는 전압</strong> 출력</li>
+      <li>세밀한 조도 측정 가능 (0~3.3V 사이 연속값)</li>
+      <li>라즈베리파이는 <strong>아날로그 입력 불가</strong> → 별도 ADC 필요</li>
+    </ul>
+  </div>
+</div>
+
+<div class="sub-page" id="sub-6-adc_need">
+  <div class="page-title">왜 ADC가 필요한가? <span class="exam-badge">★</span></div>
+  <div class="page-sub">라즈베리파이의 한계와 MCP3208의 역할</div>
+  <div class="fig">
+    <svg viewBox="0 0 460 120" width="100%" style="max-width:460px">
+      <!-- 아날로그 신호 -->
+      <rect x="10" y="20" width="120" height="80" rx="8" fill="rgba(255,179,71,0.1)" stroke="rgba(255,179,71,0.3)" stroke-width="1.5"/>
+      <text x="70" y="45" text-anchor="middle" font-size="10" fill="#ffb347" font-weight="700">조도 센서</text>
+      <text x="70" y="62" text-anchor="middle" font-size="9" fill="#8b95a8">AO 아날로그</text>
+      <text x="70" y="76" text-anchor="middle" font-size="9" fill="#8b95a8">0~3.3V 연속값</text>
+      <!-- 화살표 -->
+      <line x1="130" y1="60" x2="180" y2="60" stroke="rgba(255,179,71,0.5)" stroke-width="2"/>
+      <polygon points="180,55 195,60 180,65" fill="#ffb347"/>
+      <!-- MCP3208 -->
+      <rect x="195" y="20" width="100" height="80" rx="8" fill="rgba(48,217,160,0.1)" stroke="rgba(48,217,160,0.4)" stroke-width="1.5"/>
+      <text x="245" y="45" text-anchor="middle" font-size="10" fill="#30d9a0" font-weight="700">MCP3208</text>
+      <text x="245" y="60" text-anchor="middle" font-size="9" fill="#30d9a0">ADC 변환</text>
+      <text x="245" y="75" text-anchor="middle" font-size="9" fill="#8b95a8">아날로그→디지털</text>
+      <!-- 화살표 SPI -->
+      <line x1="295" y1="60" x2="345" y2="60" stroke="rgba(48,217,160,0.5)" stroke-width="2"/>
+      <polygon points="345,55 360,60 345,65" fill="#30d9a0"/>
+      <text x="320" y="53" text-anchor="middle" font-size="8" fill="#30d9a0">SPI</text>
+      <!-- 라즈베리파이 -->
+      <rect x="360" y="20" width="90" height="80" rx="8" fill="rgba(74,158,255,0.1)" stroke="rgba(74,158,255,0.3)" stroke-width="1.5"/>
+      <text x="405" y="45" text-anchor="middle" font-size="10" fill="#4a9eff" font-weight="700">라즈베리파이</text>
+      <text x="405" y="62" text-anchor="middle" font-size="9" fill="#8b95a8">0~4095</text>
+      <text x="405" y="76" text-anchor="middle" font-size="9" fill="#8b95a8">디지털값 처리</text>
+    </svg>
+    <p class="fig-cap">아날로그 신호 → MCP3208(ADC) → SPI → 라즈베리파이</p>
+  </div>
+  <div class="warn">⚠️ 라즈베리파이는 GPIO가 디지털만 지원 → 아날로그 센서 직접 연결 불가 → MCP3208 같은 ADC 필요</div>
+</div>
+
+</div><!-- end ch-6 -->
+
+
+<!-- ══════════════════ CH.7 SPI 통신 상세 ══════════════════ -->
+<div class="ch-page" id="ch-7">
+
+<div class="sub-page on" id="sub-7-spi_what">
+  <div class="page-title">SPI(Serial Peripheral Interface)란? <span class="exam-badge">★</span></div>
+  <div class="page-sub">4선 직렬 동기 통신 · 전이중 · 고속</div>
+  <div class="cl cl-2">
+    <span class="badge b-2">SPI 정의</span>
+    <ul style="margin-top:8px">
+      <li>마스터가 생성한 <strong>CLK(클럭)</strong> 신호에 맞춰 비트 단위로 동기 통신</li>
+      <li>MOSI / MISO 두 선 → <strong>동시에 송수신 가능</strong> (전이중 Full-Duplex)</li>
+      <li>I2C보다 <strong>빠름</strong> (선이 분리되어 있으므로)</li>
+      <li>슬레이브마다 <strong>CS(Chip Select) 핀</strong> 필요</li>
+    </ul>
+  </div>
+  <div class="info">라즈베리파이에서 SPI 사용하려면: <strong>sudo raspi-config → Interface → SPI → Enable → Reboot</strong></div>
+</div>
+
+<div class="sub-page" id="sub-7-spi_pins">
+  <div class="page-title">MOSI · MISO · CLK · CS <span class="exam-badge">★</span></div>
+  <div class="page-sub">4개 선의 역할</div>
+  <table>
+    <tr><th>핀</th><th>Full Name</th><th>방향</th><th>역할</th></tr>
+    <tr><td><span class="badge b-2">MOSI</span></td><td>Master Out Slave In</td><td>마스터 → 슬레이브</td><td>마스터가 슬레이브에 데이터 전송</td></tr>
+    <tr><td><span class="badge b-4">MISO</span></td><td>Master In Slave Out</td><td>슬레이브 → 마스터</td><td>슬레이브가 마스터에 데이터 전송</td></tr>
+    <tr><td><span class="badge b-3">CLK/SCLK</span></td><td>Serial Clock</td><td>마스터 생성</td><td>비트 전송 타이밍 기준 클럭</td></tr>
+    <tr><td><span class="badge b-5">CS/CE/SS</span></td><td>Chip Select / Chip Enable</td><td>마스터 → 슬레이브</td><td><strong>LOW = 해당 슬레이브 활성화</strong></td></tr>
+  </table>
+  <div class="fig">
+    <svg viewBox="0 0 460 100" width="100%" style="max-width:460px">
+      <!-- CLK 파형 -->
+      <text x="10" y="18" font-size="9" fill="#ffb347">CLK</text>
+      <polyline points="30,25 30,10 60,10 60,25 90,25 90,10 120,10 120,25 150,25 150,10 180,10 180,25 210,25 210,10 240,10 240,25 270,25 270,10 300,10 300,25 330,25 330,10 360,10 360,25 390,25" fill="none" stroke="#ffb347" stroke-width="2"/>
+      <!-- CLK 레이블 -->
+      <text x="200" y="40" text-anchor="middle" font-size="9" fill="#5a6275">클럭 한 주기 = 1비트</text>
+      <!-- MOSI -->
+      <text x="10" y="60" font-size="9" fill="#30d9a0">MOSI</text>
+      <text x="200" y="70" text-anchor="middle" font-size="9" fill="#30d9a0">← 마스터가 슬레이브에 보내는 데이터 (비트별)</text>
+      <!-- MISO -->
+      <text x="10" y="90" font-size="9" fill="#ff6b7a">MISO</text>
+      <text x="200" y="98" text-anchor="middle" font-size="9" fill="#ff6b7a">← 슬레이브가 마스터에 동시에 보내는 데이터</text>
+    </svg>
+  </div>
+</div>
+
+<div class="sub-page" id="sub-7-spi_mode">
+  <div class="page-title">SPI 모드 0~3 <span class="exam-badge">★</span></div>
+  <div class="page-sub">CLK 극성(CPOL)과 위상(CPHA)에 따라 결정</div>
+  <div class="fig">
+    <svg viewBox="0 0 460 150" width="100%" style="max-width:460px">
+      <!-- Mode 0 -->
+      <rect x="10" y="10" width="100" height="130" rx="6" fill="rgba(48,217,160,0.12)" stroke="rgba(48,217,160,0.4)" stroke-width="2"/>
+      <text x="60" y="30" text-anchor="middle" font-size="11" fill="#30d9a0" font-weight="700">Mode 0 ✓</text>
+      <text x="60" y="46" text-anchor="middle" font-size="9" fill="#8b95a8">실습 사용</text>
+      <!-- CLK 파형 Mode0 -->
+      <polyline points="20,75 20,60 35,60 35,75 50,75 50,60 65,60 65,75 80,75 80,60 95,60 95,75" fill="none" stroke="#30d9a0" stroke-width="1.5"/>
+      <text x="20" y="90" font-size="7" fill="#5a6275">CLK: L시작</text>
+      <text x="60" y="105" text-anchor="middle" font-size="8" fill="#30d9a0">↑상승엣지</text>
+      <text x="60" y="117" text-anchor="middle" font-size="8" fill="#30d9a0">에서 읽음</text>
+      <text x="60" y="132" text-anchor="middle" font-size="8" fill="#5a6275">spi.mode=0</text>
+      <!-- Mode 1 -->
+      <rect x="120" y="10" width="100" height="130" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+      <text x="170" y="30" text-anchor="middle" font-size="11" fill="#8b95a8" font-weight="700">Mode 1</text>
+      <polyline points="130,75 130,60 145,60 145,75 160,75 160,60 175,60 175,75 190,75 190,60 205,60 205,75" fill="none" stroke="#5a6275" stroke-width="1.5"/>
+      <text x="170" y="105" text-anchor="middle" font-size="8" fill="#5a6275">↓하강엣지</text>
+      <text x="170" y="117" text-anchor="middle" font-size="8" fill="#5a6275">에서 읽음</text>
+      <!-- Mode 2 -->
+      <rect x="230" y="10" width="100" height="130" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+      <text x="280" y="30" text-anchor="middle" font-size="11" fill="#8b95a8" font-weight="700">Mode 2</text>
+      <polyline points="240,60 240,75 255,75 255,60 270,60 270,75 285,75 285,60 300,60 300,75 315,75" fill="none" stroke="#5a6275" stroke-width="1.5"/>
+      <text x="280" y="90" font-size="7" fill="#5a6275">CLK: H시작</text>
+      <text x="280" y="105" text-anchor="middle" font-size="8" fill="#5a6275">↓하강엣지</text>
+      <text x="280" y="117" text-anchor="middle" font-size="8" fill="#5a6275">에서 읽음</text>
+      <!-- Mode 3 -->
+      <rect x="340" y="10" width="110" height="130" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+      <text x="395" y="30" text-anchor="middle" font-size="11" fill="#8b95a8" font-weight="700">Mode 3</text>
+      <polyline points="350,60 350,75 365,75 365,60 380,60 380,75 395,75 395,60 410,60 410,75 425,75 440,75" fill="none" stroke="#5a6275" stroke-width="1.5"/>
+      <text x="395" y="90" font-size="7" fill="#5a6275">CLK: H시작</text>
+      <text x="395" y="105" text-anchor="middle" font-size="8" fill="#5a6275">↑상승엣지</text>
+      <text x="395" y="117" text-anchor="middle" font-size="8" fill="#5a6275">에서 읽음</text>
+    </svg>
+  </div>
+  <table>
+    <tr><th>모드</th><th>CLK 시작</th><th>데이터 읽는 시점</th><th>사용 여부</th></tr>
+    <tr><td class="imp">Mode 0</td><td>LOW</td><td class="imp">상승 엣지(↑ Low→High)</td><td class="imp">✅ 실습 사용 (spi.mode=0)</td></tr>
+    <tr><td>Mode 1</td><td>LOW</td><td>하강 엣지(↓)</td><td>—</td></tr>
+    <tr><td>Mode 2</td><td>HIGH</td><td>하강 엣지(↓)</td><td>—</td></tr>
+    <tr><td>Mode 3</td><td>HIGH</td><td>상승 엣지(↑)</td><td>—</td></tr>
+  </table>
+  <div class="star-box">⭐ Mode 0 (spi.mode=0): CLK LOW에서 시작, 상승 엣지(LOW→HIGH)에서 데이터 읽음</div>
+</div>
+
+<div class="sub-page" id="sub-7-vs">
+  <div class="page-title">I2C vs SPI 비교 <span class="exam-badge">★</span></div>
+  <div class="page-sub">언제 어떤 통신을 쓰는가</div>
+  <table>
+    <tr><th>항목</th><th>I2C</th><th>SPI</th></tr>
+    <tr><td>선 수</td><td>2선 (SCL + SDA)</td><td class="imp">4선 (MOSI+MISO+CLK+CS)</td></tr>
+    <tr><td>통신 방향</td><td>반이중 (한 번에 한 방향)</td><td class="imp">전이중 (동시 송수신)</td></tr>
+    <tr><td>속도</td><td>저속 (100kHz~400kHz)</td><td class="imp">고속 (최대 수십MHz)</td></tr>
+    <tr><td>슬레이브 구별</td><td class="imp">주소(7비트)로 구별</td><td>CS 핀으로 구별</td></tr>
+    <tr><td>최대 슬레이브</td><td>많음 (주소 수만큼)</td><td>CS 핀 수만큼 (SPI0=2개)</td></tr>
+    <tr><td>용도</td><td>센서, 메모리, 저속 장치</td><td class="imp">ADC, 빠른 장치</td></tr>
+    <tr><td>구현 복잡도</td><td>단순</td><td>프로토콜 이해 필요</td></tr>
+  </table>
+</div>
+
+<div class="sub-page" id="sub-7-spi_bus">
+  <div class="page-title">SPI0 vs SPI1 핀 배치</div>
+  <div class="page-sub">실습에서는 SPI0 사용</div>
+  <table>
+    <tr><th>항목</th><th>SPI0 (bus 0)</th><th>SPI1 (bus 1)</th></tr>
+    <tr><td>기본 상태</td><td class="imp">기본 활성화</td><td>비활성 (설정 필요)</td></tr>
+    <tr><td>MOSI</td><td class="imp">GPIO10 (핀19)</td><td>GPIO20 (핀38)</td></tr>
+    <tr><td>MISO</td><td class="imp">GPIO9 (핀21)</td><td>GPIO19 (핀35)</td></tr>
+    <tr><td>CLK</td><td class="imp">GPIO11 (핀23)</td><td>GPIO21 (핀40)</td></tr>
+    <tr><td>CS0</td><td class="imp">GPIO8 (핀24) CE0</td><td>GPIO18 (핀12)</td></tr>
+    <tr><td>CS1</td><td>GPIO7 (핀26) CE1</td><td>GPIO17 (핀11)</td></tr>
+    <tr><td>슬레이브 수</td><td>최대 2개</td><td>최대 3개</td></tr>
+  </table>
+</div>
+
+</div><!-- end ch-7 -->
+
+
+<!-- ══════════════════ CH.8 MCP3208 ══════════════════ -->
+<div class="ch-page" id="ch-8">
+
+<div class="sub-page on" id="sub-8-mcp_what">
+  <div class="page-title">MCP3208이란? <span class="exam-badge">★</span></div>
+  <div class="page-sub">12비트 8채널 ADC — 아날로그를 디지털로</div>
+  <div class="g2">
+    <div class="cl cl-8">
+      <span class="badge b-8">기본 스펙</span>
+      <ul style="margin-top:8px">
+        <li><strong>12비트 해상도</strong> → 0~4095 (2¹²-1)</li>
+        <li><strong>8채널</strong> (CH0~CH7) → 8개 아날로그 장치 연결 가능</li>
+        <li>인터페이스: <strong>SPI</strong></li>
+        <li>동작 전압: 2.7V ~ 5.5V</li>
+      </ul>
+    </div>
+    <div class="cl cl-3">
+      <span class="badge b-3">왜 필요?</span>
+      <ul style="margin-top:8px">
+        <li>라즈베리파이는 <strong>아날로그 입력 없음</strong></li>
+        <li>아날로그 센서(조도·온도 등) → MCP3208 → SPI → 라즈베리파이</li>
+        <li>1개로 최대 <strong>8개 아날로그 장치</strong> 연결</li>
+      </ul>
+    </div>
+  </div>
+  <div class="fig">
+    <svg viewBox="0 0 460 140" width="100%" style="max-width:460px">
+      <!-- IC 외형 -->
+      <rect x="160" y="20" width="140" height="100" rx="6" fill="rgba(100,255,218,0.08)" stroke="rgba(100,255,218,0.3)" stroke-width="1.5"/>
+      <text x="230" y="70" text-anchor="middle" font-size="13" fill="#64ffda" font-weight="700">MCP3208</text>
+      <!-- 홈 표시 -->
+      <path d="M 195,20 Q 230,10 265,20" fill="none" stroke="rgba(100,255,218,0.5)" stroke-width="1.5"/>
+      <text x="230" y="85" text-anchor="middle" font-size="10" fill="#8b95a8">16핀 DIP IC</text>
+      <!-- 왼쪽 핀들 (채널) -->
+      <line x1="120" y1="35" x2="160" y2="35" stroke="rgba(255,179,71,0.5)" stroke-width="1.5"/>
+      <text x="115" y="39" text-anchor="end" font-size="9" fill="#ffb347">CH0 ①</text>
+      <line x1="120" y1="50" x2="160" y2="50" stroke="rgba(255,179,71,0.5)" stroke-width="1.5"/>
+      <text x="115" y="54" text-anchor="end" font-size="9" fill="#ffb347">CH1 ②</text>
+      <line x1="120" y1="65" x2="160" y2="65" stroke="rgba(255,179,71,0.5)" stroke-width="1.5"/>
+      <text x="115" y="69" text-anchor="end" font-size="9" fill="#ffb347">CH2 ③</text>
+      <line x1="120" y1="80" x2="160" y2="80" stroke="rgba(255,179,71,0.5)" stroke-width="1.5"/>
+      <text x="115" y="84" text-anchor="end" font-size="9" fill="#ffb347">CH3 ④</text>
+      <text x="115" y="99" text-anchor="end" font-size="9" fill="#5a6275">...⑤⑥⑦⑧</text>
+      <!-- 오른쪽 핀들 (SPI 인터페이스) -->
+      <line x1="300" y1="35" x2="340" y2="35" stroke="rgba(48,217,160,0.5)" stroke-width="1.5"/>
+      <text x="345" y="39" font-size="9" fill="#30d9a0">CS/CE ⑯</text>
+      <line x1="300" y1="50" x2="340" y2="50" stroke="rgba(48,217,160,0.5)" stroke-width="1.5"/>
+      <text x="345" y="54" font-size="9" fill="#30d9a0">CLK ⑮</text>
+      <line x1="300" y1="65" x2="340" y2="65" stroke="rgba(48,217,160,0.5)" stroke-width="1.5"/>
+      <text x="345" y="69" font-size="9" fill="#30d9a0">MISO(Dout) ⑭</text>
+      <line x1="300" y1="80" x2="340" y2="80" stroke="rgba(48,217,160,0.5)" stroke-width="1.5"/>
+      <text x="345" y="84" font-size="9" fill="#30d9a0">MOSI(Din) ⑬</text>
+      <line x1="300" y1="95" x2="340" y2="95" stroke="rgba(255,107,122,0.4)" stroke-width="1.5"/>
+      <text x="345" y="99" font-size="9" fill="#ff6b7a">VDD 3.3V ⑨</text>
+      <text x="230" y="130" text-anchor="middle" font-size="9" fill="#5a6275">왼쪽=채널 입력 / 오른쪽=SPI 인터페이스 / 중앙 홈 넘어 꽂기</text>
+    </svg>
+  </div>
+  <div class="warn">⚠️ 빵판에 꽂을 때 반드시 중앙 홈을 넘어서! 안 넘으면 양쪽 다리 연결 → 합선 → 칩 파손 (만원짜리!)</div>
+</div>
+
+<div class="sub-page" id="sub-8-protocol">
+  <div class="page-title">24비트(3바이트) SPI 프로토콜 <span class="exam-badge">★</span></div>
+  <div class="page-sub">마스터가 3바이트 보내면 슬레이브도 3바이트 동시 반환</div>
+  <div class="fig">
+    <svg viewBox="0 0 460 200" width="100%" style="max-width:460px">
+      <!-- 마스터 전송 (위) -->
+      <text x="10" y="20" font-size="10" fill="#4a9eff" font-weight="700">마스터 → MCP3208 (명령 24비트)</text>
+      <!-- 1st byte -->
+      <rect x="10" y="28" width="140" height="34" rx="4" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.3)" stroke-width="1"/>
+      <text x="80" y="43" text-anchor="middle" font-size="10" fill="#8b95a8">1st byte (8bit)</text>
+      <rect x="10" y="28" width="62" height="34" rx="4" fill="rgba(74,158,255,0.04)"/>
+      <text x="41" y="49" text-anchor="middle" font-size="9" fill="#5a6275">00000 (Dummy)</text>
+      <rect x="72" y="28" width="18" height="34" fill="rgba(48,217,160,0.15)"/>
+      <text x="81" y="49" text-anchor="middle" font-size="8" fill="#30d9a0">Start=1</text>
+      <rect x="90" y="28" width="18" height="34" fill="rgba(255,179,71,0.15)"/>
+      <text x="99" y="43" text-anchor="middle" font-size="7" fill="#ffb347">SGL=1</text>
+      <text x="99" y="55" text-anchor="middle" font-size="7" fill="#5a6275">단일</text>
+      <rect x="108" y="28" width="42" height="34" fill="rgba(179,157,255,0.12)"/>
+      <text x="129" y="49" text-anchor="middle" font-size="9" fill="#b39dff">D2</text>
+      <!-- 2nd byte -->
+      <rect x="155" y="28" width="140" height="34" rx="4" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.3)" stroke-width="1"/>
+      <text x="225" y="43" text-anchor="middle" font-size="10" fill="#8b95a8">2nd byte (8bit)</text>
+      <rect x="155" y="28" width="30" height="34" fill="rgba(179,157,255,0.12)"/>
+      <text x="170" y="49" text-anchor="middle" font-size="9" fill="#b39dff">D1</text>
+      <rect x="185" y="28" width="30" height="34" fill="rgba(179,157,255,0.12)"/>
+      <text x="200" y="49" text-anchor="middle" font-size="9" fill="#b39dff">D0</text>
+      <rect x="215" y="28" width="80" height="34" fill="rgba(74,158,255,0.04)"/>
+      <text x="255" y="49" text-anchor="middle" font-size="9" fill="#5a6275">000000 (Don't care)</text>
+      <!-- 3rd byte -->
+      <rect x="300" y="28" width="150" height="34" rx="4" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.3)" stroke-width="1"/>
+      <text x="375" y="43" text-anchor="middle" font-size="10" fill="#8b95a8">3rd byte (8bit)</text>
+      <text x="375" y="56" text-anchor="middle" font-size="9" fill="#5a6275">00000000 (Dummy)</text>
+      <!-- 슬레이브 응답 (아래) -->
+      <text x="10" y="90" font-size="10" fill="#30d9a0" font-weight="700">MCP3208 → 마스터 (응답 24비트, 동시 전송)</text>
+      <!-- 응답 1st -->
+      <rect x="10" y="98" width="140" height="34" rx="4" fill="rgba(48,217,160,0.05)" stroke="rgba(48,217,160,0.2)" stroke-width="1"/>
+      <text x="80" y="118" text-anchor="middle" font-size="9" fill="#5a6275">8bit — 전부 무시 (Null)</text>
+      <!-- 응답 2nd -->
+      <rect x="155" y="98" width="140" height="34" rx="4" fill="rgba(48,217,160,0.05)" stroke="rgba(48,217,160,0.2)" stroke-width="1"/>
+      <rect x="155" y="98" width="70" height="34" fill="rgba(48,217,160,0.04)"/>
+      <text x="190" y="113" text-anchor="middle" font-size="9" fill="#5a6275">4bit Null</text>
+      <text x="190" y="125" text-anchor="middle" font-size="8" fill="#5a6275">(무시)</text>
+      <rect x="225" y="98" width="70" height="34" fill="rgba(48,217,160,0.15)"/>
+      <text x="260" y="113" text-anchor="middle" font-size="9" fill="#30d9a0" font-weight="600">B11~B8</text>
+      <text x="260" y="125" text-anchor="middle" font-size="8" fill="#30d9a0">상위 4비트</text>
+      <!-- 응답 3rd -->
+      <rect x="300" y="98" width="150" height="34" rx="4" fill="rgba(48,217,160,0.15)" stroke="rgba(48,217,160,0.4)" stroke-width="1.5"/>
+      <text x="375" y="113" text-anchor="middle" font-size="10" fill="#30d9a0" font-weight="700">B7~B0 (8bit)</text>
+      <text x="375" y="126" text-anchor="middle" font-size="9" fill="#30d9a0">하위 8비트 (유효 데이터)</text>
+      <!-- 브레이스 표시 -->
+      <line x1="225" y1="140" x2="450" y2="140" stroke="rgba(48,217,160,0.4)" stroke-width="1.5"/>
+      <text x="337" y="155" text-anchor="middle" font-size="10" fill="#30d9a0" font-weight="600">← 유효 12비트 (B11~B0) →</text>
+      <text x="337" y="168" text-anchor="middle" font-size="9" fill="#8b95a8">이 값 = 0~4095 사이의 ADC 결과</text>
+      <!-- 화살표 동시 -->
+      <text x="460" y="72" font-size="10" fill="#5a6275">동시!</text>
+      <line x1="450" y1="62" x2="450" y2="98" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-dasharray="4,3"/>
+    </svg>
+  </div>
+  <div class="star-box">⭐ 핵심: 마스터가 3바이트 보내는 동안 슬레이브도 동시에 3바이트 반환. 응답의 마지막 12비트가 실제 ADC 값!</div>
+</div>
+
+<div class="sub-page" id="sub-8-cmd">
+  <div class="page-title">CMD 만드는 법 (CH0 기준) <span class="exam-badge">★</span></div>
+  <div class="page-sub">채널 번호 → D2·D1·D0 비트 분해 → 3바이트 커맨드 조립</div>
+  <div class="cl cl-8">
+    <span class="badge b-8">채널 → D2·D1·D0 분해</span>
+    <ul style="margin-top:8px">
+      <li>CH0 = 000 → D2=0, D1=0, D0=0</li>
+      <li>CH5 = 101 → D2=1, D1=0, D0=1</li>
+      <li>CH7 = 111 → D2=1, D1=1, D0=1</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">CMD 조립 (CH0 예시)</h3>
+    <table>
+      <tr><th>CMD</th><th>비트 구성</th><th>설명</th></tr>
+      <tr><td><span class="badge b-1">cmd1</span></td><td class="mono">0b00000110 | D2</td><td>더미5 + Start(1) + SGL(1) + D2(0) = 0x06</td></tr>
+      <tr><td><span class="badge b-2">cmd2</span></td><td class="mono">(D1 &lt;&lt; 7) | (D0 &lt;&lt; 6)</td><td>D1·D0를 7·6번 비트에 배치 → CH0=0x00</td></tr>
+      <tr><td><span class="badge b-5">cmd3</span></td><td class="mono">0x00</td><td>전부 더미 (슬레이브 응답 받기 위한 클럭 유지)</td></tr>
+    </table>
+  </div>
+  <div class="cl cl-3" style="margin-top:12px">
+    <span class="badge b-3">Start bit = 1</span>
+    <p style="margin-top:6px">통신 시작 신호</p>
+  </div>
+  <div class="cl cl-2" style="margin-top:8px">
+    <span class="badge b-2">SGL/DIFF = 1</span>
+    <p style="margin-top:6px">1 = 단일(Single) 모드 / 0 = 차동(Differential) 모드</p>
+  </div>
+</div>
+
+<div class="sub-page" id="sub-8-response">
+  <div class="page-title">응답 데이터 파싱 <span class="exam-badge">★</span></div>
+  <div class="page-sub">adc[0]·adc[1]·adc[2] 에서 12비트 추출</div>
+  <table>
+    <tr><th>응답 바이트</th><th>내용</th><th>처리</th></tr>
+    <tr><td>adc[0] (1st)</td><td>전부 더미/Null</td><td class="imp">무시</td></tr>
+    <tr><td>adc[1] (2nd)</td><td>상위 4비트 Null + B11~B8</td><td><code>adc[1] &amp; 0b00001111</code> → 앞 4비트 마스킹</td></tr>
+    <tr><td>adc[2] (3rd)</td><td>B7~B0 (하위 8비트)</td><td>그대로 사용</td></tr>
+  </table>
+  <div class="cl cl-8" style="margin-top:12px">
+    <span class="badge b-8">12비트 조합 공식</span>
+    <div class="code" style="margin-top:8px;font-size:11px">high = adc[1] &amp; 0b00001111   # 상위 4비트 추출 (앞 4개 Null 제거)
+high = high &lt;&lt; 8              # 하위 8자리 비워두기
+data = high | adc[2]          # 하위 8비트 결합 → 최종 12비트 값</div>
+  </div>
+  <div class="info">결과: data = 0~4095 사이의 정수 (밝을수록 낮음, 어두울수록 4095에 가까움)</div>
+</div>
+
+<div class="sub-page" id="sub-8-voltage">
+  <div class="page-title">전압 변환 공식</div>
+  <div class="page-sub">ADC 값(0~4095) → 실제 전압(V)</div>
+  <div class="formula" style="font-size:15px">전압(V) = ADC값 × VREF / 4095</div>
+  <div class="cl cl-3">
+    <span class="badge b-3">예시 계산</span>
+    <ul style="margin-top:8px">
+      <li>ADC값 = 3583, VREF = 3.3V</li>
+      <li>전압 = 3583 × 3.3 / 4095 ≈ <strong>2.89V</strong></li>
+      <li>→ 약간 어두운 환경 (3.3V에 가까울수록 더 어두움)</li>
+    </ul>
+  </div>
+</div>
+
+<div class="sub-page" id="sub-8-diff">
+  <div class="page-title">단일(Single) vs 차동(Differential) <span class="exam-badge">★</span></div>
+  <div class="page-sub">노이즈가 많은 환경에서는 차동 모드로 노이즈 제거</div>
+  <div class="g2">
+    <div class="cl cl-2">
+      <span class="badge b-2">단일(SGL=1)</span>
+      <ul style="margin-top:8px">
+        <li>CH0 하나만 사용</li>
+        <li>AO 신호 직접 측정</li>
+        <li>짧은 배선 환경에서 충분</li>
+        <li>실습에서 사용하는 방식</li>
+      </ul>
+    </div>
+    <div class="cl cl-4">
+      <span class="badge b-4">차동(DIFF=0)</span>
+      <ul style="margin-top:8px">
+        <li>CH0(신호+노이즈) - CH1(GND+노이즈)</li>
+        <li>= 순수 신호 (노이즈 상쇄)</li>
+        <li>긴 배선(3~5m↑)에서 필요</li>
+        <li>자동주차 센서 등 실외 설치 시</li>
+      </ul>
+    </div>
+  </div>
+  <div class="fig">
+    <svg viewBox="0 0 460 120" width="100%" style="max-width:460px">
+      <!-- 단일 -->
+      <rect x="10" y="10" width="200" height="100" rx="6" fill="rgba(48,217,160,0.05)" stroke="rgba(48,217,160,0.2)" stroke-width="1"/>
+      <text x="110" y="30" text-anchor="middle" font-size="10" fill="#30d9a0" font-weight="700">단일 모드</text>
+      <text x="110" y="52" text-anchor="middle" font-size="11" fill="#30d9a0">CH0 = 2.5V</text>
+      <text x="110" y="70" text-anchor="middle" font-size="9" fill="#8b95a8">노이즈 없으면 OK</text>
+      <text x="110" y="88" text-anchor="middle" font-size="9" fill="#ff6b7a">노이즈 있으면: CH0=2.8V</text>
+      <text x="110" y="102" text-anchor="middle" font-size="9" fill="#ff6b7a">→ 오차 0.3V 구분 불가!</text>
+      <!-- 차동 -->
+      <rect x="250" y="10" width="200" height="100" rx="6" fill="rgba(255,107,122,0.05)" stroke="rgba(255,107,122,0.2)" stroke-width="1"/>
+      <text x="350" y="30" text-anchor="middle" font-size="10" fill="#ff6b7a" font-weight="700">차동 모드 (노이즈 제거)</text>
+      <text x="350" y="50" text-anchor="middle" font-size="10" fill="#8b95a8">CH0 = 2.5 + 0.3 = 2.8V</text>
+      <text x="350" y="66" text-anchor="middle" font-size="10" fill="#8b95a8">CH1 = 0.0 + 0.3 = 0.3V</text>
+      <line x1="265" y1="72" x2="445" y2="72" stroke="rgba(255,107,122,0.2)" stroke-width="1"/>
+      <text x="350" y="86" text-anchor="middle" font-size="11" fill="#30d9a0" font-weight="700">결과 = 2.8 - 0.3 = 2.5V ✅</text>
+      <text x="350" y="103" text-anchor="middle" font-size="9" fill="#30d9a0">노이즈 완벽 제거!</text>
+    </svg>
+    <p class="fig-cap">긴 배선이 없는 실습 환경에서는 단일 모드로 충분</p>
+  </div>
+  <div class="star-box">⭐ 차동 모드: CH0(신호+노이즈) - CH1(노이즈) = 순수 신호. 수 미터 이상 긴 배선에서 사용</div>
+</div>
+
+</div><!-- end ch-8 -->
+
+</main>
+</div><!-- .main -->
+
+<script src="shared.js"></script>
+<script>
+// 초기 챕터 설정
+state.ch = 1;
+state.subs = { 1:'intro', 2:'gpio_def', 3:'poll', 4:'pwm', 5:'us_intro', 6:'ldr', 7:'spi_what', 8:'mcp_what' };
+</script>
+</body>
+</html>
