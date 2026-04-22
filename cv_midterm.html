@@ -836,6 +836,15 @@ img=cv.imread(<span class="cs">'soccer.jpg'</span>)
 cv.imshow(<span class="cs">'R channel'</span>,img[:,:,2])
 cv.imshow(<span class="cs">'R channel binarization'</span>,bin_img)
 cv.waitKey(); cv.destroyAllWindows()</div>
+  <h3>관련 함수</h3>
+  <div class="card"><table>
+    <tr><th>함수</th><th>인자 설명</th><th>주의사항</th></tr>
+    <tr>
+      <td class="mono imp">cv.threshold(src, thresh, maxval, type)</td>
+      <td>src=입력 영상<br>thresh=임계값 (Otsu면 0)<br>maxval=조건 만족 시 줄 값<br>type=이진화 방식</td>
+      <td class="imp">반환값 2개! t, bin_img 순서<br>THRESH_BINARY+THRESH_OTSU</td>
+    </tr>
+  </table></div>
 </div>
 
 <div class="sub-page" id="sub-3-p34">
@@ -863,6 +872,21 @@ plt.imshow(b_erosion,cmap=<span class="cs">'gray'</span>); plt.xticks([]); plt.y
 
 <span class="ch">b_closing=cv.erode(cv.dilate(b,se,iterations=1),se,iterations=1)</span>               <span class="cm"># 닫기=팽창→침식</span>
 plt.imshow(b_closing,cmap=<span class="cs">'gray'</span>); plt.xticks([]); plt.yticks([]); plt.show()  <span class="cm"># ⑤</span></div>
+  <h3>관련 함수</h3>
+  <div class="card"><table>
+    <tr><th>함수</th><th>인자 설명</th><th>주의사항</th></tr>
+    <tr>
+      <td class="mono imp">cv.dilate(src, kernel, dst*, anchor*, iterations*)</td>
+      <td>src=입력 영상<br>kernel=구조 요소<br>iterations*=반복 횟수</td>
+      <td>팽창. 영역 키움<br>iterations= 키워드 필수!</td>
+    </tr>
+    <tr>
+      <td class="mono imp">cv.erode(src, kernel, dst*, anchor*, iterations*)</td>
+      <td>src=입력 영상<br>kernel=구조 요소<br>iterations*=반복 횟수</td>
+      <td class="imp">침식. 영역 작게<br>erode! erosion 아님!<br>iterations= 키워드 필수!</td>
+    </tr>
+  </table></div>
+  <div class="star-box">⭐ 열림(opening) = cv.erode → cv.dilate &nbsp;&nbsp; 닫힘(closing) = cv.dilate → cv.erode</div>
 </div>
 
 <div class="sub-page" id="sub-3-p35">
@@ -884,6 +908,25 @@ img=cv.resize(img,dsize=(0,0),fx=0.25,fy=0.25)
               gamma(img,2.0),gamma(img,3.0)))</span>   <span class="cm"># numpy.hstack 함수로 이어붙이기</span>
 cv.imshow(<span class="cs">'gamma'</span>,gc)
 cv.waitKey(); cv.destroyAllWindows()</div>
+  <h3>관련 함수</h3>
+  <div class="card"><table>
+    <tr><th>함수</th><th>인자 설명</th><th>주의사항</th></tr>
+    <tr>
+      <td class="mono imp">cv.resize(src, dsize, fx*, fy*, interpolation*)</td>
+      <td>src=입력 영상<br>dsize=결과 크기<br>fx*=x배율, fy*=y배율</td>
+      <td class="imp">dsize=(0,0)이면 fx/fy 배율 사용!</td>
+    </tr>
+    <tr>
+      <td class="mono imp">np.hstack([img1, img2, ...])</td>
+      <td>같은 세로 크기 이미지 리스트</td>
+      <td>이미지 가로로 이어붙이기</td>
+    </tr>
+    <tr>
+      <td class="mono imp">np.uint8(255*(f1**gamma))</td>
+      <td>f1=0~1 정규화된 영상<br>gamma=감마값</td>
+      <td>γ&lt;1=밝아짐, γ=1=변화없음, γ&gt;1=어두워짐</td>
+    </tr>
+  </table></div>
 </div>
 
 <div class="sub-page" id="sub-3-p37">
@@ -915,6 +958,36 @@ cv.imshow(<span class="cs">'Emboss'</span>,emboss)
 cv.imshow(<span class="cs">'Emboss_bad'</span>,emboss_bad)
 cv.imshow(<span class="cs">'Emboss_worse'</span>,emboss_worse)
 cv.waitKey(); cv.destroyAllWindows()</div>
+  <h3>관련 함수</h3>
+  <div class="card"><table>
+    <tr><th>함수</th><th>인자 설명</th><th>주의사항</th></tr>
+    <tr>
+      <td class="mono imp">cv.filter2D(src, ddepth, kernel)</td>
+      <td>src=입력 영상<br>ddepth=출력 데이터형(-1=입력과 같음)<br>kernel=필터 배열</td>
+      <td class="imp">음수 나오는 필터는 np.int16 변환 필수!</td>
+    </tr>
+    <tr>
+      <td class="mono imp">cv.GaussianBlur(src, ksize, sigmaX)</td>
+      <td>src=입력 영상<br>ksize=필터 크기(홀수,홀수)<br>sigmaX=x방향 표준편차</td>
+      <td>sigma=0이면 자동 계산</td>
+    </tr>
+    <tr>
+      <td class="mono imp">np.int16(img)</td>
+      <td>img=변환할 배열</td>
+      <td class="imp">음수 저장 가능하게 변환. 엠보싱 전 필수!</td>
+    </tr>
+    <tr>
+      <td class="mono imp">np.clip(arr, 0, 255)</td>
+      <td>arr=대상 배열<br>0=최솟값, 255=최댓값</td>
+      <td class="imp">오버플로우 방지! 범위 벗어난 값 강제 제한</td>
+    </tr>
+    <tr>
+      <td class="mono imp">np.uint8(arr)</td>
+      <td>arr=변환할 배열</td>
+      <td class="imp">최종 이미지 변환 필수!</td>
+    </tr>
+  </table></div>
+  <div class="star-box">⭐ 엠보싱 3단계: np.int16 → filter2D+128 → np.clip → np.uint8</div>
 </div>
 
 <div class="sub-page" id="sub-3-funcs3">
@@ -1101,20 +1174,7 @@ cv.waitKey(); cv.destroyAllWindows()</div>
     <p style="margin-top:4px">RETR_TREE: <strong>0(1→2→3) → 4((5→6→7)→8)</strong></p>
   </div>
 
-  <h3>관련 함수 정리</h3>
-  <div class="card"><table>
-    <tr><th>함수</th><th>인자 설명</th><th>주의사항</th></tr>
-    <tr>
-      <td class="mono imp">cv.findContours(image, mode, method)</td>
-      <td>image=입력 이진 영상<br>mode=검색 방식(RETR_*)<br>method=저장 방식(CHAIN_APPROX_*)</td>
-      <td class="imp">왕복 저장 → shape[0]&gt;100 = 실제 50이상</td>
-    </tr>
-    <tr>
-      <td class="mono imp">cv.drawContours(image, contours, contourIdx, color, thickness)</td>
-      <td>contourIdx=-1이면 모두 그리기<br>color=색상(B,G,R)</td>
-      <td>thickness=-1이면 내부 채우기</td>
-    </tr>
-  </table></div>
+  <div class="info">함수 정리는 사이드바 → 실습 코드 → 프로그램 4-3 경계선 에서 확인!</div>
 </div>
 
 <div class="sub-page" id="sub-4-hough">
@@ -1285,6 +1345,15 @@ gray=cv.cvtColor(img,cv.COLOR_BGR2GRAY)
 <span class="ch">canny2=cv.Canny(gray,100,200)</span>   <span class="cm"># Tlow=100, Thigh=200 → 에지 적음</span>
 cv.imshow(<span class="cs">'Original'</span>,gray); cv.imshow(<span class="cs">'Canny1'</span>,canny1); cv.imshow(<span class="cs">'Canny2'</span>,canny2)
 cv.waitKey(); cv.destroyAllWindows()</div>
+  <h3>관련 함수</h3>
+  <div class="card"><table>
+    <tr><th>함수</th><th>인자 설명</th><th>주의사항</th></tr>
+    <tr>
+      <td class="mono imp">cv.Canny(image, threshold1, threshold2, apertureSize*=3)</td>
+      <td>image=입력 영상<br>threshold1=낮은 임계값(T_low)<br>threshold2=높은 임계값(T_high)</td>
+      <td class="imp">T_high↑ = 에지 적게 검출<br>둘 다 작으면 노이즈까지 다 검출됨!</td>
+    </tr>
+  </table></div>
 </div>
 
 <div class="sub-page" id="sub-4-p43">
@@ -1306,6 +1375,20 @@ lcontour=[]
 <span class="ch">cv.drawContours(img,lcontour,-1,(0,255,0),3)</span>
 cv.imshow(<span class="cs">'Original with contours'</span>,img); cv.imshow(<span class="cs">'Canny'</span>,canny)
 cv.waitKey(); cv.destroyAllWindows()</div>
+  <h3>관련 함수</h3>
+  <div class="card"><table>
+    <tr><th>함수</th><th>인자 설명</th><th>주의사항</th></tr>
+    <tr>
+      <td class="mono imp">cv.findContours(image, mode, method)</td>
+      <td>image=입력 이진 영상<br>mode=RETR_EXTERNAL/LIST/CCOMP/TREE<br>method=CHAIN_APPROX_NONE/SIMPLE</td>
+      <td class="imp">왕복 저장 → shape[0]&gt;100 = 실제 50이상</td>
+    </tr>
+    <tr>
+      <td class="mono imp">cv.drawContours(image, contours, contourIdx, color, thickness)</td>
+      <td>contourIdx=-1이면 모두<br>color=(B,G,R)<br>thickness=선 굵기</td>
+      <td>thickness=-1이면 내부 채우기</td>
+    </tr>
+  </table></div>
 </div>
 
 <div class="sub-page" id="sub-4-p45">
@@ -1326,6 +1409,20 @@ sp_img2=skimage.segmentation.mark_boundaries(img,slic2)
 cv.imshow(<span class="cs">'Super pixels (compact 20)'</span>,cv.cvtColor(sp_img1,cv.COLOR_RGB2BGR))
 cv.imshow(<span class="cs">'Super pixels (compact 40)'</span>,cv.cvtColor(sp_img2,cv.COLOR_RGB2BGR))
 cv.waitKey(); cv.destroyAllWindows()</div>
+  <h3>관련 함수</h3>
+  <div class="card"><table>
+    <tr><th>함수</th><th>인자 설명</th><th>주의사항</th></tr>
+    <tr>
+      <td class="mono imp">skimage.segmentation.slic(image, compactness, n_segments)</td>
+      <td>compactness=균일도<br>n_segments=슈퍼픽셀 개수</td>
+      <td>compactness↓=색상위주(불규칙)<br>compactness↑=위치위주(사각형)</td>
+    </tr>
+    <tr>
+      <td class="mono imp">skimage.segmentation.mark_boundaries(img, labels)</td>
+      <td>img=원본 영상<br>labels=slic 결과</td>
+      <td class="imp">결과가 float → np.uint8(×255) 변환 필수!</td>
+    </tr>
+  </table></div>
 </div>
 
 <div class="sub-page" id="sub-4-p47">
@@ -1350,11 +1447,24 @@ LColor=(255,0,0); RColor=(0,0,255)           <span class="cm"># 파란색(물체
 <span class="ch">grab=img*mask2[:,:,np.newaxis]</span>              <span class="cm"># np.newaxis: (H,W)→(H,W,1) 차원 추가</span>
 cv.imshow(<span class="cs">'Grab cut image'</span>,grab)
 cv.waitKey(); cv.destroyAllWindows()</div>
+  <h3>관련 함수</h3>
   <div class="card"><table>
-    <tr><th>핵심 줄</th><th>설명</th></tr>
-    <tr><td class="mono imp">cv.grabCut(..., 5, GC_INIT_WITH_MASK)</td><td>마스크 기반 초기화, 5번 반복</td></tr>
-    <tr><td class="mono imp">np.where((mask==GC_BGD)|(mask==GC_PR_BGD),0,1)</td><td>배경=0, 물체=1 이진 마스크</td></tr>
-    <tr><td class="mono imp">img * mask2[:,:,np.newaxis]</td><td class="imp">np.newaxis 차원 추가 필수!</td></tr>
+    <tr><th>함수</th><th>인자 설명</th><th>주의사항</th></tr>
+    <tr>
+      <td class="mono imp">cv.grabCut(img, mask, rect, bgdModel, fgdModel, iterCount, mode)</td>
+      <td>img=입력 영상<br>mask=분할 상태 마스크<br>rect=초기 사각형(None=마스크 초기화)<br>bgdModel=배경 모델(np.zeros((1,65),float64))<br>fgdModel=전경 모델<br>iterCount=반복 횟수<br>mode=초기화 방식</td>
+      <td class="imp">iterCount = 뒤에서 두 번째!<br>mode = GC_INIT_WITH_MASK<br>GC_BGD/FGD/PR_BGD/PR_FGD 4가지만!</td>
+    </tr>
+    <tr>
+      <td class="mono imp">np.where((mask==GC_BGD)|(mask==GC_PR_BGD), 0, 1)</td>
+      <td>배경이거나 배경같으면 0<br>나머지(물체)는 1</td>
+      <td>이진 마스크 생성</td>
+    </tr>
+    <tr>
+      <td class="mono imp">img * mask2[:,:,np.newaxis]</td>
+      <td>mask2=(H,W) 배열</td>
+      <td class="imp">np.newaxis 차원 추가 필수!<br>(H,W)→(H,W,1)</td>
+    </tr>
   </table></div>
 </div>
 
@@ -1733,6 +1843,20 @@ gray=cv.cvtColor(img,cv.COLOR_BGR2GRAY)
 img[harris>0.01*harris.max()]=[0,0,255]                    <span class="cm"># 빨간점으로 표시</span>
 cv.imshow(<span class="cs">'Harris corners'</span>,img)
 cv.waitKey(); cv.destroyAllWindows()</div>
+  <h3>관련 함수</h3>
+  <div class="card"><table>
+    <tr><th>함수</th><th>인자 설명</th><th>주의사항</th></tr>
+    <tr>
+      <td class="mono imp">cv.cornerHarris(src, blockSize, ksize, k)</td>
+      <td>src=입력 그레이스케일 영상<br>blockSize=주변 영역 크기<br>ksize=소벨 커널 크기<br>k=Harris 상수(보통 0.04)</td>
+      <td>반환: float32 C값 맵<br>C↑큰양수=코너, C음수=에지, C≈0=평탄</td>
+    </tr>
+    <tr>
+      <td class="mono imp">cv.dilate(harris, None)</td>
+      <td>harris=C값 맵<br>None=기본 3×3 커널</td>
+      <td>NMS용 팽창으로 극대점 찾기</td>
+    </tr>
+  </table></div>
 </div>
 
 <div class="sub-page" id="sub-5-p52">
@@ -1748,6 +1872,25 @@ gray=cv.cvtColor(img,cv.COLOR_BGR2GRAY)
 <span class="cm"># DRAW_RICH_KEYPOINTS: 크기와 방향까지 원으로 표시</span>
 cv.imshow(<span class="cs">'sift'</span>,gray)
 cv.waitKey(); cv.destroyAllWindows()</div>
+  <h3>관련 함수</h3>
+  <div class="card"><table>
+    <tr><th>함수</th><th>인자 설명</th><th>주의사항</th></tr>
+    <tr>
+      <td class="mono imp">cv.SIFT_create()</td>
+      <td>인자 없음</td>
+      <td>SIFT 객체 생성</td>
+    </tr>
+    <tr>
+      <td class="mono imp">sift.detectAndCompute(image, mask)</td>
+      <td>image=입력 영상<br>mask=None (마스크 없음)</td>
+      <td>반환: (keypoints, descriptors)<br>기술자=128차원 벡터</td>
+    </tr>
+    <tr>
+      <td class="mono">cv.drawKeypoints(image, keypoints, outImage, flags)</td>
+      <td>flags=DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS</td>
+      <td>크기·방향까지 원으로 표시</td>
+    </tr>
+  </table></div>
 </div>
 
 <div class="sub-page" id="sub-5-p53">
@@ -1778,6 +1921,30 @@ for m,n in matches:
 res=cv.drawMatches(img1,kp1,img2,kp2,good_matches,None)
 cv.imshow(<span class="cs">'Good Matches'</span>,res)
 cv.waitKey(); cv.destroyAllWindows()</div>
+  <h3>관련 함수</h3>
+  <div class="card"><table>
+    <tr><th>함수</th><th>인자 설명</th><th>주의사항</th></tr>
+    <tr>
+      <td class="mono imp">cv.FlannBasedMatcher(flann_params, search_params)</td>
+      <td>flann_params=dict(algorithm=1, trees=5)<br>search_params=dict(checks=50)</td>
+      <td class="imp">아주 빠름! BFMatcher보다 훨씬 빠름</td>
+    </tr>
+    <tr>
+      <td class="mono imp">flann.knnMatch(des1, des2, k=2)</td>
+      <td>des1/des2=두 영상의 기술자<br>k=최근접 개수</td>
+      <td>k=2 필수! Lowe's ratio test 위해</td>
+    </tr>
+    <tr>
+      <td class="mono imp">m.distance &lt; 0.7 * n.distance</td>
+      <td>m=첫번째 가까운 매칭<br>n=두번째 가까운 매칭</td>
+      <td class="imp">Lowe's ratio test<br>70% 이하면 좋은 매칭으로 채택!</td>
+    </tr>
+    <tr>
+      <td class="mono">cv.drawMatches(img1,kp1,img2,kp2,matches,None)</td>
+      <td>img1/img2=두 영상<br>kp1/kp2=특징점 목록<br>matches=매칭 결과</td>
+      <td>매칭 결과 시각화</td>
+    </tr>
+  </table></div>
 </div>
 
 <div class="sub-page" id="sub-5-calc5">
