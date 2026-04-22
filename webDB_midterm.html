@@ -67,6 +67,7 @@
     <button class="ch-tab" data-ch="3" onclick="showCh(3)">Ch.3 HTML/CSS/JS</button>
     <button class="ch-tab" data-ch="4" onclick="showCh(4)">Ch.4 서블릿</button>
     <button class="ch-tab" data-ch="5" onclick="showCh(5)">Ch.5 쿠키·세션</button>
+    <button class="ch-tab" data-ch="6" onclick="showCh(6)">★ 함수 사전</button>
   </div>
 </div>
 
@@ -139,6 +140,16 @@
   <button class="sub-tab" onclick="showSub(5,'dispatcher')">RequestDispatcher</button>
   <div class="sidebar-label">비교 정리</div>
   <button class="sub-tab" onclick="showSub(5,'compare')">5가지 방법 비교<span class="star">★</span></button>
+</div>
+
+<!-- 함수 사전 메뉴 -->
+<div id="menu-6" style="display:none">
+  <div class="sidebar-label">챕터별 함수</div>
+  <button class="sub-tab on" onclick="showSub(6,'ch1')">Ch.1 웹 기초</button>
+  <button class="sub-tab" onclick="showSub(6,'ch2')">Ch.2 개발환경</button>
+  <button class="sub-tab" onclick="showSub(6,'ch3')">Ch.3 HTML/CSS/JS</button>
+  <button class="sub-tab" onclick="showSub(6,'ch4')">Ch.4 서블릿</button>
+  <button class="sub-tab" onclick="showSub(6,'ch5')">Ch.5 쿠키·세션</button>
 </div>
 
 </nav>
@@ -596,14 +607,16 @@ element.addEventListener(<span class="cs">"click"</span>, fn);</div>
   <div class="page-title">서블릿이란? <span class="exam-badge">★</span></div>
   <div class="page-sub">Ch.4 Section 01</div>
   <div class="star-box">⭐ 서블릿 = Server + Applet = <strong>서버에서 실행되는 작은 Java 프로그램</strong></div>
+  
   <p style="margin-top:10px">클라이언트 요청을 받아서 처리하고 HTML 응답을 돌려주는 역할. Java로 만들기 때문에 Java의 특징(이식성, API 사용)을 그대로 가짐.</p>
+
+  <div class="info">
+    <strong>교수님 강조:</strong> 서블릿은 <strong>멀티 스레드(Multi-Thread)</strong> 방식으로 동작합니다. 요청마다 프로세스를 새로 만드는 것이 아니라, 메모리에 로드된 객체를 여러 스레드가 공유하므로 서버 부하가 적고 빠릅니다.
+  </div>
+
   <h3>서블릿의 동작</h3>
-  <div class="code">브라우저 → HTTP 요청
- → 톰캣(서블릿 컨테이너)
- → 해당 서블릿 실행
- → DB 액세스 (필요 시)
- → HTML 동적 생성
- → 브라우저에 응답</div>
+  <div class="code">브라우저 → HTTP 요청 → 톰캣(서블릿 컨테이너) → 해당 서블릿 실행 → DB 액세스 → HTML 동적 생성 → 응답</div>
+
   <h3>서블릿 장단점</h3>
   <div class="g2">
     <div class="cl cl-teal">
@@ -612,230 +625,100 @@ element.addEventListener(<span class="cs">"click"</span>, fn);</div>
         <li>Java API 모두 사용 가능</li>
         <li>OS/하드웨어 독립적</li>
         <li>스레드 기반 다중 처리</li>
-        <li>오픈소스 라이브러리 활용</li>
       </ul>
     </div>
     <div class="cl cl-red">
       <span class="badge b-red">단점</span>
       <ul style="margin-top:8px">
-        <li>HTML 출력 시 out.print()로 태그를 문자열로 기술해야 함 → 복잡</li>
+        <li>HTML 출력 시 out.print() 문자열 기술 → 복잡</li>
         <li>디자이너가 화면 수정하기 어려움</li>
         <li>HTML Form 데이터 처리가 불편</li>
       </ul>
     </div>
   </div>
-  <div class="prof-box">"서블릿은 최종 산출물이 HTML 페이지. 서버에서 동적으로 HTML을 만들어서 클라이언트에 보내주는 것."</div>
 </div>
 
 <div class="sub-page" id="sub-4-lifecycle">
   <div class="page-title">서블릿 생명주기 <span class="exam-badge">★</span></div>
   <div class="page-sub">Ch.4 Section 01</div>
   <div class="star-box">⭐ 핵심: init()은 최초 1회. service()는 매 요청마다.</div>
-  <div class="code">첫 번째 요청:
-  컴파일 (.java → .class)
-   → init()    <span class="cm">// 최초 1회, 초기화</span>
-   → service() <span class="cm">// 매 요청마다 실행</span>
-   → doGet() or doPost()
+  <div class="code">첫 번째 요청: 컴파일 → init() (초기화) → service() (실행) → doGet/doPost
+두 번째 이후: service() → doGet/doPost (init 생략!)
+종료/수정: destroy() (정리 작업)</div>
 
-두 번째 이후 요청:
-  service() → doGet()/doPost()  <span class="cm">// init() 생략!</span>
+  <div class="warn">
+    <strong>동작 원리:</strong> 서블릿 코드를 수정하면 <code>destroy()</code>가 호출되고, 다음 요청 시 다시 <code>init()</code>부터 시작되어 변경사항이 반영됩니다.
+  </div>
 
-코드 수정 / 서버 종료:
-  destroy()  <span class="cm">// 최종 1회, 정리</span></div>
   <table style="margin-top:12px">
     <tr><th>메서드</th><th>호출 시점</th><th>용도</th></tr>
-    <tr><td class="mono imp">init()</td><td>최초 1회</td><td>초기화 작업 (DB 연결 등)</td></tr>
-    <tr><td class="mono imp">service()</td><td>매 요청마다</td><td>GET/POST 분기</td></tr>
-    <tr><td class="mono imp">doGet()</td><td>GET 요청 시</td><td>실제 처리 로직</td></tr>
-    <tr><td class="mono imp">doPost()</td><td>POST 요청 시</td><td>실제 처리 로직</td></tr>
-    <tr><td class="mono imp">destroy()</td><td>종료 시 1회</td><td>정리 작업</td></tr>
+    <tr><td class="mono imp">init()</td><td>최초 1회</td><td>DB 연결 등 무거운 초기화 작업</td></tr>
+    <tr><td class="mono imp">service()</td><td>매 요청마다</td><td>GET/POST 판별 및 분기</td></tr>
+    <tr><td class="mono imp">doGet/Post</td><td>매 요청마다</td><td>실제 비즈니스 로직 처리</td></tr>
+    <tr><td class="mono imp">destroy()</td><td>종료 시 1회</td><td>자원 해제 (DB 닫기 등)</td></tr>
   </table>
-  <div class="tip">service()를 오버라이딩하면 → doGet/doPost 자동 실행 안 됨<br>service() 안 건드리면 → doGet/doPost 자동으로 실행됨</div>
-  <div class="prof-box">"처음 요청하면 약간 delay가 있다. 컴파일, init(), 컨테이너에 올리는 시간 때문. 두 번째부터는 바로바로 나온다."</div>
+  <div class="tip">service()를 직접 오버라이딩하면 doGet/doPost가 자동 실행되지 않으니 주의하세요!</div>
 </div>
 
 <div class="sub-page" id="sub-4-structure">
   <div class="page-title">서블릿 클래스 구조 <span class="exam-badge">★</span></div>
   <div class="page-sub">Ch.4 Section 01</div>
-  <div class="ct">LoginServlet.java</div>
-  <div class="code"><span class="ck">import</span> javax.servlet.*;
-<span class="ck">import</span> javax.servlet.http.*;
-<span class="ck">import</span> java.io.*;
-
-<span class="ch">@WebServlet("/LoginServlet")</span>
-<span class="cm">// URL 매핑: 이 URL 요청 → 이 서블릿 실행
-// form의 action="LoginServlet"과 반드시 일치!</span>
-
+  <div class="code"><span class="ch">@WebServlet("/LoginServlet")</span>
 <span class="ck">public class</span> LoginServlet <span class="ck">extends</span> HttpServlet {
-<span class="cm">  // HttpServlet 상속 = 서블릿이 되는 조건</span>
-
-  <span class="ck">protected void</span> doGet(
-      HttpServletRequest request,   <span class="cm">// 요청 정보 객체</span>
-      HttpServletResponse response) <span class="cm">// 응답 출력 객체</span>
-      <span class="ck">throws</span> ServletException, IOException {
-
-    <span class="cm">// 왜 request, response 두 개를 받는가?
-    // 요청 처리 + 응답 = 두 역할이 필요하기 때문!</span>
-
-    <span class="cm">// 1. 먼저! 한글 깨짐 방지</span>
+  <span class="ck">protected void</span> doGet(HttpServletRequest request, HttpServletResponse response) {
+    <span class="cm">// 1. 응답 설정 (순서 주의: getWriter 전 실행)</span>
     response.setContentType(<span class="cs">"text/html; charset=utf-8"</span>);
-
-    <span class="cm">// 2. 파라미터 추출</span>
+    
+    <span class="cm">// 2. 파라미터 추출 (리턴 타입: String)</span>
     String id = request.getParameter(<span class="cs">"id"</span>);
-
-    <span class="cm">// 3. 브라우저로 HTML 출력</span>
+    
+    <span class="cm">// 3. 출력</span>
     PrintWriter out = response.getWriter();
-    out.print(<span class="cs">"&lt;html&gt;&lt;body&gt;"</span>);
     out.print(<span class="cs">"&lt;h2&gt;안녕, "</span> + id + <span class="cs">"!&lt;/h2&gt;"</span>);
-    out.print(<span class="cs">"&lt;/body&gt;&lt;/html&gt;"</span>);
   }
 }</div>
-  <div class="warn">response.setContentType()은 반드시 getWriter() 호출 전에!</div>
-</div>
-
-<div class="sub-page" id="sub-4-request">
-  <div class="page-title">HttpServletRequest <span class="exam-badge">★</span></div>
-  <div class="page-sub">Ch.4 Section 01</div>
-  <p>클라이언트의 요청 정보를 담은 객체. 서블릿 컨테이너가 생성해서 doGet/doPost에 전달.</p>
-  <h3>주요 메서드</h3>
-  <table>
-    <tr><th>메서드</th><th>반환</th><th>설명</th></tr>
-    <tr><td class="mono imp">getParameter("name")</td><td>String</td><td>단일 값 추출. 없으면 null.</td></tr>
-    <tr><td class="mono imp">getParameterValues("name")</td><td>String[]</td><td>다중 값 추출 (체크박스 등)</td></tr>
-    <tr><td class="mono imp">getParameterNames()</td><td>Enumeration</td><td>파라미터 이름 목록</td></tr>
-    <tr><td class="mono imp">getMethod()</td><td>String</td><td>"GET" 또는 "POST"</td></tr>
-    <tr><td class="mono imp">getSession()</td><td>HttpSession</td><td>세션 객체 반환/생성</td></tr>
-    <tr><td class="mono imp">getCookies()</td><td>Cookie[]</td><td>쿠키 배열 반환</td></tr>
-  </table>
-  <div class="tip">getParameter()는 항상 String 반환. 숫자가 필요하면 Integer.parseInt() 필요!</div>
-</div>
-
-<div class="sub-page" id="sub-4-response">
-  <div class="page-title">HttpServletResponse <span class="exam-badge">★</span></div>
-  <div class="page-sub">Ch.4 Section 01</div>
-  <p>서버에서 클라이언트로 응답을 보내는 객체.</p>
-  <h3>주요 메서드</h3>
-  <table>
-    <tr><th>메서드</th><th>설명</th></tr>
-    <tr><td class="mono imp">getWriter()</td><td>PrintWriter 반환. HTML 출력용 스트림.</td></tr>
-    <tr><td class="mono imp">setContentType("text/html; charset=utf-8")</td><td>응답 타입 + 인코딩 설정. getWriter() 전에 호출!</td></tr>
-    <tr><td class="mono imp">setCharacterEncoding("UTF-8")</td><td>문자 인코딩만 별도 설정</td></tr>
-    <tr><td class="mono imp">sendRedirect("URL")</td><td>다른 페이지로 이동</td></tr>
-    <tr><td class="mono imp">addCookie(cookie)</td><td>쿠키를 클라이언트에 저장</td></tr>
-  </table>
-  <h3>PrintWriter로 HTML 출력</h3>
-  <div class="code">PrintWriter out = response.getWriter();
-out.print(<span class="cs">"&lt;html&gt;&lt;body&gt;"</span>);
-out.print(<span class="cs">"&lt;h2&gt;결과&lt;/h2&gt;"</span>);
-out.print(<span class="cs">"&lt;/body&gt;&lt;/html&gt;"</span>);</div>
-  <div class="prof-box">"서버에서 클라이언트 쪽으로 데이터를 내보내기 위해서는 PrintWriter 클래스를 이용. response 객체의 getWriter()로 출력 스트림 ID를 가지고 옴."</div>
+  <div class="warn">핵심 순서: setContentType() → getWriter() 순서를 지키지 않으면 한글이 깨집니다.</div>
 </div>
 
 <div class="sub-page" id="sub-4-get_post">
   <div class="page-title">GET vs POST <span class="exam-badge">★</span></div>
-  <div class="page-sub">Ch.4 — 교수님이 "언제 뭘 써야 하는지 모르면 기술이 없는 것"이라고 강조!</div>
-  <div class="prof-box">"GET 쓴 사람, POST 쓴 사람 모두 왜 그걸 선택했는지 설명 못하면 기술 없는 것."</div>
+  <div class="page-sub">Ch.4 — 설계 원칙과 사용 이유</div>
   <div class="g2">
     <div class="cl cl-blue">
       <span class="badge b-blue">GET 방식</span>
       <ul style="margin-top:8px">
-        <li>데이터가 <strong>URL(쿼리스트링)에 포함</strong></li>
-        <li>예) ...?id=kim&pw=1234</li>
-        <li>장점: 빠름</li>
-        <li>단점: URL에 노출됨, 길이 제한</li>
-        <li>서블릿: doGet() 실행</li>
+        <li>데이터가 URL에 포함 (조회용)</li>
+        <li><strong>멱등성:</strong> 여러 번 실행해도 결과가 같음</li>
+        <li>북마크 가능, 길이 제한 있음</li>
       </ul>
     </div>
     <div class="cl cl-red">
       <span class="badge b-red">POST 방식</span>
       <ul style="margin-top:8px">
-        <li>데이터가 <strong>HTTP Body에 포함</strong></li>
-        <li>URL에 안 보임</li>
-        <li>장점: 보안 우수, 길이 제한 없음</li>
-        <li>단점: GET보다 느림</li>
-        <li>서블릿: doPost() 실행</li>
+        <li>데이터가 Body에 숨겨짐 (보안/변경)</li>
+        <li>서버의 상태를 바꿀 때(글쓰기, 로그인 등) 사용</li>
+        <li>길이 제한 없음, 대용량 데이터 전송 가능</li>
       </ul>
     </div>
   </div>
-  <div class="ok">로그인/회원가입처럼 민감한 정보 → POST. 검색어처럼 노출돼도 되는 것 → GET.</div>
+  <div class="ok">교수님 팁: "조회는 GET, 생성/수정/삭제는 POST를 쓰는 것이 RESTful한 설계의 기본입니다."</div>
 </div>
 
-<div class="sub-page" id="sub-4-form_servlet">
-  <div class="page-title">폼 → 서블릿 전체 흐름 <span class="exam-badge">★</span></div>
-  <div class="page-sub">Ch.4 실습</div>
-  <div class="ct">login.html</div>
-  <div class="code">&lt;form <span class="ch">action="LoginServlet"</span>&gt;
-  아이디: &lt;input type=<span class="cs">"text"</span> <span class="ch">name="id"</span>&gt;
-  비밀번호: &lt;input type=<span class="cs">"password"</span> <span class="ch">name="pw"</span>&gt;
-  &lt;input type=<span class="cs">"submit"</span> value=<span class="cs">"로그인"</span>&gt;
-&lt;/form&gt;
-
-<span class="cm">&lt;!-- 전송 시 생성되는 URL: --&gt;
-&lt;!-- .../LoginServlet?id=kim&pw=1234 --&gt;</span></div>
-  <div class="ct">LoginServlet.java — doGet()</div>
-  <div class="code">response.setContentType(<span class="cs">"text/html; charset=utf-8"</span>);
-
-String id = request.getParameter(<span class="cs">"id"</span>);   <span class="cm">// "kim"</span>
-String pw = request.getParameter(<span class="cs">"pw"</span>);   <span class="cm">// "1234"</span>
-
-PrintWriter out = response.getWriter();
-<span class="ck">if</span> (<span class="cs">"admin"</span>.equals(id) && <span class="cs">"1234"</span>.equals(pw)) {
-    out.print(<span class="cs">"&lt;h2&gt;로그인 성공!&lt;/h2&gt;"</span>);
-} <span class="ck">else</span> {
-    out.print(<span class="cs">"&lt;h2&gt;로그인 실패&lt;/h2&gt;"</span>);
-}</div>
-  <div class="warn">로그인 폼(login.html)은 <strong>서블릿이 아닌 HTML 파일</strong>로 만들어야 한다! 정적 파일을 서블릿으로 만들면 컴파일/init/service 불필요하게 실행 → 서버 낭비.</div>
-</div>
-
-<div class="sub-page" id="sub-4-checkbox">
-  <div class="page-title">체크박스 · 다중 선택 처리</div>
-  <div class="page-sub">Ch.4 실습</div>
-  <div class="ct">checkbox.html</div>
-  <div class="code">&lt;form action=<span class="cs">"CheckServlet"</span>&gt;
-  &lt;input type=<span class="cs">"checkbox"</span> name=<span class="cs">"fruit"</span> value=<span class="cs">"apple"</span>&gt; 사과
-  &lt;input type=<span class="cs">"checkbox"</span> name=<span class="cs">"fruit"</span> value=<span class="cs">"banana"</span>&gt; 바나나
-  &lt;input type=<span class="cs">"checkbox"</span> name=<span class="cs">"fruit"</span> value=<span class="cs">"orange"</span>&gt; 오렌지
-  &lt;input type=<span class="cs">"submit"</span>&gt;
-&lt;/form&gt;
-<span class="cm">&lt;!-- 사과+오렌지 체크 시: ...?fruit=apple&fruit=orange --&gt;</span></div>
-  <div class="ct">CheckServlet.java</div>
-  <div class="code">String[] fruits = request.getParameterValues(<span class="cs">"fruit"</span>);
-<span class="cm">// getParameter 쓰면 첫 번째 값만! → 반드시 getParameterValues!
-
-// fruits가 null일 수도 있음 (아무것도 체크 안 하면)</span>
-<span class="ck">if</span> (fruits != null) {
-    <span class="ck">for</span> (String f : fruits) {
-        out.print(<span class="cs">"선택: "</span> + f + <span class="cs">"&lt;br&gt;"</span>);
-    }
-}</div>
-  <div class="warn">체크박스에 getParameter() 쓰면 첫 번째 값만 반환. 반드시 <strong>getParameterValues()</strong> 사용!</div>
-</div>
-
-<div class="sub-page" id="sub-4-annotation">
-  <div class="page-title">@WebServlet · web.xml</div>
+<div class="sub-page" id="sub-4-request">
+  <div class="page-title">HttpServletRequest & 데이터 검증 <span class="exam-badge">★</span></div>
   <div class="page-sub">Ch.4 Section 01</div>
-  <div class="g2">
-    <div class="cl cl-red">
-      <span class="badge b-red">web.xml (구버전 2.x)</span>
-      <div class="code" style="margin-top:8px;font-size:11px">&lt;servlet&gt;
-  &lt;servlet-name&gt;Login&lt;/servlet-name&gt;
-  &lt;servlet-class&gt;com.LoginServlet&lt;/servlet-class&gt;
-&lt;/servlet&gt;
-&lt;servlet-mapping&gt;
-  &lt;servlet-name&gt;Login&lt;/servlet-name&gt;
-  &lt;url-pattern&gt;/LoginServlet&lt;/url-pattern&gt;
-&lt;/servlet-mapping&gt;</div>
-    </div>
-    <div class="cl cl-teal">
-      <span class="badge b-teal">@WebServlet (현재 3.0+)</span>
-      <div class="code" style="margin-top:8px"><span class="ch">@WebServlet("/LoginServlet")</span>
-<span class="ck">public class</span> LoginServlet
-    <span class="ck">extends</span> HttpServlet {
-  <span class="cm">// 훨씬 간단!</span>
-}</div>
-    </div>
+  <div class="warn">
+    <strong>실무 검증 포인트:</strong> 
+    - 텍스트창 입력 안 함: <code>""</code>(빈 문자열) 반환<br>
+    - 체크박스 선택 안 함: <code>null</code> 반환<br>
+    - 따라서 <code>if(id != null && !id.equals(""))</code> 검사가 필요합니다.
   </div>
-  <div class="ok">서블릿 3.0부터 @WebServlet 애너테이션으로 web.xml 없이 URL 매핑 가능. 현재는 거의 애너테이션 방식 사용.</div>
+  <table>
+    <tr><th>메서드</th><th>반환</th><th>설명</th></tr>
+    <tr><td class="mono imp">getParameter()</td><td>String</td><td>단일 값 추출 (숫자는 parseInt 변환 필수)</td></tr>
+    <tr><td class="mono imp">getParameterValues()</td><td>String[]</td><td>체크박스 등 다중 선택 값 추출</td></tr>
+    <tr><td class="mono imp">getMethod()</td><td>String</td><td>요청 방식("GET" 혹은 "POST") 확인</td></tr>
+  </table>
 </div>
 
 </div><!-- end ch-4 -->
@@ -849,6 +732,11 @@ PrintWriter out = response.getWriter();
   <div class="page-sub">Ch.5 Section 01</div>
   <div class="warn">HTTP는 <strong>비연결형(Stateless) 통신</strong>. 페이지를 이동하면 이전 페이지의 정보가 사라짐!</div>
   <p style="margin-top:10px">로그인 상태 유지, 장바구니, 쇼핑몰의 주문 정보 등 — 여러 페이지에 걸쳐 정보를 공유해야 하는 경우가 많음.</p>
+
+  <div class="info">
+    <strong>심화 포인트:</strong> 웹 브라우저는 요청을 보내고 응답을 받으면 연결을 바로 끊어버립니다. 이를 <strong>무상태(Stateless)</strong>라고 하며, 이를 극복하기 위해 쿠키나 세션 같은 기술이 탄생했습니다.
+  </div>
+
   <h3>정보 공유 5가지 방법</h3>
   <table>
     <tr><th>방법</th><th>저장 위치</th><th>언제 쓰나</th></tr>
@@ -866,181 +754,189 @@ PrintWriter out = response.getWriter();
   <div class="page-sub">Ch.5 Section 01</div>
   <p>서블릿에서 다른 페이지로 이동시키는 메서드. HTTP Response 객체에 있음.</p>
   <div class="code">response.sendRedirect(<span class="cs">"main.jsp"</span>);
-response.sendRedirect(<span class="cs">"http://www.naver.com"</span>);
-
-<span class="cm">// 주의: sendRedirect 후에도 아래 코드가 실행됨!
-// 반드시 return; 함께 사용</span>
-response.sendRedirect(<span class="cs">"login.html"</span>);
-<span class="ck">return</span>;</div>
-  <h3>동작 방식</h3>
-  <div class="code">서버 → 브라우저에게 "이 URL로 가라" (302 응답)
-→ 브라우저가 해당 URL로 새 요청
-→ URL 주소 바뀜. 이전 request 데이터 소멸.</div>
-</div>
-
-<div class="sub-page" id="sub-5-urlrewrite">
-  <div class="page-title">URL Rewriting <span class="exam-badge">★</span></div>
-  <div class="page-sub">Ch.5 Section 01</div>
-  <p>URL에 쿼리스트링을 붙여서 다음 페이지로 데이터 전달.</p>
-  <h3>쿼리스트링 (Query String)</h3>
-  <p>URL에 부가해서 데이터 전달 목적으로 사용하는 문자열.</p>
-  <div class="code">URL?name=value&name2=value2
-   ↑           ↑
- 물음표    각 데이터는 &로 연결</div>
-  <div class="ct">예시</div>
-  <div class="code"><span class="cm">// sendRedirect에 쿼리스트링 붙이기</span>
-String name = request.getParameter(<span class="cs">"name"</span>);
-String gender = <span class="cs">"남자"</span>;
-response.sendRedirect(<span class="cs">"ResultServlet?name="</span> + name + <span class="cs">"&gender="</span> + gender);
-
-<span class="cm">// 받는 쪽 서블릿에서:</span>
-String name = request.getParameter(<span class="cs">"name"</span>);
-String gender = request.getParameter(<span class="cs">"gender"</span>);</div>
-  <div class="warn">한글은 URL 인코딩 필요! URLEncoder.encode(value, "UTF-8") 사용.</div>
-  <p>장점: 간단. 단점: URL에 노출됨. 매 페이지마다 붙여야 해서 복잡.</p>
+<span class="ck">return</span>; <span class="cm">// 반드시 return으로 로직 종료 필요</span></div>
+  
+  <div class="warn">
+    <strong>동작 원리:</strong> 서버가 브라우저에게 <strong>302 상태 코드</strong>를 보내서 "다시 요청해라"고 시키는 방식입니다. 따라서 주소창이 변하고, 이전의 request 객체는 사라집니다.
+  </div>
 </div>
 
 <div class="sub-page" id="sub-5-cookie">
   <div class="page-title">쿠키 (Cookie) <span class="exam-badge">★</span></div>
   <div class="page-sub">Ch.5 Section 02</div>
   <div class="star-box">⭐ 쿠키 = 서버가 클라이언트(브라우저)에 저장하는 데이터. name=value 형식.</div>
+  
+  <div class="info">
+    <strong>핵심 디테일:</strong> 쿠키 값에는 <strong>공백, 괄호, 등호, 한글</strong> 등을 직접 넣을 수 없습니다. 한글을 저장하려면 반드시 <code>URLEncoder.encode()</code>로 인코딩해야 합니다.
+  </div>
+
   <h3>쿠키 생성 & 전송</h3>
   <div class="code">Cookie ck = <span class="ck">new</span> Cookie(<span class="cs">"name"</span>, <span class="cs">"kim"</span>);
-<span class="cm">// 생성자: 첫 번째=키 이름, 두 번째=값 (둘 다 String)</span>
+ck.setMaxAge(3600); <span class="cm">// 1시간 유지</span>
+response.addCookie(ck);</div>
 
-ck.setMaxAge(3600); <span class="cm">// 유효시간(초). 0이면 즉시 삭제. 음수=브라우저 닫을 때 삭제</span>
-response.addCookie(ck); <span class="cm">// 브라우저에 저장 명령</span></div>
-  <h3>쿠키 읽기</h3>
-  <div class="code">Cookie[] cookies = request.getCookies(); <span class="cm">// 모든 쿠키 배열로</span>
-<span class="ck">if</span> (cookies != null) {
-    <span class="ck">for</span> (Cookie c : cookies) {
-        <span class="ck">if</span> (c.getName().equals(<span class="cs">"name"</span>)) {
-            String val = c.getValue();
-        }
-    }
-}</div>
-  <h3>쿠키 삭제</h3>
-  <div class="code">Cookie ck = <span class="ck">new</span> Cookie(<span class="cs">"name"</span>, <span class="cs">""</span>);
-ck.setMaxAge(0); <span class="cm">// 0 = 즉시 삭제</span>
-response.addCookie(ck);</div>
-  <h3>쿠키 값 변경</h3>
-  <div class="code">ck.setValue(<span class="cs">"newValue"</span>);
-response.addCookie(ck);</div>
   <div class="g2">
-    <div class="cl cl-teal"><span class="badge b-teal">장점</span><ul style="margin-top:6px"><li>서버 메모리 사용 안 함</li><li>브라우저 닫아도 유지 가능 (setMaxAge 설정 시)</li></ul></div>
-    <div class="cl cl-red"><span class="badge b-red">단점</span><ul style="margin-top:6px"><li>클라이언트 저장 → 보안 취약</li><li>개발자도구에서 바로 보임/수정 가능</li><li>4KB 용량 제한</li></ul></div>
+    <div class="cl cl-teal"><span class="badge b-teal">장점</span><ul style="margin-top:6px"><li>서버 메모리 사용 안 함</li><li>setMaxAge로 반영구 유지 가능</li></ul></div>
+    <div class="cl cl-red"><span class="badge b-red">단점</span><ul style="margin-top:6px"><li>보안에 취약 (사용자 수정 가능)</li><li>4KB 용량 제한</li></ul></div>
   </div>
-  <div class="prof-box">"쿠키는 서버가 저장 요청을 하면 클라이언트 브라우저가 관리하는 특정 공간에 보관. 개발자 도구에서 다 보이고 삭제, 변경도 가능. 그래서 보안에 취약."</div>
 </div>
 
 <div class="sub-page" id="sub-5-session">
   <div class="page-title">세션 (Session) <span class="exam-badge">★</span></div>
   <div class="page-sub">Ch.5 Section 03</div>
-  <div class="star-box">⭐ 세션 = 서버에 저장되는 데이터. 브라우저마다 세션 ID가 발급됨.</div>
+  <div class="star-box">⭐ 세션 = 서버에 저장되는 데이터. 브라우저마다 고유한 세션 ID가 발급됨.</div>
+
+  <div class="warn">
+    <strong>교수님 강조:</strong> 세션은 서버에 저장되지만, 누가 누구인지 구별하기 위해 <strong>JSESSIONID</strong>라는 쿠키를 클라이언트에 보냅니다. 즉, 세션도 내부적으로는 쿠키 기술을 이용합니다.
+  </div>
+
   <h3>세션 생성 & 저장</h3>
   <div class="code">HttpSession session = request.getSession();
-<span class="cm">// getSession(true) : 없으면 새로 생성 (기본값)
-// getSession(false): 없으면 null 반환</span>
-
-<span class="cm">// 저장 (두 번째 인자가 Object 타입!)</span>
 session.setAttribute(<span class="cs">"loginUser"</span>, <span class="cs">"kim"</span>);</div>
-  <h3>세션 읽기</h3>
-  <div class="code"><span class="cm">// getAttribute()의 반환 타입 = Object → 형변환 필수!</span>
-String user = (String) session.getAttribute(<span class="cs">"loginUser"</span>);
 
-<span class="cm">// 또는 toString() 사용</span>
-String user = session.getAttribute(<span class="cs">"loginUser"</span>).toString();</div>
-  <h3>세션 삭제</h3>
-  <div class="code">session.removeAttribute(<span class="cs">"loginUser"</span>); <span class="cm">// 단일 삭제</span>
-session.invalidate(); <span class="cm">// 전체 삭제 (로그아웃)</span></div>
-  <h3>유효시간 설정</h3>
-  <div class="code">session.setMaxInactiveInterval(1800); <span class="cm">// 초 단위. 기본 1800초(30분)</span>
-<span class="cm">// 0 또는 음수 = 유효시간 없음 (주의: 메모리 누수)</span></div>
-  <div class="g2">
-    <div class="cl cl-teal"><span class="badge b-teal">장점</span><ul style="margin-top:6px"><li>서버에 저장 → 보안 우수</li><li>용량 제한 없음</li></ul></div>
-    <div class="cl cl-red"><span class="badge b-red">단점</span><ul style="margin-top:6px"><li>서버 메모리 사용</li><li>동시 접속자 많으면 서버 부담</li><li><strong>브라우저 단위</strong> — 브라우저 다르면 별도 세션</li></ul></div>
-  </div>
-  <div class="warn">세션은 브라우저 단위! 크롬에서 로그인해도 엣지로 열면 로그아웃 상태. 방문 횟수처럼 지속돼야 하는 건 쿠키로!</div>
-  <div class="prof-box">"세션이라는 것은 클라이언트가 접속하면 서버 쪽에 생성되는 공간. 브라우저마다 세션 ID가 발급되고 그걸 기준으로 클라이언트 관리."</div>
-</div>
+  <h3>세션 읽기 (형변환 필수!)</h3>
+  <div class="code">String user = <span class="cs">(String)</span> session.getAttribute(<span class="cs">"loginUser"</span>);</div>
 
-<div class="sub-page" id="sub-5-context">
-  <div class="page-title">ServletContext</div>
-  <div class="page-sub">Ch.5 Section 04</div>
-  <p>서블릿 컨테이너에서 <strong>모든 서블릿이 공유하는 메모리 공간</strong>. 웹 애플리케이션 단위로 만들어짐. Java의 클래스 변수(static)와 유사.</p>
-  <div class="code">ServletContext ctx = request.getServletContext();
-
-ctx.setAttribute(<span class="cs">"notice"</span>, <span class="cs">"서버 점검 예정"</span>);
-String notice = (String) ctx.getAttribute(<span class="cs">"notice"</span>);</div>
-  <div class="info">모든 사용자가 공통으로 봐야 하는 데이터(공지사항 등)에 적합. Object 타입이라 형변환 필요.</div>
+  <div class="prof-box">"브라우저를 끄면 세션이 사라지는 이유는 브라우저가 관리하던 JSESSIONID 쿠키가 삭제되기 때문입니다."</div>
 </div>
 
 <div class="sub-page" id="sub-5-dispatcher">
-  <div class="page-title">RequestDispatcher</div>
+  <div class="page-title">RequestDispatcher (Forward) <span class="exam-badge">★</span></div>
   <div class="page-sub">Ch.5 Section 05</div>
-  <p>request, response 객체를 그대로 다른 서블릿에 전달. sendRedirect와 달리 서버 내부에서 이동.</p>
-  <div class="code">RequestDispatcher rd =
-    request.getRequestDispatcher(<span class="cs">"/ResultServlet"</span>);
-rd.forward(request, response);
-<span class="cm">// request 객체가 그대로 넘어감!
-// 다음 서블릿에서도 getParameter() 사용 가능</span></div>
+  <p>request, response 객체를 그대로 다른 서블릿에 전달. 서버 내부에서 이동.</p>
+
   <div class="g2">
-    <div class="cl cl-red"><span class="badge b-red">sendRedirect</span><ul style="margin-top:6px"><li>브라우저가 새 요청</li><li>URL 주소 바뀜</li><li>request 데이터 소멸</li><li>외부 URL로도 이동 가능</li></ul></div>
-    <div class="cl cl-teal"><span class="badge b-teal">forward (dispatcher)</span><ul style="margin-top:6px"><li>서버 내부에서 전달</li><li>URL 주소 안 바뀜</li><li>request 데이터 유지!</li><li>같은 서버 내에서만</li></ul></div>
+    <div class="cl cl-red">
+      <span class="badge b-red">sendRedirect</span>
+      <ul style="margin-top:8px">
+        <li>주소창 바뀜</li>
+        <li><strong>request 공유 안 됨</strong></li>
+        <li>속도가 약간 느림</li>
+      </ul>
+    </div>
+    <div class="cl cl-teal">
+      <span class="badge b-teal">Forward</span>
+      <ul style="margin-top:8px">
+        <li>주소창 안 바뀜</li>
+        <li><strong>request 객체 공유</strong></li>
+        <li>서버 내부 이동이라 빠름</li>
+      </ul>
+    </div>
   </div>
+  <div class="info">로그인 후 메인으로 보낼 때는 Redirect를, 데이터를 담아 결과창을 보여줄 때는 Forward를 주로 씁니다.</div>
 </div>
 
 <div class="sub-page" id="sub-5-compare">
   <div class="page-title">5가지 방법 비교 <span class="exam-badge">★</span></div>
-  <div class="page-sub">Ch.5 총정리 — 시험 유력 출제 범위!</div>
+  <div class="page-sub">Ch.5 총정리</div>
   <table>
-    <tr><th>방법</th><th>저장 위치</th><th>보안</th><th>용량</th><th>유지 기간</th><th>적합한 용도</th></tr>
-    <tr>
-      <td class="imp">URL Rewriting</td>
-      <td>URL</td>
-      <td class="ch">취약</td>
-      <td>제한적</td>
-      <td>한 번의 이동</td>
-      <td>간단한 값 전달</td>
-    </tr>
-    <tr>
-      <td class="imp">Cookie</td>
-      <td>클라이언트</td>
-      <td class="ch">취약</td>
-      <td>4KB</td>
-      <td>setMaxAge 설정값</td>
-      <td>방문 횟수, 자동 로그인</td>
-    </tr>
-    <tr>
-      <td class="imp">Session</td>
-      <td>서버</td>
-      <td class="cs">우수</td>
-      <td>제한 없음</td>
-      <td>브라우저 종료 or 타임아웃</td>
-      <td>로그인 상태 유지</td>
-    </tr>
-    <tr>
-      <td class="imp">ServletContext</td>
-      <td>서버 (공유)</td>
-      <td class="cs">우수</td>
-      <td>제한 없음</td>
-      <td>서버 종료까지</td>
-      <td>모든 사용자 공통 데이터</td>
-    </tr>
-    <tr>
-      <td class="imp">RequestDispatcher</td>
-      <td>request 객체</td>
-      <td class="cs">우수</td>
-      <td>제한 없음</td>
-      <td>요청 처리 동안</td>
-      <td>서블릿 간 처리 위임</td>
-    </tr>
+    <tr><th>방법</th><th>저장 위치</th><th>유지 기간</th><th>특징</th></tr>
+    <tr><td>URL Rewriting</td><td>URL</td><td>이동 시 1회</td><td>보안 취약, 단순 전달</td></tr>
+    <tr><td>Cookie</td><td>클라이언트</td><td>설정 시간 동안</td><td>보안 취약, 서버 부담 없음</td></tr>
+    <tr><td>Session</td><td>서버</td><td>브라우저 종료 전</td><td><strong>보안 우수, 개인 정보</strong></td></tr>
+    <tr><td>ServletContext</td><td>서버(공유)</td><td>서버 종료 전</td><td><strong>모든 사용자 공유</strong></td></tr>
+    <tr><td>Forward</td><td>request</td><td>요청 처리 동안</td><td>객체 공유, 주소창 고정</td></tr>
   </table>
-  <div class="star-box">⭐ 핵심 차이: 쿠키=클라이언트 저장 / 세션=서버 저장 / 세션은 브라우저 단위!</div>
-  <div class="prof-box">"각 기술의 장단점을 이해해야지만, 이런 상황에서는 이 기술을 써야지 라는 판단을 할 수 있다. 그게 설계 능력이다."</div>
+  <div class="prof-box">"기술의 차이를 모르면 적절한 설계를 할 수 없다. 각 기술의 생명주기를 꼭 기억하라."</div>
 </div>
 
 </div><!-- end ch-5 -->
+
+
+<!-- ══════════════════ 함수 사전 ══════════════════ -->
+<div class="ch-page" id="ch-6">
+
+  <div class="sub-page on" id="sub-6-ch1">
+    <div class="page-title">Ch.1 ~ Ch.3 핵심 메서드</div>
+    <div class="page-sub">JavaScript 및 기본 동작</div>
+    <table>
+      <thead>
+        <tr><th>구분</th><th>메서드</th><th>설명</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>JS</td><td><code>document.getElementById("id")</code></td><td>해당 ID를 가진 HTML 요소 객체 반환</td></tr>
+        <tr><td>JS</td><td><code>alert("메시지")</code></td><td>브라우저 알림창 표시</td></tr>
+        <tr><td>JS</td><td><code>console.log(값)</code></td><td>브라우저 개발자 도구 콘솔에 출력</td></tr>
+        <tr><td>URL</td><td><code>index.html</code></td><td>파일 경로 생략 시 기본으로 호출되는 파일명</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sub-page" id="sub-6-ch4">
+    <div class="page-title">Ch.4 서블릿 입출력 메서드 <span class="exam-badge">★</span></div>
+    <div class="page-sub">요청(Request) 처리와 응답(Response) 생성</div>
+    <table>
+      <thead>
+        <tr><th>메서드</th><th>리턴 타입</th><th>설명</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>setCharacterEncoding("UTF-8")</code></td><td>void</td><td>전송 데이터 한글 깨짐 방지 (<span style="color:var(--c4)">필수</span>)</td></tr>
+        <tr><td><code>getParameter("name")</code></td><td>String</td><td>HTML <code>name</code>값에 해당하는 단일 데이터 읽기</td></tr>
+        <tr><td><code>getParameterValues("name")</code></td><td>String[]</td><td>체크박스 등 다중 선택 데이터를 배열로 읽기</td></tr>
+        <tr><td><code>Integer.parseInt(String)</code></td><td>int</td><td>받아온 문자열을 계산 가능한 숫자로 변환</td></tr>
+        <tr><td><code>setContentType("text/html;...")</code></td><td>void</td><td>응답할 문서의 형식과 인코딩 지정</td></tr>
+        <tr><td><code>getWriter()</code></td><td>PrintWriter</td><td>브라우저에 HTML 코드를 쓸 출력 객체 생성</td></tr>
+      </tbody>
+    </table>
+    <div class="warn">순서 중요: setCharacterEncoding → getParameter / setContentType → getWriter</div>
+  </div>
+
+  <div class="sub-page" id="sub-6-ch5">
+    <div class="page-title">Ch.5 정보 공유 및 전달 <span class="exam-badge">★</span></div>
+    <div class="page-sub">Cookie, Session, Forward 실습 총망라</div>
+    <table>
+      <thead>
+        <tr><th>구분</th><th>메서드</th><th>핵심 설명</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="3"><b>Cookie</b></td>
+          <td><code>new Cookie("k", "v")</code></td>
+          <td>쿠키 객체 생성 (값은 문자열만 가능)</td>
+        </tr>
+        <tr>
+          <td><code>setMaxAge(초)</code></td>
+          <td>쿠키 수명 설정 (0: 즉시삭제, -1: 브라우저 종료 시 삭제)</td>
+        </tr>
+        <tr>
+          <td><code>response.addCookie(c)</code></td>
+          <td>생성한 쿠키를 클라이언트 브라우저로 전송</td>
+        </tr>
+        <tr>
+          <td rowspan="2"><b>Session</b></td>
+          <td><code>request.getSession()</code></td>
+          <td>기존 세션을 가져오거나 없으면 새로 생성</td>
+        </tr>
+        <tr>
+          <td><code>invalidate()</code></td>
+          <td>세션의 모든 정보 삭제 (로그아웃 시 필수)</td>
+        </tr>
+        <tr>
+          <td rowspan="2"><b>공통</b></td>
+          <td><code>setAttribute("k", v)</code></td>
+          <td>데이터 저장 (Object 타입이므로 자바의 모든 객체 가능)</td>
+        </tr>
+        <tr>
+          <td><code>getAttribute("k")</code></td>
+          <td>데이터 추출 (<span style="color:var(--star)">형변환/Casting 반드시 필요</span>)</td>
+        </tr>
+        <tr>
+          <td rowspan="2"><b>Forward</b></td>
+          <td><code>getRequestDispatcher("path")</code></td>
+          <td>이동할 경로를 가진 배달원(Dispatcher) 객체 생성</td>
+        </tr>
+        <tr>
+          <td><code>forward(req, res)</code></td>
+          <td>현재 request를 유지하며 서버 안에서 페이지 이동</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="prof-box">"getAttribute로 숫자를 가져올 땐 (int)를, 문자열은 (String)을 꼭 붙이세요!"</div>
+  </div>
+
+</div><!-- end 함수 사전 -->
+
+
 
 </main>
 </div><!-- end main -->
