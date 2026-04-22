@@ -118,10 +118,13 @@
   <button class="sub-tab" onclick="showSub(4,'canny')">캐니 에지·NMS<span class="star">★</span></button>
   <button class="sub-tab" onclick="showSub(4,'contour_t')">경계선 이론<span class="star">★</span></button>
   <button class="sub-tab" onclick="showSub(4,'hough')">허프 변환</button>
+  <button class="sub-tab" onclick="showSub(4,'ransac')">LMSE·RANSAC<span class="star">★</span></button>
   <button class="sub-tab" onclick="showSub(4,'super_t')">슈퍼화소 개념</button>
   <button class="sub-tab" onclick="showSub(4,'snake')">능동 외곽선</button>
   <button class="sub-tab" onclick="showSub(4,'grab_t')">GrabCut 개념<span class="star">★</span></button>
   <div class="sidebar-label">실습 코드</div>
+  <button class="sub-tab" onclick="showSub(4,'p_sobel')">소벨 에지 코드<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(4,'p_hough')">직선·원 검출 코드<span class="star">★</span></button>
   <button class="sub-tab" onclick="showSub(4,'p42')">프로그램 4-2 캐니</button>
   <button class="sub-tab" onclick="showSub(4,'p43')">프로그램 4-3 경계선<span class="star">★</span></button>
   <button class="sub-tab" onclick="showSub(4,'p45')">프로그램 4-5 슈퍼화소<span class="star">★</span></button>
@@ -475,7 +478,8 @@ cv.setMouseCallback(<span class="cs">'Drawing'</span>,draw)
   <p>Otsu: 이진화를 최적화 문제로 바라봄. 임계값 T를 <strong>자동으로</strong> 찾아줘요.</p>
   <div class="formula">t̂ = argmin J(t) &nbsp;&nbsp; J(t) = n₀(t)v₀(t) + n₁(t)v₁(t) &nbsp;&nbsp;&nbsp; (3.2, 3.3)</div>
   <p style="font-size:13px;color:var(--tx3)">목적함수 J(t): 작을수록 좋음. 0이 되는 화소들의 분산과 1이 되는 화소들의 분산의 가중치 합</p>
-  <div class="warn">반환값이 2개! t(임계값 숫자) + bin_img(결과 이미지). 순서 틀리면 오류!</div>
+  <div class="star-box">⭐ 반환값 2개! t = 사용된 임계값 / bin_img = thresholding 적용된 결과 이미지</div>
+  <div class="warn">순서 중요! t, bin_img 순서로 받아야 해요!</div>
   <div class="ok">print(t)로 Otsu가 자동 계산한 임계값 확인 — 이 줄도 시험에 나와요!</div>
 </div>
 
@@ -551,7 +555,7 @@ cv.setMouseCallback(<span class="cs">'Drawing'</span>,draw)
   </div>
   <h3>가우시안 필터 (개념만)</h3>
   <div class="formula">g(x) = (1/σ√2π)·e^(-x²/2σ²) &nbsp;&nbsp; g(y,x) = (1/σ²2π)·e^(-(y²+x²)/2σ²)</div>
-  <p style="font-size:13px;color:var(--tx3)">σ 클수록 더 많이 흐림. 노이즈 제거에 효과적.</p>
+  <div class="star-box">⭐ σ(시그마) 값이 작으면 거의 원본 유지 / σ이 크면 많이 흐려진다</div>
 </div>
 
 <div class="sub-page" id="sub-3-overflow">
@@ -830,16 +834,53 @@ cv.waitKey(); cv.destroyAllWindows()</div>
   </ul>
   <div class="formula">xsin(θ) + ycos(θ) = ρ &nbsp;&nbsp;&nbsp; (4.6) — 기울기 무한대 대처용 극좌표</div>
   <div class="tip">원 검출 허프 변환 = 3차원 누적 배열 사용 (중심x, 중심y, 반지름r)</div>
+  <h3>함수 정리</h3>
+  <div class="card"><table>
+    <tr><th>함수</th><th>핵심 인자</th><th>설명</th></tr>
+    <tr><td class="mono imp">cv.HoughLinesP(image, rho, theta, threshold, ...)</td><td>minLineLength, maxLineGap</td><td>직선 검출. rho=거리해상도, theta=각도해상도, threshold=최소투표수</td></tr>
+    <tr><td class="mono imp">cv.HoughCircles(image, method, dp, minDist, param1, param2, minRadius, maxRadius)</td><td>dp=1이 최적, param1=캐니 T_high, param2=누적 임계값</td><td>원 검출. param2 작을수록 원 아닌 것도 검출됨</td></tr>
+  </table></div>
 </div>
 
+<div class="sub-page" id="sub-4-ransac">
+  <div class="page-title">LMSE vs RANSAC <span class="exam-badge">★</span></div>
+  <div class="page-sub">직선 추정의 두 가지 방법 비교</div>
+  <div class="g2">
+    <div class="cl cl-red">
+      <span class="badge b-red">LMSE (최소평균제곱오차)</span>
+      <ul style="margin-top:8px">
+        <li>강인하지 않은 추정 기법</li>
+        <li class="imp"><strong>아웃라이어(이상치)를 걸러내는 기능이 전혀 없음</strong></li>
+        <li>모든 점에 같은 기회를 부여</li>
+        <li>아웃라이어가 있으면 결과가 크게 틀어짐</li>
+      </ul>
+    </div>
+    <div class="cl cl-teal">
+      <span class="badge b-teal">RANSAC</span>
+      <ul style="margin-top:8px">
+        <li>강인한 추정 기법</li>
+        <li class="imp"><strong>난수를 생성하여 추정하는 일을 충분히 많이 반복하고 가장 신뢰할 수 있는 값 선택</strong></li>
+        <li>아웃라이어가 있어도 강건하게 동작</li>
+        <li>반복 횟수가 많아 계산 비용이 큼</li>
+      </ul>
+    </div>
+  </div>
+  <div class="star-box">⭐ 핵심 차이: LMSE = 아웃라이어에 취약 / RANSAC = 아웃라이어에 강건(난수 반복 추정)</div>
+</div>
 <div class="sub-page" id="sub-4-super_t">
   <div class="page-title">4.4.2 슈퍼화소 개념</div>
   <div class="page-sub">PPT 35p</div>
   <p>이미지를 비슷한 색상·밝기의 덩어리(슈퍼화소)로 나누는 방법이에요.</p>
   <div class="g2">
-    <div class="cl cl-blue"><span class="badge b-blue">compactness 낮음</span><p style="margin-top:6px">물체 경계 따라 불규칙한 모양</p></div>
-    <div class="cl cl-red"><span class="badge b-red">compactness 높음</span><p style="margin-top:6px">사각형 격자처럼 균일한 모양</p></div>
+    <div class="cl cl-blue"><span class="badge b-blue">compactness 낮음</span><p style="margin-top:6px">물체 경계 따라 불규칙한 모양 (색상 위주)</p></div>
+    <div class="cl cl-red"><span class="badge b-red">compactness 높음</span><p style="margin-top:6px">사각형 격자처럼 균일한 모양 (위치 위주)</p></div>
   </div>
+  <div class="star-box">⭐ SLIC = <strong>색상 + 위치를 같이 고려</strong>해서 픽셀을 비슷한 그룹으로 묶는 알고리즘<br>k-means를 영상에 맞게 변형. <strong>(R,G,B,x,y) 5차원 벡터</strong> 사용 — x,y는 위치 정보!</div>
+  <div class="card"><table>
+    <tr><th>함수</th><th>인자</th><th>설명</th></tr>
+    <tr><td class="mono imp">skimage.segmentation.slic(image, compactness, n_segments)</td><td>compactness, n_segments=슈퍼픽셀 개수</td><td>각 픽셀이 어느 슈퍼픽셀에 속하는지 반환</td></tr>
+    <tr><td class="mono imp">skimage.segmentation.mark_boundaries(img, labels)</td><td>labels=slic 결과 객체</td><td>슈퍼픽셀 경계 시각화</td></tr>
+  </table></div>
 </div>
 
 <div class="sub-page" id="sub-4-snake">
@@ -866,6 +907,79 @@ cv.waitKey(); cv.destroyAllWindows()</div>
   </div>
 </div>
 
+<div class="sub-page" id="sub-4-p_sobel">
+  <div class="page-title">소벨 에지 검출 코드 <span class="exam-badge">★</span></div>
+  <div class="page-sub">코드는 시험 안나오지만 함수 인자는 알아야 해요!</div>
+  <div class="star-box">⭐ 소벨 결과는 음수 포함 → CV_32F 필수! / 결과를 uint8로 보려면 convertScaleAbs 사용</div>
+  <div class="code"><span class="ck">import</span> cv2 <span class="ck">as</span> cv
+img=cv.imread(<span class="cs">'soccer.jpg'</span>)
+gray=cv.cvtColor(img,cv.COLOR_BGR2GRAY)
+
+<span class="cm"># 소벨 연산 — CV_32F 필수!</span>
+<span class="ch">gx=cv.Sobel(gray, cv.CV_32F, 1, 0, ksize=3)</span>   <span class="cm"># x방향 (dx=1, dy=0)</span>
+<span class="ch">gy=cv.Sobel(gray, cv.CV_32F, 0, 1, ksize=3)</span>   <span class="cm"># y방향 (dx=0, dy=1)</span>
+
+<span class="cm"># 에지 강도 = √(Gx²+Gy²)</span>
+mag=cv.magnitude(gx,gy)
+
+<span class="cm"># float → uint8 변환 (절댓값 취하고 스케일)</span>
+<span class="ch">gx8=cv.convertScaleAbs(gx)</span>
+<span class="ch">gy8=cv.convertScaleAbs(gy)</span>
+
+<span class="cm"># 두 결과 합성 (가중합)</span>
+<span class="ch">edge=cv.addWeighted(gx8, 0.5, gy8, 0.5, 0)</span>
+<span class="cm"># addWeighted(src1, alpha, src2, beta, gamma) = src1*alpha + src2*beta + gamma</span>
+
+cv.imshow(<span class="cs">'Sobel edge'</span>,edge)
+cv.waitKey(); cv.destroyAllWindows()</div>
+  <div class="card"><table>
+    <tr><th>함수</th><th>핵심 인자</th><th>주의사항</th></tr>
+    <tr><td class="mono imp">cv.Sobel(src, ddepth, dx, dy, ksize=3)</td><td>dx=1,dy=0 → x방향</td><td class="imp">CV_32F 필수! 음수 포함</td></tr>
+    <tr><td class="mono imp">cv.convertScaleAbs(src)</td><td></td><td>절댓값 취하고 uint8 변환</td></tr>
+    <tr><td class="mono imp">cv.addWeighted(src1, alpha, src2, beta, gamma)</td><td>src1*alpha + src2*beta + gamma</td><td>두 이미지 가중합. dtype 같아야 함!</td></tr>
+    <tr><td class="mono imp">cv.magnitude(gx, gy)</td><td>x,y 소벨 결과</td><td>에지 강도 = √(Gx²+Gy²)</td></tr>
+  </table></div>
+</div>
+<div class="sub-page" id="sub-4-p_hough">
+  <div class="page-title">직선·원 검출 코드 <span class="exam-badge">★</span></div>
+  <div class="page-sub">HoughLinesP + HoughCircles</div>
+  <div class="code"><span class="ck">import</span> cv2 <span class="ck">as</span> cv
+<span class="ck">import</span> numpy <span class="ck">as</span> np
+img=cv.imread(<span class="cs">'soccer.jpg'</span>)
+gray=cv.cvtColor(img,cv.COLOR_BGR2GRAY)
+edges=cv.Canny(gray,50,150)
+
+<span class="cm"># 직선 검출</span>
+<span class="ch">lines=cv.HoughLinesP(edges, rho=1, theta=np.pi/180, threshold=100,
+                    minLineLength=50, maxLineGap=5)</span>
+<span class="cm"># rho=거리해상도(픽셀), theta=각도해상도(라디안), threshold=최소투표수
+# minLineLength=최소 선 길이, maxLineGap=최대 허용 간격</span>
+<span class="ck">if</span> lines <span class="ck">is not</span> None:
+    <span class="ck">for</span> line <span class="ck">in</span> lines:
+        x1,y1,x2,y2 = line[0]
+        cv.line(img,(x1,y1),(x2,y2),(0,255,0),2)
+
+<span class="cm"># 원 검출</span>
+<span class="ch">circles=cv.HoughCircles(gray, cv.HOUGH_GRADIENT, dp=1, minDist=50,
+                        param1=100, param2=30, minRadius=0, maxRadius=0)</span>
+<span class="cm"># dp=1 최적, minDist=원 중심 간 최소 거리
+# param1=캐니 T_high, param2=누적 임계값(작을수록 원 아닌 것도 검출)
+# minRadius/maxRadius=검출할 원의 최소/최대 반지름</span>
+<span class="ck">if</span> circles <span class="ck">is not</span> None:
+    circles=np.uint16(np.around(circles))
+    <span class="ck">for</span> c <span class="ck">in</span> circles[0,:]:
+        <span class="ch">cv.circle(img,(c[0],c[1]),c[2],(0,255,0),2)</span>  <span class="cm"># 원 그리기</span>
+        <span class="ch">cv.circle(img,(c[0],c[1]),2,(0,0,255),3)</span>    <span class="cm"># 중심점</span>
+
+cv.imshow(<span class="cs">'result'</span>,img)
+cv.waitKey(); cv.destroyAllWindows()</div>
+  <div class="card"><table>
+    <tr><th>함수</th><th>핵심 인자</th><th>주의사항</th></tr>
+    <tr><td class="mono imp">cv.HoughLinesP(edges, rho, theta, threshold)</td><td>minLineLength, maxLineGap</td><td>에지 이미지 입력!</td></tr>
+    <tr><td class="mono imp">cv.HoughCircles(img, HOUGH_GRADIENT, dp, minDist, param1, param2)</td><td>dp=1 최적, param2↓=더 많이 검출</td><td>그레이스케일 입력!</td></tr>
+    <tr><td class="mono imp">cv.circle(img, center, radius, color, thickness)</td><td>center=(x,y), thickness=-1이면 채우기</td><td>center가 (x,y) 순서!</td></tr>
+  </table></div>
+</div>
 <div class="sub-page" id="sub-4-p42">
   <div class="page-title">프로그램 4-2 — 캐니 에지 실험</div>
   <div class="page-sub">PPT 17~18p — 결과 이미지와 매칭!</div>

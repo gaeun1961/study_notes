@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>웹DB프로그래밍 중간고사 정리</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+:root {
+  --c1:#4a9eff;--c1d:rgba(74,158,255,0.12);
+  --c2:#30d9a0;--c2d:rgba(48,217,160,0.12);
+  --c3:#b39dff;--c3d:rgba(179,157,255,0.12);
+  --c4:#ff6b7a;--c4d:rgba(255,107,122,0.12);
+  --c5:#ffb347;--c5d:rgba(255,179,71,0.12);
+  --amb:#ffd700;--ambd:rgba(255,215,0,0.12);
+}
+.header{background:linear-gradient(180deg,rgba(74,158,255,0.04) 0%,transparent 100%)}
+.header-badge{background:var(--c1d);color:var(--c1);border-color:rgba(74,158,255,0.25)}
+.ch-tab.on[data-ch="1"]{color:var(--c1)}
+.ch-tab.on[data-ch="2"]{color:var(--c2)}
+.ch-tab.on[data-ch="3"]{color:var(--c3)}
+.ch-tab.on[data-ch="4"]{color:var(--c4)}
+.ch-tab.on[data-ch="5"]{color:var(--c5)}
+.ch1 .sub-tab.on{border-left-color:var(--c1);color:var(--c1)}
+.ch2 .sub-tab.on{border-left-color:var(--c2);color:var(--c2)}
+.ch3 .sub-tab.on{border-left-color:var(--c3);color:var(--c3)}
+.ch4 .sub-tab.on{border-left-color:var(--c4);color:var(--c4)}
+.ch5 .sub-tab.on{border-left-color:var(--c5);color:var(--c5)}
+.cl-blue{border-left-color:var(--c1)} .cl-teal{border-left-color:var(--c2)}
+.cl-pur{border-left-color:var(--c3)} .cl-red{border-left-color:var(--c4)}
+.cl-amb{border-left-color:var(--c5)} .cl-gold{border-left-color:var(--amb)}
+.tip{background:var(--c3d);border-color:rgba(179,157,255,0.2);color:var(--c3)}
+.warn{background:var(--c4d);border-color:rgba(255,107,122,0.2);color:var(--c4)}
+.ok{background:var(--c2d);border-color:rgba(48,217,160,0.2);color:var(--c2)}
+.info{background:var(--c1d);border-color:rgba(74,158,255,0.2);color:var(--c1)}
+.formula{border-color:var(--c3);color:var(--c3)}
+.b-blue{background:var(--c1d);color:var(--c1);border-color:rgba(74,158,255,0.25)}
+.b-teal{background:var(--c2d);color:var(--c2);border-color:rgba(48,217,160,0.25)}
+.b-pur{background:var(--c3d);color:var(--c3);border-color:rgba(179,157,255,0.25)}
+.b-red{background:var(--c4d);color:var(--c4);border-color:rgba(255,107,122,0.25)}
+.b-amb{background:var(--c5d);color:var(--c5);border-color:rgba(255,179,71,0.25)}
+.b-gold{background:var(--ambd);color:var(--amb);border-color:rgba(255,215,0,0.25)}
+.b-gray{background:rgba(255,255,255,0.06);color:var(--tx2);border-color:var(--bor)}
+.prof-box{
+  background:rgba(255,215,0,0.05);
+  border:1px solid rgba(255,215,0,0.2);
+  border-left:3px solid var(--amb);
+  border-radius:0 8px 8px 0;
+  padding:10px 14px;margin:10px 0;
+  font-size:13px;line-height:1.7;color:var(--amb);
+}
+.prof-box::before{content:"👨‍🏫 교수님 강조 ";font-weight:700}
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="index.html">&#8249; 목록으로</a>
+
+<div class="header">
+  <div class="header-top">
+    <h1>웹DB프로그래밍</h1>
+    <span class="header-badge">중간고사 정리</span>
+  </div>
+  <div class="ch-tabs">
+    <button class="ch-tab on" data-ch="1" onclick="showCh(1)">Ch.1 웹 기초</button>
+    <button class="ch-tab" data-ch="2" onclick="showCh(2)">Ch.2 개발환경</button>
+    <button class="ch-tab" data-ch="3" onclick="showCh(3)">Ch.3 HTML/CSS/JS</button>
+    <button class="ch-tab" data-ch="4" onclick="showCh(4)">Ch.4 서블릿</button>
+    <button class="ch-tab" data-ch="5" onclick="showCh(5)">Ch.5 쿠키·세션</button>
+  </div>
+</div>
+
+<div class="main">
+<nav class="sidebar ch1" id="sidebar">
+
+<!-- Ch.1 메뉴 -->
+<div id="menu-1">
+  <div class="sidebar-label">웹 기본</div>
+  <button class="sub-tab on" onclick="showSub(1,'internet')">인터넷 vs 웹<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(1,'http')">HTTP · URL</button>
+  <button class="sub-tab" onclick="showSub(1,'structure')">클라이언트-서버 구조<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(1,'static')">정적 vs 동적 웹<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(1,'network')">네트워크 · 프로토콜</button>
+  <button class="sub-tab" onclick="showSub(1,'html_css_js')">HTML · CSS · JS 역할</button>
+</div>
+
+<!-- Ch.2 메뉴 -->
+<div id="menu-2" style="display:none">
+  <div class="sidebar-label">Java 이론</div>
+  <button class="sub-tab on" onclick="showSub(2,'whyjava')">왜 Java인가?<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(2,'jvm')">JVM · 바이트코드<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(2,'tools')">JDK · IDE · 톰캣</button>
+  <div class="sidebar-label">환경 구축</div>
+  <button class="sub-tab" onclick="showSub(2,'tomcat')">톰캣 구동 확인</button>
+  <button class="sub-tab" onclick="showSub(2,'project')">동적 웹 프로젝트 생성</button>
+  <button class="sub-tab" onclick="showSub(2,'jsp_run')">JSP 실행 확인</button>
+</div>
+
+<!-- Ch.3 메뉴 -->
+<div id="menu-3" style="display:none">
+  <div class="sidebar-label">HTML</div>
+  <button class="sub-tab on" onclick="showSub(3,'html_basic')">HTML 구조 · 태그</button>
+  <button class="sub-tab" onclick="showSub(3,'semantic')">시맨틱 태그<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(3,'form')">Form 태그<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(3,'input')">Input 태그 종류<span class="star">★</span></button>
+  <div class="sidebar-label">CSS</div>
+  <button class="sub-tab" onclick="showSub(3,'css_basic')">CSS 기본 · 셀렉터<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(3,'css_apply')">CSS 적용 방법</button>
+  <div class="sidebar-label">JavaScript</div>
+  <button class="sub-tab" onclick="showSub(3,'js_basic')">JS 특징 · 문법</button>
+  <button class="sub-tab" onclick="showSub(3,'dom')">DOM · 이벤트 처리<span class="star">★</span></button>
+</div>
+
+<!-- Ch.4 메뉴 -->
+<div id="menu-4" style="display:none">
+  <div class="sidebar-label">서블릿 개념</div>
+  <button class="sub-tab on" onclick="showSub(4,'servlet_what')">서블릿이란?<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(4,'lifecycle')">생명주기<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(4,'structure')">클래스 구조<span class="star">★</span></button>
+  <div class="sidebar-label">요청·응답</div>
+  <button class="sub-tab" onclick="showSub(4,'request')">HttpServletRequest<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(4,'response')">HttpServletResponse<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(4,'get_post')">GET vs POST<span class="star">★</span></button>
+  <div class="sidebar-label">입력 처리</div>
+  <button class="sub-tab" onclick="showSub(4,'form_servlet')">폼 → 서블릿 흐름<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(4,'checkbox')">체크박스·다중 선택</button>
+  <button class="sub-tab" onclick="showSub(4,'annotation')">@WebServlet · web.xml</button>
+</div>
+
+<!-- Ch.5 메뉴 -->
+<div id="menu-5" style="display:none">
+  <div class="sidebar-label">정보 공유</div>
+  <button class="sub-tab on" onclick="showSub(5,'why_share')">왜 정보 공유가 필요한가<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(5,'redirect')">sendRedirect<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(5,'urlrewrite')">URL Rewriting<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(5,'cookie')">쿠키(Cookie)<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(5,'session')">세션(Session)<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(5,'context')">ServletContext</button>
+  <button class="sub-tab" onclick="showSub(5,'dispatcher')">RequestDispatcher</button>
+  <div class="sidebar-label">비교 정리</div>
+  <button class="sub-tab" onclick="showSub(5,'compare')">5가지 방법 비교<span class="star">★</span></button>
+</div>
+
+</nav>
+
+<main class="content">
+
+<!-- ══════════════════ CH.1 ══════════════════ -->
+<div class="ch-page on" id="ch-1">
+
+<div class="sub-page on" id="sub-1-internet">
+  <div class="page-title">인터넷 vs 웹 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.1 Section 01 · 02</div>
+  <div class="warn">웹 = 인터넷이 아니다. 웹은 인터넷 위에서 돌아가는 서비스 중 하나일 뿐!</div>
+  <div class="g2">
+    <div class="cl cl-blue">
+      <span class="badge b-blue">인터넷</span>
+      <ul style="margin-top:8px">
+        <li><strong>하드웨어적 개념</strong> — 컴퓨터들을 연결한 네트워크</li>
+        <li>미국 국방부의 ARPANET이 시초</li>
+        <li>이메일, FTP, 텔넷, 웹 등 여러 서비스가 인터넷 위에서 동작</li>
+      </ul>
+    </div>
+    <div class="cl cl-teal">
+      <span class="badge b-teal">웹 (WWW)</span>
+      <ul style="margin-top:8px">
+        <li><strong>인터넷 서비스 중 하나</strong></li>
+        <li>HTTP 프로토콜 사용</li>
+        <li>HTML 문서를 연결해서 정보 제공</li>
+        <li>개발 목적: 연구자들이 흩어진 정보를 쉽게 공유</li>
+      </ul>
+    </div>
+  </div>
+  <h3>인터넷 기반 서비스 종류</h3>
+  <p>이메일, FTP, Telnet, DNS, 웹 등 — 다 TCP/IP를 사용하지만 응용 계층에서 각자 별도 프로토콜을 가짐.</p>
+</div>
+
+<div class="sub-page" id="sub-1-http">
+  <div class="page-title">HTTP · URL</div>
+  <div class="page-sub">Ch.1 Section 01</div>
+  <h3>HTTP (HyperText Transfer Protocol)</h3>
+  <p>클라이언트(브라우저)와 서버가 HTML 문서를 주고받기 위한 통신 규약.</p>
+  <h3>URL 구조</h3>
+  <div class="code">http  ://  www.naver.com  :  80  /  news/index.html
+  ①           ②          ③         ④
+
+① 프로토콜  — http 또는 https
+② 서버 주소 — 서버가 위치한 주소
+③ 포트번호  — 웹 서비스 기본값 80 (생략 가능)
+④ 파일 경로 — 없으면 index.html이 기본</div>
+  <h3>포트 (Port)</h3>
+  <p>네트워크 서비스를 제공하기 위한 일종의 출입문. 하나의 컴퓨터에서 여러 서비스를 구분하는 데 사용. 포트와 프로토콜이 일치하지 않으면 서비스 이용 불가.</p>
+  <h3>도메인 네임 시스템 (DNS)</h3>
+  <p>IP 주소는 숫자 (예: 123.123.123.123). 도메인 이름(www.naver.com)을 IP 주소로 변환하는 시스템이 DNS.</p>
+</div>
+
+<div class="sub-page" id="sub-1-structure">
+  <div class="page-title">클라이언트-서버 구조 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.1 Section 03</div>
+  <div class="g2">
+    <div class="cl cl-blue">
+      <span class="badge b-blue">클라이언트</span>
+      <ul style="margin-top:8px">
+        <li>웹 서비스를 이용하는 사용자 쪽</li>
+        <li>브라우저가 동작</li>
+        <li><strong>프런트엔드</strong>: HTML, CSS, JavaScript</li>
+      </ul>
+    </div>
+    <div class="cl cl-teal">
+      <span class="badge b-teal">서버</span>
+      <ul style="margin-top:8px">
+        <li>웹 서비스를 제공하는 쪽</li>
+        <li>웹 서버 소프트웨어 동작</li>
+        <li><strong>백엔드</strong>: 서블릿/JSP, DB</li>
+      </ul>
+    </div>
+  </div>
+  <div class="code">브라우저 → HTTP 요청 → 웹서버(톰캣) → 서블릿 실행 → DB
+브라우저 ← HTML 응답 ← 서블릿이 HTML 생성</div>
+  <div class="prof-box">"프런트엔드, 백엔드 모르는 사람 없죠? 없으면 넘어갑니다."</div>
+</div>
+
+<div class="sub-page" id="sub-1-static">
+  <div class="page-title">정적 vs 동적 웹 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.1 Section 03</div>
+  <div class="g2">
+    <div class="cl cl-blue">
+      <span class="badge b-blue">정적(Static) 웹</span>
+      <ul style="margin-top:8px">
+        <li>HTML 파일을 그대로 전송</li>
+        <li>서버는 찾아서 보낼 뿐, 처리 없음</li>
+        <li>누가 접속해도 항상 같은 페이지</li>
+      </ul>
+    </div>
+    <div class="cl cl-red">
+      <span class="badge b-red">동적(Dynamic) 웹</span>
+      <ul style="margin-top:8px">
+        <li>서버에서 Java 코드가 실행됨</li>
+        <li>사용자 입력에 따라 HTML을 그때그때 생성</li>
+        <li>로그인, 쇼핑몰, 검색 결과 등</li>
+      </ul>
+    </div>
+  </div>
+  <div class="warn">클라이언트 동적(JS로 화면 바꾸기)과 서버 동적(서블릿이 HTML 생성)은 다른 개념!</div>
+  <h3>Server Script vs Client Script</h3>
+  <div class="g2">
+    <div class="card">
+      <span class="badge b-blue">Client Script</span>
+      <p style="margin-top:6px">브라우저에서 실행. 대표: <strong>JavaScript</strong></p>
+    </div>
+    <div class="card">
+      <span class="badge b-teal">Server Script</span>
+      <p style="margin-top:6px">서버에서 실행. 대표: <strong>JSP, ASP, PHP</strong></p>
+    </div>
+  </div>
+  <div class="prof-box">교수님 설명: "환영합니다가 박혀있는 페이지 → 정적. 내 이름 입력하면 '환영합니다, 김OO'처럼 서버가 HTML을 그때 만들어서 보내주는 것 → 동적"</div>
+</div>
+
+<div class="sub-page" id="sub-1-network">
+  <div class="page-title">네트워크 · 프로토콜</div>
+  <div class="page-sub">Ch.1 Section 02</div>
+  <h3>TCP/IP</h3>
+  <ul>
+    <li>컴퓨터 간 통신 프로토콜 중 가장 널리 쓰임</li>
+    <li>하드웨어, OS, 접속 매체 관계없이 동작하는 <strong>개방형 구조</strong></li>
+    <li>TCP: 데이터 흐름 관리, 정확성 확인</li>
+    <li>IP: 데이터(패킷)를 목적지까지 전송</li>
+  </ul>
+  <h3>OSI 7계층 → TCP/IP 4계층으로 단순화</h3>
+  <h3>IP 주소</h3>
+  <p>TCP/IP 네트워크에서 컴퓨터를 구분하는 주소. 123.123.123.123 형태 (4개, 10진수).</p>
+</div>
+
+<div class="sub-page" id="sub-1-html_css_js">
+  <div class="page-title">HTML · CSS · JS 역할</div>
+  <div class="page-sub">Ch.1 Section 03</div>
+  <div class="g2">
+    <div class="cl cl-blue"><span class="badge b-blue">HTML</span><p style="margin-top:6px">웹 문서의 <strong>구조</strong>를 정의. 태그로 콘텐츠에 의미 부여.</p></div>
+    <div class="cl cl-teal"><span class="badge b-teal">CSS</span><p style="margin-top:6px">웹 문서의 <strong>표현(디자인)</strong>을 담당. 위치, 색상, 크기 등.</p></div>
+  </div>
+  <div class="cl cl-pur"><span class="badge b-pur">JavaScript</span><p style="margin-top:6px">HTML 문서에서 <strong>동적으로 변하는 콘텐츠</strong>를 처리. 이벤트 처리, 서버와 통신.</p></div>
+  <div class="info">HTML5 원칙: HTML = 구조(뼈대), CSS = 표현(디자인). 두 역할을 분리하자!</div>
+</div>
+
+</div><!-- end ch-1 -->
+
+
+<!-- ══════════════════ CH.2 ══════════════════ -->
+<div class="ch-page" id="ch-2">
+
+<div class="sub-page on" id="sub-2-whyjava">
+  <div class="page-title">왜 Java인가? <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.2 Section 01</div>
+  <div class="prof-box">"수많은 언어 중에 왜 Java를 쓰냐? 이유를 알고 써야지 그냥 쓰면 안 된다."</div>
+  <div class="star-box">⭐ 핵심 이유: <strong>이식성(Portability)</strong> — JVM 덕분에 어떤 OS에서도 코드 변경 없이 동작</div>
+  <p style="margin-top:12px">인터넷 환경은 Windows, Linux, Mac, Android, iOS 등 다양한 OS가 공존. C 언어로 만든 프로그램은 OS가 바뀌면 다시 컴파일해야 하지만, Java는 JVM만 있으면 어디서든 동일하게 동작.</p>
+  <div class="prof-box">"리눅스로 서버 운영하다가 유닉스로 바꿔도 Java 코드는 그대로 쓸 수 있다. C였으면 다시 만들어야 한다."</div>
+  <h3>Java의 특징</h3>
+  <ul>
+    <li>간결하면서도 강력한 <strong>객체지향 프로그래밍 언어</strong></li>
+    <li>플랫폼에 독립적 (이식성)</li>
+    <li>많은 오픈소스 라이브러리 → 생산성 향상</li>
+    <li>GUI 기반 응용 프로그램 개발에는 적합하지 않음</li>
+    <li>하드웨어 정밀 제어 프로그램에는 비교적 적합하지 않음</li>
+  </ul>
+  <h3>Java 플랫폼</h3>
+  <p>API + JVM으로 구성. Java SE(일반), Java EE(대규모 개발) 등이 있음. 웹 개발은 톰캣 같은 서블릿 컨테이너만 설치해도 충분.</p>
+</div>
+
+<div class="sub-page" id="sub-2-jvm">
+  <div class="page-title">JVM · 바이트코드 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.2 Section 01</div>
+  <div class="g2">
+    <div class="cl cl-blue">
+      <span class="badge b-blue">C 언어 실행 과정</span>
+      <div class="code" style="margin-top:8px">소스(.c)
+ ↓ 컴파일 (컴파일러)
+오브젝트(.obj)
+ ↓ 링크
+실행파일(.exe)
+ ↓
+OS가 직접 실행
+→ OS가 다르면 다시!</div>
+    </div>
+    <div class="cl cl-teal">
+      <span class="badge b-teal">Java 실행 과정</span>
+      <div class="code" style="margin-top:8px">소스(.java)
+ ↓ javac (컴파일)
+바이트코드(.class)
+ ↓
+JVM이 실행
+(OS 위에 JVM 설치)
+→ JVM만 있으면 OK!</div>
+    </div>
+  </div>
+  <div class="ok">바이트코드 = 기계어가 아님. <strong>JVM이 이해하는 언어</strong>. JVM이 각 OS에 맞게 번역해서 실행.</div>
+  <h3>JVM이 중요한 이유</h3>
+  <p>OS 위에 JVM이 올라가 있어서 OS의 영향을 받지 않음. <strong>Write Once, Run Anywhere.</strong></p>
+  <div class="prof-box">"Java 소스는 컴파일 후 바이트코드가 생성되며, JVM은 바이트코드를 해석하여 운영체제에서 실행할 수 있도록 번역한다."</div>
+</div>
+
+<div class="sub-page" id="sub-2-tools">
+  <div class="page-title">JDK · IDE · 톰캣</div>
+  <div class="page-sub">Ch.2 Section 01</div>
+  <table>
+    <tr><th>도구</th><th>역할</th><th>이 수업에서 사용</th></tr>
+    <tr><td class="imp">JDK</td><td>Java 컴파일러 + JRE(실행환경). javac, java 명령어 포함</td><td>AdoptOpenJDK 11</td></tr>
+    <tr><td class="imp">IDE (이클립스)</td><td>코딩 편의 도구. 컴파일·실행·디버그 통합. 없어도 코딩 가능.</td><td>Eclipse IDE for Enterprise Java Developers</td></tr>
+    <tr><td class="imp">서블릿 컨테이너 (WAS)</td><td>웹 서버 데몬 + Java 실행기(JVM 포함). 클라이언트 요청 받아 서블릿 실행.</td><td>Apache Tomcat 9</td></tr>
+    <tr><td class="imp">데이터베이스</td><td>데이터 저장</td><td>H2 Database v1.4</td></tr>
+  </table>
+  <div class="warn">이클립스는 반드시 <strong>Enterprise Java Developers 버전</strong>! 일반 Java 버전은 동적 웹 프로젝트 생성 불가.</div>
+  <div class="prof-box">"웹 서버(아파치 톰캣) = 웹 서비스 데몬 프로그램 + 서블릿 컨테이너. 이 두 개를 합쳐놓은 게 WAS(Web Application Server)."</div>
+</div>
+
+<div class="sub-page" id="sub-2-tomcat">
+  <div class="page-title">톰캣 구동 확인</div>
+  <div class="page-sub">Ch.2 Section 03</div>
+  <ol style="line-height:2">
+    <li>JAVA_HOME 환경변수 설정</li>
+    <li><code style="font-family:monospace;font-size:12px;background:var(--sur2);padding:2px 6px;border-radius:4px">Tomcat\bin\startup.bat</code> 실행</li>
+    <li>브라우저에서 <code style="font-family:monospace;font-size:12px;background:var(--sur2);padding:2px 6px;border-radius:4px">localhost:8080</code> 접속</li>
+    <li>Apache Tomcat 화면이 나오면 성공</li>
+  </ol>
+  <div class="info">톰캣의 기본 포트는 <strong>8080</strong>. localhost = 내 컴퓨터.</div>
+</div>
+
+<div class="sub-page" id="sub-2-project">
+  <div class="page-title">동적 웹 프로젝트 생성</div>
+  <div class="page-sub">Ch.2 Section 04</div>
+  <div class="g2">
+    <div class="card">
+      <span class="badge b-gray">정적 웹 프로젝트</span>
+      <p style="margin-top:6px">HTML, CSS, JS만으로 구성된 웹 개발 시 사용</p>
+    </div>
+    <div class="card">
+      <span class="badge b-teal">동적 웹 프로젝트</span>
+      <p style="margin-top:6px">서블릿, JSP 개발 시 사용. <strong>우리가 사용!</strong></p>
+    </div>
+  </div>
+  <h3>생성 순서</h3>
+  <div class="code">File → New → Dynamic Web Project
+ → 프로젝트명 입력 (예: jwbook)
+ → Target runtime: Apache Tomcat v9.0
+ → Web Module: "Generate web.xml" 체크
+ → Finish</div>
+  <h3>주요 용어</h3>
+  <table>
+    <tr><th>용어</th><th>설명</th></tr>
+    <tr><td class="imp">Context root</td><td>URL 진입점. 기본값 = 프로젝트명<br>예) localhost:8080/jwbook/...</td></tr>
+    <tr><td class="imp">Content directory</td><td>웹 콘텐츠(html, css, jsp, 이미지) 위치. src/main/webapp</td></tr>
+    <tr><td class="imp">web.xml</td><td>서블릿 정보를 컨테이너에 제공하는 설정 파일. 서블릿 3.0부터 @WebServlet 애너테이션으로 대체 가능.</td></tr>
+  </table>
+</div>
+
+<div class="sub-page" id="sub-2-jsp_run">
+  <div class="page-title">JSP 실행 확인</div>
+  <div class="page-sub">Ch.2 Section 04 — hello.jsp</div>
+  <p>환경 설정이 제대로 됐는지 JSP 파일로 확인.</p>
+  <div class="ct">hello.jsp</div>
+  <div class="code"><span class="ck">&lt;%@ page</span> language=<span class="cs">"java"</span> contentType=<span class="cs">"text/html; charset=UTF-8"</span> pageEncoding=<span class="cs">"UTF-8"</span><span class="ck">%&gt;</span>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset=<span class="cs">"UTF-8"</span>&gt;
+  &lt;title&gt;Hello World&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h2&gt;Hello World&lt;/h2&gt;
+  현재 날짜와 시간은
+  <span class="ck">&lt;%=</span>java.time.LocalDateTime.now()<span class="ck">%&gt;</span>
+  입니다.
+&lt;/body&gt;
+&lt;/html&gt;</div>
+  <div class="ok">브라우저에서 현재 날짜/시간이 출력되면 성공 → Java 코드가 서버에서 실행되고 있다는 증거!</div>
+</div>
+
+</div><!-- end ch-2 -->
+
+
+<!-- ══════════════════ CH.3 ══════════════════ -->
+<div class="ch-page" id="ch-3">
+
+<div class="sub-page on" id="sub-3-html_basic">
+  <div class="page-title">HTML 구조 · 태그</div>
+  <div class="page-sub">Ch.3 Section 01</div>
+  <div class="ct">HTML 기본 구조</div>
+  <div class="code">&lt;!DOCTYPE html&gt;     <span class="cm">&lt;!-- HTML5 문서 선언 --&gt;</span>
+&lt;html&gt;              <span class="cm">&lt;!-- 문서 시작 --&gt;</span>
+  &lt;head&gt;            <span class="cm">&lt;!-- 보이지 않는 설정 부분 --&gt;</span>
+    &lt;meta charset=<span class="cs">"UTF-8"</span>&gt;  <span class="cm">&lt;!-- 한글 깨짐 방지 (필수!) --&gt;</span>
+    &lt;title&gt;페이지 제목&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;            <span class="cm">&lt;!-- 실제 화면에 보이는 부분 --&gt;</span>
+    &lt;h1&gt;제목&lt;/h1&gt;
+    &lt;p&gt;문단&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</div>
+  <h3>주요 용어</h3>
+  <div class="g2">
+    <div class="cl cl-blue"><span class="badge b-blue">태그(Tag)</span><p style="margin-top:6px">&lt; &gt; 로 표현. 시작 태그 + 종료 태그 쌍. 예) &lt;h2&gt;&lt;/h2&gt;</p></div>
+    <div class="cl cl-teal"><span class="badge b-teal">엘리먼트(Element)</span><p style="margin-top:6px">태그 자체. h2, img, p 등</p></div>
+    <div class="cl cl-pur"><span class="badge b-pur">속성(Attribute)</span><p style="margin-top:6px">태그에 추가 정보 부여. 예) &lt;img src="img.png"&gt;</p></div>
+    <div class="cl cl-amb"><span class="badge b-amb">태그 보디(Body)</span><p style="margin-top:6px">시작 태그와 종료 태그 사이 내용</p></div>
+  </div>
+  <h3>블록 태그 vs 인라인 태그</h3>
+  <div class="g2">
+    <div class="card"><span class="badge b-blue">블록 태그</span><p style="margin-top:6px">라인 전체 사용. 다른 요소와 같은 줄 배치 불가. div, p, h1~h6, ul, li 등</p></div>
+    <div class="card"><span class="badge b-teal">인라인 태그</span><p style="margin-top:6px">다른 요소와 같은 줄 배치 가능. span, a, img, input 등</p></div>
+  </div>
+</div>
+
+<div class="sub-page" id="sub-3-semantic">
+  <div class="page-title">시맨틱 태그 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.3 Section 01 — 교수님이 특별히 강조!</div>
+  <div class="prof-box">"B 태그, I 태그, U 태그는 의미 없는 태그. HTML5에서는 쓰지 마라."</div>
+  <p>시맨틱(Semantic) = 의미 있는. HTML5에서 도입. 검색 로봇이 문서 내용을 파악할 수 있도록.</p>
+  <div class="g2">
+    <div class="cl cl-red">
+      <span class="badge b-red">쓰지 말 것 (의미 없음)</span>
+      <div class="code" style="margin-top:8px">&lt;b&gt;굵게&lt;/b&gt;     <span class="cm">→ 그냥 굵게</span>
+&lt;i&gt;기울임&lt;/i&gt;  <span class="cm">→ 그냥 기울임</span>
+&lt;u&gt;밑줄&lt;/u&gt;    <span class="cm">→ 그냥 밑줄</span></div>
+    </div>
+    <div class="cl cl-teal">
+      <span class="badge b-teal">써야 할 것 (의미 있음)</span>
+      <div class="code" style="margin-top:8px">&lt;strong&gt;강조&lt;/strong&gt;  <span class="cm">→ 중요함!</span>
+&lt;em&gt;인용·강조&lt;/em&gt;   <span class="cm">→ 인용구</span>
+검색 로봇: 의미 파악 가능</div>
+    </div>
+  </div>
+  <div class="info">HTML = 구조(뼈대), CSS = 표현(디자인). HTML에서 디자인 속성 쓰는 건 HTML5 정신에 어긋남.</div>
+</div>
+
+<div class="sub-page" id="sub-3-form">
+  <div class="page-title">Form 태그 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.3 Section 01 — 서블릿과 연결되는 핵심!</div>
+  <div class="star-box">⭐ form 태그 = 사용자 입력을 받아 서버(서블릿)로 전송하는 태그</div>
+  <div class="ct">기본 구조</div>
+  <div class="code">&lt;form <span class="ch">action="MyServlet"</span> method="get"&gt;
+  <span class="cm">&lt;!-- action: 이 폼의 데이터를 어느 서블릿으로 보낼지 --&gt;</span>
+  <span class="cm">&lt;!-- method: get 또는 post --&gt;</span>
+  
+  &lt;input type=<span class="cs">"text"</span>     <span class="ch">name="id"</span>&gt;
+  &lt;input type=<span class="cs">"password"</span> <span class="ch">name="pw"</span>&gt;
+  &lt;input type=<span class="cs">"submit"</span>&gt;
+&lt;/form&gt;</div>
+  <div class="warn"><strong>name 속성이 핵심!</strong> 서블릿에서 request.getParameter("<strong>name에 쓴 값</strong>")으로 꺼냄. name 없으면 서버로 전송 안 됨!</div>
+</div>
+
+<div class="sub-page" id="sub-3-input">
+  <div class="page-title">Input 태그 종류 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.3 Section 01</div>
+  <table>
+    <tr><th>type</th><th>UI</th><th>서블릿에서 읽는 방법</th></tr>
+    <tr><td class="mono imp">text</td><td>한 줄 텍스트 입력</td><td>getParameter()</td></tr>
+    <tr><td class="mono imp">password</td><td>암호화된 텍스트</td><td>getParameter()</td></tr>
+    <tr><td class="mono imp">email</td><td>이메일 형식 입력</td><td>getParameter()</td></tr>
+    <tr><td class="mono imp">number</td><td>숫자 입력 (증감 버튼)</td><td>getParameter() + parseInt</td></tr>
+    <tr><td class="mono imp">radio</td><td>단일 선택 (같은 name 그룹)</td><td>getParameter()</td></tr>
+    <tr><td class="mono imp">checkbox</td><td>다중 선택 가능</td><td class="imp">getParameterValues() → String[]</td></tr>
+    <tr><td class="mono imp">submit</td><td>전송 버튼</td><td>—</td></tr>
+    <tr><td class="mono imp">reset</td><td>초기화 버튼</td><td>—</td></tr>
+    <tr><td class="mono imp">hidden</td><td>UI 없이 데이터 전송</td><td>getParameter()</td></tr>
+  </table>
+  <h3>textarea · select</h3>
+  <table>
+    <tr><th>태그</th><th>설명</th><th>읽는 방법</th></tr>
+    <tr><td class="mono imp">textarea</td><td>여러 줄 텍스트 입력</td><td>getParameter()</td></tr>
+    <tr><td class="mono imp">select</td><td>단일 선택 드롭다운</td><td>getParameter()</td></tr>
+    <tr><td class="mono imp">select multiple</td><td>다중 선택 드롭다운</td><td class="imp">getParameterValues()</td></tr>
+  </table>
+</div>
+
+<div class="sub-page" id="sub-3-css_basic">
+  <div class="page-title">CSS 기본 · 셀렉터 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.3 Section 02</div>
+  <h3>CSS 구문</h3>
+  <div class="code">선택자 { 속성: 값; 속성: 값; }</div>
+  <h3>3가지 기본 셀렉터</h3>
+  <div class="g2">
+    <div class="cl cl-blue">
+      <span class="badge b-blue">태그 셀렉터</span>
+      <div class="code" style="margin-top:8px">p { color: red; }
+h1 { font-size: 24px; }</div>
+      <p>해당 태그 전체에 적용. 공통 스타일에 사용.</p>
+    </div>
+    <div class="cl cl-teal">
+      <span class="badge b-teal">아이디 셀렉터</span>
+      <div class="code" style="margin-top:8px">#myId { color: blue; }</div>
+      <p>HTML: id="myId". 문서 전체에서 딱 1개만. # 붙임.</p>
+    </div>
+  </div>
+  <div class="cl cl-pur">
+    <span class="badge b-pur">클래스 셀렉터 (가장 많이 씀)</span>
+    <div class="code" style="margin-top:8px">.myClass { color: green; }</div>
+    <p>HTML: class="myClass". 여러 곳에 재사용 가능. . (점) 붙임. Bootstrap 등 라이브러리의 기반.</p>
+  </div>
+</div>
+
+<div class="sub-page" id="sub-3-css_apply">
+  <div class="page-title">CSS 적용 방법</div>
+  <div class="page-sub">Ch.3 Section 02</div>
+  <table>
+    <tr><th>방법</th><th>위치</th><th>특징</th></tr>
+    <tr><td class="imp">인라인 스타일</td><td>HTML 태그에 직접</td><td>현재 태그에만 적용</td></tr>
+    <tr><td class="imp">내장 스타일시트</td><td>&lt;head&gt;의 &lt;style&gt;태그 안</td><td>현재 문서에만 적용</td></tr>
+    <tr><td class="imp">외장 스타일시트</td><td>별도 .css 파일 → &lt;link&gt;로 연결</td><td>여러 문서에 공통 적용 가능</td></tr>
+  </table>
+  <div class="info">CSS는 위에서 아래로 중첩(Cascading) 적용. 같은 속성이 있으면 나중 선언이 우선.</div>
+</div>
+
+<div class="sub-page" id="sub-3-js_basic">
+  <div class="page-title">JS 특징 · 문법</div>
+  <div class="page-sub">Ch.3 Section 03</div>
+  <h3>JavaScript 특징</h3>
+  <ul>
+    <li>동적이며 타입 명시 불필요한 인터프리터 언어</li>
+    <li>객체지향 + 함수형 프로그래밍 모두 지원</li>
+    <li>HTML의 내용, 속성, 스타일 변경 가능</li>
+    <li>이벤트 처리 및 서버와 실시간 통신 가능</li>
+  </ul>
+  <h3>변수 선언</h3>
+  <div class="code"><span class="ck">var</span> a = 1;    <span class="cm">// 함수 범위, 호이스팅 주의</span>
+<span class="ck">let</span> b = 2;    <span class="cm">// 블록 범위, 주로 사용</span>
+<span class="ck">const</span> c = 3; <span class="cm">// 블록 범위, 상수</span></div>
+  <div class="warn">범위 지정 없이 선언하면 전역변수. 호이스팅(끌어올림) 주의!</div>
+</div>
+
+<div class="sub-page" id="sub-3-dom">
+  <div class="page-title">DOM · 이벤트 처리 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.3 Section 03</div>
+  <h3>DOM (Document Object Model)</h3>
+  <p>HTML 문서를 프로그램적으로 처리할 수 있도록 <strong>문서 구조 전체를 객체화</strong>한 것. JS가 이를 통해 HTML 요소에 접근 가능.</p>
+  <h3>DOM 접근</h3>
+  <div class="code">document.getElementById(<span class="cs">"myId"</span>)      <span class="cm">// id로 찾기</span>
+document.querySelector(<span class="cs">".myClass"</span>)  <span class="cm">// CSS 셀렉터로 찾기</span></div>
+  <h3>이벤트 처리 3가지 방법</h3>
+  <div class="code"><span class="cm">// ① HTML 태그에 속성</span>
+&lt;button onclick=<span class="cs">"fn()"</span>&gt;클릭&lt;/button&gt;
+
+<span class="cm">// ② DOM 속성</span>
+document.getElementById(<span class="cs">"btn"</span>).onclick = fn;
+
+<span class="cm">// ③ addEventListener (권장)</span>
+element.addEventListener(<span class="cs">"click"</span>, fn);</div>
+</div>
+
+</div><!-- end ch-3 -->
+
+
+<!-- ══════════════════ CH.4 ══════════════════ -->
+<div class="ch-page" id="ch-4">
+
+<div class="sub-page on" id="sub-4-servlet_what">
+  <div class="page-title">서블릿이란? <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.4 Section 01</div>
+  <div class="star-box">⭐ 서블릿 = Server + Applet = <strong>서버에서 실행되는 작은 Java 프로그램</strong></div>
+  <p style="margin-top:10px">클라이언트 요청을 받아서 처리하고 HTML 응답을 돌려주는 역할. Java로 만들기 때문에 Java의 특징(이식성, API 사용)을 그대로 가짐.</p>
+  <h3>서블릿의 동작</h3>
+  <div class="code">브라우저 → HTTP 요청
+ → 톰캣(서블릿 컨테이너)
+ → 해당 서블릿 실행
+ → DB 액세스 (필요 시)
+ → HTML 동적 생성
+ → 브라우저에 응답</div>
+  <h3>서블릿 장단점</h3>
+  <div class="g2">
+    <div class="cl cl-teal">
+      <span class="badge b-teal">장점</span>
+      <ul style="margin-top:8px">
+        <li>Java API 모두 사용 가능</li>
+        <li>OS/하드웨어 독립적</li>
+        <li>스레드 기반 다중 처리</li>
+        <li>오픈소스 라이브러리 활용</li>
+      </ul>
+    </div>
+    <div class="cl cl-red">
+      <span class="badge b-red">단점</span>
+      <ul style="margin-top:8px">
+        <li>HTML 출력 시 out.print()로 태그를 문자열로 기술해야 함 → 복잡</li>
+        <li>디자이너가 화면 수정하기 어려움</li>
+        <li>HTML Form 데이터 처리가 불편</li>
+      </ul>
+    </div>
+  </div>
+  <div class="prof-box">"서블릿은 최종 산출물이 HTML 페이지. 서버에서 동적으로 HTML을 만들어서 클라이언트에 보내주는 것."</div>
+</div>
+
+<div class="sub-page" id="sub-4-lifecycle">
+  <div class="page-title">서블릿 생명주기 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.4 Section 01</div>
+  <div class="star-box">⭐ 핵심: init()은 최초 1회. service()는 매 요청마다.</div>
+  <div class="code">첫 번째 요청:
+  컴파일 (.java → .class)
+   → init()    <span class="cm">// 최초 1회, 초기화</span>
+   → service() <span class="cm">// 매 요청마다 실행</span>
+   → doGet() or doPost()
+
+두 번째 이후 요청:
+  service() → doGet()/doPost()  <span class="cm">// init() 생략!</span>
+
+코드 수정 / 서버 종료:
+  destroy()  <span class="cm">// 최종 1회, 정리</span></div>
+  <table style="margin-top:12px">
+    <tr><th>메서드</th><th>호출 시점</th><th>용도</th></tr>
+    <tr><td class="mono imp">init()</td><td>최초 1회</td><td>초기화 작업 (DB 연결 등)</td></tr>
+    <tr><td class="mono imp">service()</td><td>매 요청마다</td><td>GET/POST 분기</td></tr>
+    <tr><td class="mono imp">doGet()</td><td>GET 요청 시</td><td>실제 처리 로직</td></tr>
+    <tr><td class="mono imp">doPost()</td><td>POST 요청 시</td><td>실제 처리 로직</td></tr>
+    <tr><td class="mono imp">destroy()</td><td>종료 시 1회</td><td>정리 작업</td></tr>
+  </table>
+  <div class="tip">service()를 오버라이딩하면 → doGet/doPost 자동 실행 안 됨<br>service() 안 건드리면 → doGet/doPost 자동으로 실행됨</div>
+  <div class="prof-box">"처음 요청하면 약간 delay가 있다. 컴파일, init(), 컨테이너에 올리는 시간 때문. 두 번째부터는 바로바로 나온다."</div>
+</div>
+
+<div class="sub-page" id="sub-4-structure">
+  <div class="page-title">서블릿 클래스 구조 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.4 Section 01</div>
+  <div class="ct">LoginServlet.java</div>
+  <div class="code"><span class="ck">import</span> javax.servlet.*;
+<span class="ck">import</span> javax.servlet.http.*;
+<span class="ck">import</span> java.io.*;
+
+<span class="ch">@WebServlet("/LoginServlet")</span>
+<span class="cm">// URL 매핑: 이 URL 요청 → 이 서블릿 실행
+// form의 action="LoginServlet"과 반드시 일치!</span>
+
+<span class="ck">public class</span> LoginServlet <span class="ck">extends</span> HttpServlet {
+<span class="cm">  // HttpServlet 상속 = 서블릿이 되는 조건</span>
+
+  <span class="ck">protected void</span> doGet(
+      HttpServletRequest request,   <span class="cm">// 요청 정보 객체</span>
+      HttpServletResponse response) <span class="cm">// 응답 출력 객체</span>
+      <span class="ck">throws</span> ServletException, IOException {
+
+    <span class="cm">// 왜 request, response 두 개를 받는가?
+    // 요청 처리 + 응답 = 두 역할이 필요하기 때문!</span>
+
+    <span class="cm">// 1. 먼저! 한글 깨짐 방지</span>
+    response.setContentType(<span class="cs">"text/html; charset=utf-8"</span>);
+
+    <span class="cm">// 2. 파라미터 추출</span>
+    String id = request.getParameter(<span class="cs">"id"</span>);
+
+    <span class="cm">// 3. 브라우저로 HTML 출력</span>
+    PrintWriter out = response.getWriter();
+    out.print(<span class="cs">"&lt;html&gt;&lt;body&gt;"</span>);
+    out.print(<span class="cs">"&lt;h2&gt;안녕, "</span> + id + <span class="cs">"!&lt;/h2&gt;"</span>);
+    out.print(<span class="cs">"&lt;/body&gt;&lt;/html&gt;"</span>);
+  }
+}</div>
+  <div class="warn">response.setContentType()은 반드시 getWriter() 호출 전에!</div>
+</div>
+
+<div class="sub-page" id="sub-4-request">
+  <div class="page-title">HttpServletRequest <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.4 Section 01</div>
+  <p>클라이언트의 요청 정보를 담은 객체. 서블릿 컨테이너가 생성해서 doGet/doPost에 전달.</p>
+  <h3>주요 메서드</h3>
+  <table>
+    <tr><th>메서드</th><th>반환</th><th>설명</th></tr>
+    <tr><td class="mono imp">getParameter("name")</td><td>String</td><td>단일 값 추출. 없으면 null.</td></tr>
+    <tr><td class="mono imp">getParameterValues("name")</td><td>String[]</td><td>다중 값 추출 (체크박스 등)</td></tr>
+    <tr><td class="mono imp">getParameterNames()</td><td>Enumeration</td><td>파라미터 이름 목록</td></tr>
+    <tr><td class="mono imp">getMethod()</td><td>String</td><td>"GET" 또는 "POST"</td></tr>
+    <tr><td class="mono imp">getSession()</td><td>HttpSession</td><td>세션 객체 반환/생성</td></tr>
+    <tr><td class="mono imp">getCookies()</td><td>Cookie[]</td><td>쿠키 배열 반환</td></tr>
+  </table>
+  <div class="tip">getParameter()는 항상 String 반환. 숫자가 필요하면 Integer.parseInt() 필요!</div>
+</div>
+
+<div class="sub-page" id="sub-4-response">
+  <div class="page-title">HttpServletResponse <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.4 Section 01</div>
+  <p>서버에서 클라이언트로 응답을 보내는 객체.</p>
+  <h3>주요 메서드</h3>
+  <table>
+    <tr><th>메서드</th><th>설명</th></tr>
+    <tr><td class="mono imp">getWriter()</td><td>PrintWriter 반환. HTML 출력용 스트림.</td></tr>
+    <tr><td class="mono imp">setContentType("text/html; charset=utf-8")</td><td>응답 타입 + 인코딩 설정. getWriter() 전에 호출!</td></tr>
+    <tr><td class="mono imp">setCharacterEncoding("UTF-8")</td><td>문자 인코딩만 별도 설정</td></tr>
+    <tr><td class="mono imp">sendRedirect("URL")</td><td>다른 페이지로 이동</td></tr>
+    <tr><td class="mono imp">addCookie(cookie)</td><td>쿠키를 클라이언트에 저장</td></tr>
+  </table>
+  <h3>PrintWriter로 HTML 출력</h3>
+  <div class="code">PrintWriter out = response.getWriter();
+out.print(<span class="cs">"&lt;html&gt;&lt;body&gt;"</span>);
+out.print(<span class="cs">"&lt;h2&gt;결과&lt;/h2&gt;"</span>);
+out.print(<span class="cs">"&lt;/body&gt;&lt;/html&gt;"</span>);</div>
+  <div class="prof-box">"서버에서 클라이언트 쪽으로 데이터를 내보내기 위해서는 PrintWriter 클래스를 이용. response 객체의 getWriter()로 출력 스트림 ID를 가지고 옴."</div>
+</div>
+
+<div class="sub-page" id="sub-4-get_post">
+  <div class="page-title">GET vs POST <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.4 — 교수님이 "언제 뭘 써야 하는지 모르면 기술이 없는 것"이라고 강조!</div>
+  <div class="prof-box">"GET 쓴 사람, POST 쓴 사람 모두 왜 그걸 선택했는지 설명 못하면 기술 없는 것."</div>
+  <div class="g2">
+    <div class="cl cl-blue">
+      <span class="badge b-blue">GET 방식</span>
+      <ul style="margin-top:8px">
+        <li>데이터가 <strong>URL(쿼리스트링)에 포함</strong></li>
+        <li>예) ...?id=kim&pw=1234</li>
+        <li>장점: 빠름</li>
+        <li>단점: URL에 노출됨, 길이 제한</li>
+        <li>서블릿: doGet() 실행</li>
+      </ul>
+    </div>
+    <div class="cl cl-red">
+      <span class="badge b-red">POST 방식</span>
+      <ul style="margin-top:8px">
+        <li>데이터가 <strong>HTTP Body에 포함</strong></li>
+        <li>URL에 안 보임</li>
+        <li>장점: 보안 우수, 길이 제한 없음</li>
+        <li>단점: GET보다 느림</li>
+        <li>서블릿: doPost() 실행</li>
+      </ul>
+    </div>
+  </div>
+  <div class="ok">로그인/회원가입처럼 민감한 정보 → POST. 검색어처럼 노출돼도 되는 것 → GET.</div>
+</div>
+
+<div class="sub-page" id="sub-4-form_servlet">
+  <div class="page-title">폼 → 서블릿 전체 흐름 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.4 실습</div>
+  <div class="ct">login.html</div>
+  <div class="code">&lt;form <span class="ch">action="LoginServlet"</span>&gt;
+  아이디: &lt;input type=<span class="cs">"text"</span> <span class="ch">name="id"</span>&gt;
+  비밀번호: &lt;input type=<span class="cs">"password"</span> <span class="ch">name="pw"</span>&gt;
+  &lt;input type=<span class="cs">"submit"</span> value=<span class="cs">"로그인"</span>&gt;
+&lt;/form&gt;
+
+<span class="cm">&lt;!-- 전송 시 생성되는 URL: --&gt;
+&lt;!-- .../LoginServlet?id=kim&pw=1234 --&gt;</span></div>
+  <div class="ct">LoginServlet.java — doGet()</div>
+  <div class="code">response.setContentType(<span class="cs">"text/html; charset=utf-8"</span>);
+
+String id = request.getParameter(<span class="cs">"id"</span>);   <span class="cm">// "kim"</span>
+String pw = request.getParameter(<span class="cs">"pw"</span>);   <span class="cm">// "1234"</span>
+
+PrintWriter out = response.getWriter();
+<span class="ck">if</span> (<span class="cs">"admin"</span>.equals(id) && <span class="cs">"1234"</span>.equals(pw)) {
+    out.print(<span class="cs">"&lt;h2&gt;로그인 성공!&lt;/h2&gt;"</span>);
+} <span class="ck">else</span> {
+    out.print(<span class="cs">"&lt;h2&gt;로그인 실패&lt;/h2&gt;"</span>);
+}</div>
+  <div class="warn">로그인 폼(login.html)은 <strong>서블릿이 아닌 HTML 파일</strong>로 만들어야 한다! 정적 파일을 서블릿으로 만들면 컴파일/init/service 불필요하게 실행 → 서버 낭비.</div>
+</div>
+
+<div class="sub-page" id="sub-4-checkbox">
+  <div class="page-title">체크박스 · 다중 선택 처리</div>
+  <div class="page-sub">Ch.4 실습</div>
+  <div class="ct">checkbox.html</div>
+  <div class="code">&lt;form action=<span class="cs">"CheckServlet"</span>&gt;
+  &lt;input type=<span class="cs">"checkbox"</span> name=<span class="cs">"fruit"</span> value=<span class="cs">"apple"</span>&gt; 사과
+  &lt;input type=<span class="cs">"checkbox"</span> name=<span class="cs">"fruit"</span> value=<span class="cs">"banana"</span>&gt; 바나나
+  &lt;input type=<span class="cs">"checkbox"</span> name=<span class="cs">"fruit"</span> value=<span class="cs">"orange"</span>&gt; 오렌지
+  &lt;input type=<span class="cs">"submit"</span>&gt;
+&lt;/form&gt;
+<span class="cm">&lt;!-- 사과+오렌지 체크 시: ...?fruit=apple&fruit=orange --&gt;</span></div>
+  <div class="ct">CheckServlet.java</div>
+  <div class="code">String[] fruits = request.getParameterValues(<span class="cs">"fruit"</span>);
+<span class="cm">// getParameter 쓰면 첫 번째 값만! → 반드시 getParameterValues!
+
+// fruits가 null일 수도 있음 (아무것도 체크 안 하면)</span>
+<span class="ck">if</span> (fruits != null) {
+    <span class="ck">for</span> (String f : fruits) {
+        out.print(<span class="cs">"선택: "</span> + f + <span class="cs">"&lt;br&gt;"</span>);
+    }
+}</div>
+  <div class="warn">체크박스에 getParameter() 쓰면 첫 번째 값만 반환. 반드시 <strong>getParameterValues()</strong> 사용!</div>
+</div>
+
+<div class="sub-page" id="sub-4-annotation">
+  <div class="page-title">@WebServlet · web.xml</div>
+  <div class="page-sub">Ch.4 Section 01</div>
+  <div class="g2">
+    <div class="cl cl-red">
+      <span class="badge b-red">web.xml (구버전 2.x)</span>
+      <div class="code" style="margin-top:8px;font-size:11px">&lt;servlet&gt;
+  &lt;servlet-name&gt;Login&lt;/servlet-name&gt;
+  &lt;servlet-class&gt;com.LoginServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+  &lt;servlet-name&gt;Login&lt;/servlet-name&gt;
+  &lt;url-pattern&gt;/LoginServlet&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</div>
+    </div>
+    <div class="cl cl-teal">
+      <span class="badge b-teal">@WebServlet (현재 3.0+)</span>
+      <div class="code" style="margin-top:8px"><span class="ch">@WebServlet("/LoginServlet")</span>
+<span class="ck">public class</span> LoginServlet
+    <span class="ck">extends</span> HttpServlet {
+  <span class="cm">// 훨씬 간단!</span>
+}</div>
+    </div>
+  </div>
+  <div class="ok">서블릿 3.0부터 @WebServlet 애너테이션으로 web.xml 없이 URL 매핑 가능. 현재는 거의 애너테이션 방식 사용.</div>
+</div>
+
+</div><!-- end ch-4 -->
+
+
+<!-- ══════════════════ CH.5 ══════════════════ -->
+<div class="ch-page" id="ch-5">
+
+<div class="sub-page on" id="sub-5-why_share">
+  <div class="page-title">왜 정보 공유가 필요한가 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.5 Section 01</div>
+  <div class="warn">HTTP는 <strong>비연결형(Stateless) 통신</strong>. 페이지를 이동하면 이전 페이지의 정보가 사라짐!</div>
+  <p style="margin-top:10px">로그인 상태 유지, 장바구니, 쇼핑몰의 주문 정보 등 — 여러 페이지에 걸쳐 정보를 공유해야 하는 경우가 많음.</p>
+  <h3>정보 공유 5가지 방법</h3>
+  <table>
+    <tr><th>방법</th><th>저장 위치</th><th>언제 쓰나</th></tr>
+    <tr><td class="imp">URL Rewriting</td><td>URL</td><td>간단한 페이지 이동, 노출 괜찮은 데이터</td></tr>
+    <tr><td class="imp">Cookie</td><td>클라이언트(브라우저)</td><td>방문 횟수, 비민감 정보 유지</td></tr>
+    <tr><td class="imp">Session</td><td>서버</td><td>로그인 상태, 민감한 정보</td></tr>
+    <tr><td class="imp">ServletContext</td><td>서버 (공유 공간)</td><td>모든 사용자 공통 데이터</td></tr>
+    <tr><td class="imp">RequestDispatcher</td><td>request 객체</td><td>서블릿 간 데이터 전달 (forward)</td></tr>
+  </table>
+  <div class="prof-box">"언제 어떤 기술을 써야 하는지 판단할 수 있어야 한다. 그게 설계 능력이다."</div>
+</div>
+
+<div class="sub-page" id="sub-5-redirect">
+  <div class="page-title">sendRedirect <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.5 Section 01</div>
+  <p>서블릿에서 다른 페이지로 이동시키는 메서드. HTTP Response 객체에 있음.</p>
+  <div class="code">response.sendRedirect(<span class="cs">"main.jsp"</span>);
+response.sendRedirect(<span class="cs">"http://www.naver.com"</span>);
+
+<span class="cm">// 주의: sendRedirect 후에도 아래 코드가 실행됨!
+// 반드시 return; 함께 사용</span>
+response.sendRedirect(<span class="cs">"login.html"</span>);
+<span class="ck">return</span>;</div>
+  <h3>동작 방식</h3>
+  <div class="code">서버 → 브라우저에게 "이 URL로 가라" (302 응답)
+→ 브라우저가 해당 URL로 새 요청
+→ URL 주소 바뀜. 이전 request 데이터 소멸.</div>
+</div>
+
+<div class="sub-page" id="sub-5-urlrewrite">
+  <div class="page-title">URL Rewriting <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.5 Section 01</div>
+  <p>URL에 쿼리스트링을 붙여서 다음 페이지로 데이터 전달.</p>
+  <h3>쿼리스트링 (Query String)</h3>
+  <p>URL에 부가해서 데이터 전달 목적으로 사용하는 문자열.</p>
+  <div class="code">URL?name=value&name2=value2
+   ↑           ↑
+ 물음표    각 데이터는 &로 연결</div>
+  <div class="ct">예시</div>
+  <div class="code"><span class="cm">// sendRedirect에 쿼리스트링 붙이기</span>
+String name = request.getParameter(<span class="cs">"name"</span>);
+String gender = <span class="cs">"남자"</span>;
+response.sendRedirect(<span class="cs">"ResultServlet?name="</span> + name + <span class="cs">"&gender="</span> + gender);
+
+<span class="cm">// 받는 쪽 서블릿에서:</span>
+String name = request.getParameter(<span class="cs">"name"</span>);
+String gender = request.getParameter(<span class="cs">"gender"</span>);</div>
+  <div class="warn">한글은 URL 인코딩 필요! URLEncoder.encode(value, "UTF-8") 사용.</div>
+  <p>장점: 간단. 단점: URL에 노출됨. 매 페이지마다 붙여야 해서 복잡.</p>
+</div>
+
+<div class="sub-page" id="sub-5-cookie">
+  <div class="page-title">쿠키 (Cookie) <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.5 Section 02</div>
+  <div class="star-box">⭐ 쿠키 = 서버가 클라이언트(브라우저)에 저장하는 데이터. name=value 형식.</div>
+  <h3>쿠키 생성 & 전송</h3>
+  <div class="code">Cookie ck = <span class="ck">new</span> Cookie(<span class="cs">"name"</span>, <span class="cs">"kim"</span>);
+<span class="cm">// 생성자: 첫 번째=키 이름, 두 번째=값 (둘 다 String)</span>
+
+ck.setMaxAge(3600); <span class="cm">// 유효시간(초). 0이면 즉시 삭제. 음수=브라우저 닫을 때 삭제</span>
+response.addCookie(ck); <span class="cm">// 브라우저에 저장 명령</span></div>
+  <h3>쿠키 읽기</h3>
+  <div class="code">Cookie[] cookies = request.getCookies(); <span class="cm">// 모든 쿠키 배열로</span>
+<span class="ck">if</span> (cookies != null) {
+    <span class="ck">for</span> (Cookie c : cookies) {
+        <span class="ck">if</span> (c.getName().equals(<span class="cs">"name"</span>)) {
+            String val = c.getValue();
+        }
+    }
+}</div>
+  <h3>쿠키 삭제</h3>
+  <div class="code">Cookie ck = <span class="ck">new</span> Cookie(<span class="cs">"name"</span>, <span class="cs">""</span>);
+ck.setMaxAge(0); <span class="cm">// 0 = 즉시 삭제</span>
+response.addCookie(ck);</div>
+  <h3>쿠키 값 변경</h3>
+  <div class="code">ck.setValue(<span class="cs">"newValue"</span>);
+response.addCookie(ck);</div>
+  <div class="g2">
+    <div class="cl cl-teal"><span class="badge b-teal">장점</span><ul style="margin-top:6px"><li>서버 메모리 사용 안 함</li><li>브라우저 닫아도 유지 가능 (setMaxAge 설정 시)</li></ul></div>
+    <div class="cl cl-red"><span class="badge b-red">단점</span><ul style="margin-top:6px"><li>클라이언트 저장 → 보안 취약</li><li>개발자도구에서 바로 보임/수정 가능</li><li>4KB 용량 제한</li></ul></div>
+  </div>
+  <div class="prof-box">"쿠키는 서버가 저장 요청을 하면 클라이언트 브라우저가 관리하는 특정 공간에 보관. 개발자 도구에서 다 보이고 삭제, 변경도 가능. 그래서 보안에 취약."</div>
+</div>
+
+<div class="sub-page" id="sub-5-session">
+  <div class="page-title">세션 (Session) <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.5 Section 03</div>
+  <div class="star-box">⭐ 세션 = 서버에 저장되는 데이터. 브라우저마다 세션 ID가 발급됨.</div>
+  <h3>세션 생성 & 저장</h3>
+  <div class="code">HttpSession session = request.getSession();
+<span class="cm">// getSession(true) : 없으면 새로 생성 (기본값)
+// getSession(false): 없으면 null 반환</span>
+
+<span class="cm">// 저장 (두 번째 인자가 Object 타입!)</span>
+session.setAttribute(<span class="cs">"loginUser"</span>, <span class="cs">"kim"</span>);</div>
+  <h3>세션 읽기</h3>
+  <div class="code"><span class="cm">// getAttribute()의 반환 타입 = Object → 형변환 필수!</span>
+String user = (String) session.getAttribute(<span class="cs">"loginUser"</span>);
+
+<span class="cm">// 또는 toString() 사용</span>
+String user = session.getAttribute(<span class="cs">"loginUser"</span>).toString();</div>
+  <h3>세션 삭제</h3>
+  <div class="code">session.removeAttribute(<span class="cs">"loginUser"</span>); <span class="cm">// 단일 삭제</span>
+session.invalidate(); <span class="cm">// 전체 삭제 (로그아웃)</span></div>
+  <h3>유효시간 설정</h3>
+  <div class="code">session.setMaxInactiveInterval(1800); <span class="cm">// 초 단위. 기본 1800초(30분)</span>
+<span class="cm">// 0 또는 음수 = 유효시간 없음 (주의: 메모리 누수)</span></div>
+  <div class="g2">
+    <div class="cl cl-teal"><span class="badge b-teal">장점</span><ul style="margin-top:6px"><li>서버에 저장 → 보안 우수</li><li>용량 제한 없음</li></ul></div>
+    <div class="cl cl-red"><span class="badge b-red">단점</span><ul style="margin-top:6px"><li>서버 메모리 사용</li><li>동시 접속자 많으면 서버 부담</li><li><strong>브라우저 단위</strong> — 브라우저 다르면 별도 세션</li></ul></div>
+  </div>
+  <div class="warn">세션은 브라우저 단위! 크롬에서 로그인해도 엣지로 열면 로그아웃 상태. 방문 횟수처럼 지속돼야 하는 건 쿠키로!</div>
+  <div class="prof-box">"세션이라는 것은 클라이언트가 접속하면 서버 쪽에 생성되는 공간. 브라우저마다 세션 ID가 발급되고 그걸 기준으로 클라이언트 관리."</div>
+</div>
+
+<div class="sub-page" id="sub-5-context">
+  <div class="page-title">ServletContext</div>
+  <div class="page-sub">Ch.5 Section 04</div>
+  <p>서블릿 컨테이너에서 <strong>모든 서블릿이 공유하는 메모리 공간</strong>. 웹 애플리케이션 단위로 만들어짐. Java의 클래스 변수(static)와 유사.</p>
+  <div class="code">ServletContext ctx = request.getServletContext();
+
+ctx.setAttribute(<span class="cs">"notice"</span>, <span class="cs">"서버 점검 예정"</span>);
+String notice = (String) ctx.getAttribute(<span class="cs">"notice"</span>);</div>
+  <div class="info">모든 사용자가 공통으로 봐야 하는 데이터(공지사항 등)에 적합. Object 타입이라 형변환 필요.</div>
+</div>
+
+<div class="sub-page" id="sub-5-dispatcher">
+  <div class="page-title">RequestDispatcher</div>
+  <div class="page-sub">Ch.5 Section 05</div>
+  <p>request, response 객체를 그대로 다른 서블릿에 전달. sendRedirect와 달리 서버 내부에서 이동.</p>
+  <div class="code">RequestDispatcher rd =
+    request.getRequestDispatcher(<span class="cs">"/ResultServlet"</span>);
+rd.forward(request, response);
+<span class="cm">// request 객체가 그대로 넘어감!
+// 다음 서블릿에서도 getParameter() 사용 가능</span></div>
+  <div class="g2">
+    <div class="cl cl-red"><span class="badge b-red">sendRedirect</span><ul style="margin-top:6px"><li>브라우저가 새 요청</li><li>URL 주소 바뀜</li><li>request 데이터 소멸</li><li>외부 URL로도 이동 가능</li></ul></div>
+    <div class="cl cl-teal"><span class="badge b-teal">forward (dispatcher)</span><ul style="margin-top:6px"><li>서버 내부에서 전달</li><li>URL 주소 안 바뀜</li><li>request 데이터 유지!</li><li>같은 서버 내에서만</li></ul></div>
+  </div>
+</div>
+
+<div class="sub-page" id="sub-5-compare">
+  <div class="page-title">5가지 방법 비교 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.5 총정리 — 시험 유력 출제 범위!</div>
+  <table>
+    <tr><th>방법</th><th>저장 위치</th><th>보안</th><th>용량</th><th>유지 기간</th><th>적합한 용도</th></tr>
+    <tr>
+      <td class="imp">URL Rewriting</td>
+      <td>URL</td>
+      <td class="ch">취약</td>
+      <td>제한적</td>
+      <td>한 번의 이동</td>
+      <td>간단한 값 전달</td>
+    </tr>
+    <tr>
+      <td class="imp">Cookie</td>
+      <td>클라이언트</td>
+      <td class="ch">취약</td>
+      <td>4KB</td>
+      <td>setMaxAge 설정값</td>
+      <td>방문 횟수, 자동 로그인</td>
+    </tr>
+    <tr>
+      <td class="imp">Session</td>
+      <td>서버</td>
+      <td class="cs">우수</td>
+      <td>제한 없음</td>
+      <td>브라우저 종료 or 타임아웃</td>
+      <td>로그인 상태 유지</td>
+    </tr>
+    <tr>
+      <td class="imp">ServletContext</td>
+      <td>서버 (공유)</td>
+      <td class="cs">우수</td>
+      <td>제한 없음</td>
+      <td>서버 종료까지</td>
+      <td>모든 사용자 공통 데이터</td>
+    </tr>
+    <tr>
+      <td class="imp">RequestDispatcher</td>
+      <td>request 객체</td>
+      <td class="cs">우수</td>
+      <td>제한 없음</td>
+      <td>요청 처리 동안</td>
+      <td>서블릿 간 처리 위임</td>
+    </tr>
+  </table>
+  <div class="star-box">⭐ 핵심 차이: 쿠키=클라이언트 저장 / 세션=서버 저장 / 세션은 브라우저 단위!</div>
+  <div class="prof-box">"각 기술의 장단점을 이해해야지만, 이런 상황에서는 이 기술을 써야지 라는 판단을 할 수 있다. 그게 설계 능력이다."</div>
+</div>
+
+</div><!-- end ch-5 -->
+
+</main>
+</div><!-- end main -->
+
+<script src="shared.js"></script>
+<script>showCh(1);</script>
+</body>
+</html>
