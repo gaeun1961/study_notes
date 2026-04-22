@@ -195,12 +195,13 @@
   <div class="cl cl-1"><span class="badge b-1">비유</span><p style="margin-top:6px">책장에서 책 찾기. 왼쪽부터 한 권씩 확인하다가 찾으면 멈춤.</p></div>
   <div class="ct">SeqSearch 수도코드</div>
   <div class="code">SeqSearch(int n, keyType[] S, keyType x) {
-    index location = 1;
-    while (location &lt;= n &amp;&amp; <span class="blank">S[location] != x</span>)   <span class="cm">// ← 빈칸! 비교 조건</span>
-        location++;
-    if (location &gt; n)
-        <span class="blank">location = 0</span>;   <span class="cm">// ← 빈칸! 못 찾은 경우 0 반환</span>
-    return location;
+    index location = 1;              <span class="cm">// 탐색 시작 위치 = 첫 번째 칸</span>
+    while (location &lt;= n            <span class="cm">// 배열 끝을 넘지 않았고</span>
+        &amp;&amp; <span class="blank">S[location] != x</span>)       <span class="cm">// ← 빈칸! 아직 못 찾은 동안 계속</span>
+        location++;                  <span class="cm">// 다음 칸으로 이동</span>
+    if (location &gt; n)               <span class="cm">// 끝까지 갔는데도 없었다면</span>
+        <span class="blank">location = 0</span>;              <span class="cm">// ← 빈칸! 0으로 "없음" 표시</span>
+    return location;                 <span class="cm">// 찾은 위치 반환 (없으면 0)</span>
 }</div>
   <p><span class="badge b-1">Basic Operation</span>: S[location]과 x의 비교</p>
   <table style="margin-top:10px">
@@ -224,14 +225,18 @@
   <div class="ct">BinSearch 수도코드</div>
   <div class="code">BinSearch(int n, keyType[] S, keyType x) {
     index location, low, high, mid;
-    low = 1;  high = n;  location = 0;
-    while (low &lt;= high &amp;&amp; location == 0) {
-        mid = floor((low + high) / 2);
-        if (x == S[mid])       <span class="blank">location = mid</span>;    <span class="cm">// ← 빈칸!</span>
-        else if (x &lt; S[mid])   high = mid - 1;
-        else                   <span class="blank">low = mid + 1</span>;   <span class="cm">// ← 빈칸!</span>
+    low = 1;  high = n;  location = 0; <span class="cm">// 탐색 범위 초기화, 0=아직 못 찾음</span>
+    while (low &lt;= high                 <span class="cm">// 탐색 범위가 아직 남아있고</span>
+        &amp;&amp; location == 0) {             <span class="cm">// 아직 못 찾은 동안 반복</span>
+        mid = floor((low + high) / 2); <span class="cm">// 현재 범위의 정중앙 인덱스 계산</span>
+        if (x == S[mid])
+            <span class="blank">location = mid</span>;            <span class="cm">// ← 빈칸! 찾았다! 위치 저장</span>
+        else if (x &lt; S[mid])
+            high = mid - 1;            <span class="cm">// x가 중간보다 작음 → 왼쪽 절반만</span>
+        else
+            <span class="blank">low = mid + 1</span>;            <span class="cm">// ← 빈칸! x가 중간보다 큼 → 오른쪽 절반만</span>
     }
-    return location;
+    return location;                   <span class="cm">// 찾은 위치 반환 (못 찾으면 0)</span>
 }</div>
   <p><span class="badge b-1">Basic Operation</span>: x와 S[mid] 비교</p>
   <div class="formula">W(n) = ⌊lg n⌋ + 1 ≈ Θ(lg n)</div>
@@ -246,9 +251,9 @@
       <h4>❌ 재귀 버전 (비효율)</h4>
       <div class="ct">Fib 재귀</div>
       <div class="code">Fib(int n) {
-    if (n &lt;= 1)  return n;
+    if (n &lt;= 1)  return n;          <span class="cm">// 기저: n=0이면 0, n=1이면 1</span>
     else
-        return Fib(n-1) + <span class="blank">Fib(n-2)</span>; <span class="cm">// ← 빈칸!</span>
+        return Fib(n-1) + <span class="blank">Fib(n-2)</span>; <span class="cm">// ← 빈칸! 앞 두 수의 합</span>
 }</div>
       <p><span class="badge b-h">T(n) ≥ 2^(n/2)</span> 지수적 증가</p>
       <p style="font-size:12px; color:var(--tx3)">같은 계산을 수없이 반복해서 비효율적</p>
@@ -257,13 +262,13 @@
       <h4>✅ 반복 버전 (효율)</h4>
       <div class="ct">Fib2 반복</div>
       <div class="code">Fib2(int n) {
-    f[0] = 0;
+    f[0] = 0;                          <span class="cm">// 기저: 0번째 피보나치 = 0</span>
     if (n &gt; 0) {
-        f[1] = 1;
-        for (i=2; i&lt;=n; i++)
-            f[i] = <span class="blank">f[i-1] + f[i-2]</span>; <span class="cm">// ← 빈칸!</span>
+        f[1] = 1;                      <span class="cm">// 기저: 1번째 피보나치 = 1</span>
+        for (i=2; i&lt;=n; i++)          <span class="cm">// 2번째부터 n번째까지 순서대로</span>
+            f[i] = <span class="blank">f[i-1] + f[i-2]</span>; <span class="cm">// ← 빈칸! 앞 두 수 합산해서 저장</span>
     }
-    return f[n];
+    return f[n];                       <span class="cm">// n번째 피보나치 수 반환</span>
 }</div>
       <p><span class="badge b-1">T(n) = n+1</span> 선형 시간</p>
     </div>
@@ -360,12 +365,12 @@
   <div class="ct">location(index low, index high) — 초기 호출: location(1, n)</div>
   <div class="code">location(index low, index high) {
     index mid;
-    if (low &gt; high)  return 0;                     <span class="cm">// 못 찾은 경우</span>
+    if (low &gt; high)  return 0;                     <span class="cm">// 범위가 역전됨 = 없는 것 → 0 반환</span>
     else {
-        mid = floor((low + high) / 2);
-        if (x == S[mid])       return mid;           <span class="cm">// 발견!</span>
-        else if (x &lt; S[mid])  return location(low, mid-1);   <span class="cm">// 왼쪽 재귀</span>
-        else                   return location(mid+1, high);  <span class="cm">// 오른쪽 재귀</span>
+        mid = floor((low + high) / 2);             <span class="cm">// 현재 범위 정중앙</span>
+        if (x == S[mid])       return mid;         <span class="cm">// 중앙이 정답! 위치 반환</span>
+        else if (x &lt; S[mid])  return location(low, mid-1);   <span class="cm">// 왼쪽 절반으로 재귀</span>
+        else                   return location(mid+1, high);  <span class="cm">// 오른쪽 절반으로 재귀</span>
     }
 }</div>
   <p><span class="badge b-1">Basic Operation</span>: x와 S[mid] 비교</p>
@@ -378,15 +383,15 @@
   <div class="cl cl-2"><span class="badge b-2">비유</span><p style="margin-top:6px">카드 더미를 절반씩 나눠서 각각 정렬한 뒤, 두 더미를 크기 순으로 합치기.</p></div>
   <div class="ct">mergeSort</div>
   <div class="code">mergeSort(int n, keytype[] S) {
-    if (n &gt; 1) {
-        const int h = floor(n/2), m = n - h;
-        keytype[] U = new keytype[1..h],
-                  V = new keytype[1..m];
-        copy S[1:h]     to U[1:h];      <span class="cm">// 왼쪽 절반 복사</span>
-        copy <span class="blank">S[h+1:n]</span>  to V[1:m];   <span class="cm">// ← 빈칸! 오른쪽 절반</span>
-        mergeSort(h, U);
-        mergeSort(<span class="blank">m, V</span>);            <span class="cm">// ← 빈칸!</span>
-        merge(h, m, U, V, S);
+    if (n &gt; 1) {                          <span class="cm">// 원소가 2개 이상일 때만 정렬 필요</span>
+        const int h = floor(n/2), m = n - h; <span class="cm">// h=왼쪽 크기, m=오른쪽 크기</span>
+        keytype[] U = new keytype[1..h],   <span class="cm">// 왼쪽 절반 담을 임시 배열</span>
+                  V = new keytype[1..m];   <span class="cm">// 오른쪽 절반 담을 임시 배열</span>
+        copy S[1:h]     to U[1:h];        <span class="cm">// 왼쪽 절반 U에 복사</span>
+        copy <span class="blank">S[h+1:n]</span>  to V[1:m];     <span class="cm">// ← 빈칸! 오른쪽 절반 V에 복사</span>
+        mergeSort(h, U);                  <span class="cm">// 왼쪽 절반 재귀 정렬</span>
+        mergeSort(<span class="blank">m, V</span>);              <span class="cm">// ← 빈칸! 오른쪽 절반 재귀 정렬</span>
+        merge(h, m, U, V, S);            <span class="cm">// 정렬된 두 배열을 S에 합치기</span>
     }
 }</div>
 </div>
@@ -397,13 +402,13 @@
   <div class="ct">merge</div>
   <div class="code">merge(int h, int m, keytype[] U, keytype[] V, keytype[] S) {
     index i=1, j=1, k=1;
-    while (i &lt;= h &amp;&amp; j &lt;= m) {           <span class="cm">// 양쪽 모두 남아있는 동안</span>
-        if (U[i] &lt; V[j]) { S[k] = U[i]; i++; }  <span class="cm">// U에서 더 작은 원소 선택</span>
-        else              { S[k] = V[j]; j++; }  <span class="cm">// V에서 더 작은 원소 선택</span>
-        k++;
+    while (i &lt;= h &amp;&amp; j &lt;= m) {           <span class="cm">// U와 V 둘 다 남아있는 동안</span>
+        if (U[i] &lt; V[j]) { S[k] = U[i]; i++; }  <span class="cm">// U가 더 작으면 U에서 꺼냄</span>
+        else              { S[k] = V[j]; j++; }  <span class="cm">// V가 더 작거나 같으면 V에서 꺼냄</span>
+        k++;                                      <span class="cm">// S의 다음 칸으로</span>
     }
-    if (i &gt; h)  copy V[j:m] to S[k:h+m];       <span class="cm">// U 소진 → 나머지 V 복사</span>
-    else        copy <span class="blank">U[i:h]</span> to S[k:h+m];   <span class="cm">// ← 빈칸! V 소진 → 나머지 U</span>
+    if (i &gt; h)  copy V[j:m] to S[k:h+m];       <span class="cm">// U 먼저 소진 → V 나머지 그대로 복사</span>
+    else        copy <span class="blank">U[i:h]</span> to S[k:h+m];   <span class="cm">// ← 빈칸! V 먼저 소진 → U 나머지 복사</span>
 }</div>
   <p><span class="badge b-1">Basic Operation</span>: U[i]와 V[j] 비교</p>
   <table>
@@ -431,11 +436,12 @@
   <div class="ct">quickSort</div>
   <div class="code">quickSort(index low, index high) {
     index pivotPoint;
-    if (high &gt; low) {
-        pivotPoint = partition(low, high);
-        quickSort(low, pivotPoint - 1);
-        quickSort(<span class="blank">pivotPoint + 1, high</span>);  <span class="cm">// ← 빈칸!</span>
+    if (high &gt; low) {                         <span class="cm">// 원소가 2개 이상일 때만</span>
+        pivotPoint = partition(low, high);     <span class="cm">// pivot 위치 결정 + 분할</span>
+        quickSort(low, pivotPoint - 1);        <span class="cm">// pivot 왼쪽 재귀 정렬</span>
+        quickSort(<span class="blank">pivotPoint + 1, high</span>);   <span class="cm">// ← 빈칸! pivot 오른쪽 재귀 정렬</span>
     }
+    <span class="cm">// pivot은 이미 제자리! combine 불필요</span>
 }</div>
 </div>
 
@@ -449,15 +455,15 @@
   <div class="code">partition(index low, index high) {
     index i, j, pivotPoint;
     keytype pivotItem;
-    pivotItem = S[low];    <span class="cm">// 첫 원소를 pivot으로</span>
-    j = low;
-    for (i = low+1; i &lt;= high; i++)
-        if (S[i] &lt; <span class="blank">pivotItem</span>) {          <span class="cm">// ← 빈칸!</span>
-            exchange S[i] and S[++j];  <span class="cm">// 작은 원소를 왼쪽으로</span>
+    pivotItem = S[low];    <span class="cm">// 첫 원소를 pivot으로 설정</span>
+    j = low;               <span class="cm">// j = "pivot보다 작은 것들"의 마지막 위치</span>
+    for (i = low+1; i &lt;= high; i++)   <span class="cm">// 나머지 원소들을 하나씩 확인</span>
+        if (S[i] &lt; <span class="blank">pivotItem</span>) {          <span class="cm">// ← 빈칸! pivot보다 작으면</span>
+            exchange S[i] and S[++j];  <span class="cm">// j 한 칸 늘리고, 작은 원소를 왼쪽으로 swap</span>
         }
-    pivotPoint = j;
-    exchange S[<span class="blank">low</span>] and S[pivotPoint]; <span class="cm">// ← 빈칸! pivot 최종 위치로</span>
-    return pivotPoint;
+    pivotPoint = j;                    <span class="cm">// 최종 j 위치가 pivot이 들어갈 자리</span>
+    exchange S[<span class="blank">low</span>] and S[pivotPoint]; <span class="cm">// ← 빈칸! pivot을 제자리로 이동</span>
+    return pivotPoint;                 <span class="cm">// pivot의 최종 인덱스 반환</span>
 }</div>
   <p><span class="badge b-1">Basic Operation</span>: S[i]와 pivotItem 비교 &nbsp;|&nbsp; T(m) = m−1 (Every Case)</p>
 </div>
@@ -537,12 +543,12 @@
   <div class="formula">D(k)[i][j] = min( D(k-1)[i][j] , D(k-1)[i][k] + D(k-1)[k][j] )</div>
   <div class="ct">floyd</div>
   <div class="code">floyd(int n, number W[][], number D[][]) {
-    D = W;
-    for k=1 to n:
-        for i=1 to n:
-            for j=1 to n:
+    D = W;              <span class="cm">// 초기값: 직접 연결 거리로 시작</span>
+    for k=1 to n:       <span class="cm">// k번째 노드를 경유지로 추가해가며</span>
+        for i=1 to n:   <span class="cm">// 출발지 i를</span>
+            for j=1 to n:  <span class="cm">// 도착지 j까지 모든 쌍 확인</span>
                 <span class="basic-op">D[i][j] = min(D[i][j], D[i][k] + D[k][j]);</span>
-                <span class="cm">// ↑ Basic Operation</span>
+                <span class="cm">// k 안 거치는 것 vs k 거치는 것 — 더 짧은 경로로 갱신</span>
 }</div>
   <p><span class="badge b-h">T(n) = n³</span> &nbsp;|&nbsp; 경로 복원: P[i][j]에 경유 노드 k 저장</p>
 </div>
@@ -683,33 +689,33 @@ wi ≤ w 이면: P[i][w] = max( P[i-1][w] , pi + P[i-1][w-wi] )</div>
   <div class="page-sub">교수님 Two-way 스타일을 그대로 확장</div>
   <div class="ct">mergesort3 + merge3</div>
   <div class="code">mergesort3(int n, keytype[] S) {
-    if (n > 1) {
-        const int h = floor(n/3), m = floor(n/3), p = n-h-m;
-        keytype[] U = new keytype[1..h],
-                  V = new keytype[1..m],
-                  W = new keytype[1..p];
-        copy S[1:h]       to U[1:h];
-        copy S[h+1:h+m]   to V[1:m];
-        copy S[h+m+1:n]   to W[1:p];
-        mergesort3(h, U);
-        mergesort3(m, V);
-        mergesort3(p, W);
-        merge3(h, m, p, U, V, W, S);
+    if (n > 1) {                               <span class="cm">// 원소 2개 이상일 때만</span>
+        const int h = floor(n/3), m = floor(n/3), p = n-h-m; <span class="cm">// 3등분 크기</span>
+        keytype[] U = new keytype[1..h],       <span class="cm">// 1/3 담을 임시 배열</span>
+                  V = new keytype[1..m],       <span class="cm">// 2/3 담을 임시 배열</span>
+                  W = new keytype[1..p];       <span class="cm">// 3/3 담을 임시 배열</span>
+        copy S[1:h]       to U[1:h];          <span class="cm">// 첫 번째 1/3 복사</span>
+        copy S[h+1:h+m]   to V[1:m];         <span class="cm">// 두 번째 1/3 복사</span>
+        copy S[h+m+1:n]   to W[1:p];         <span class="cm">// 세 번째 1/3 복사</span>
+        mergesort3(h, U);                     <span class="cm">// 첫 번째 파트 재귀 정렬</span>
+        mergesort3(m, V);                     <span class="cm">// 두 번째 파트 재귀 정렬</span>
+        mergesort3(p, W);                     <span class="cm">// 세 번째 파트 재귀 정렬</span>
+        merge3(h, m, p, U, V, W, S);         <span class="cm">// 세 배열을 S에 합치기</span>
     }
 }
 
 merge3(int p, int q, int r,
        keytype[] U, keytype[] V, keytype[] W, keytype[] S) {
-    index i=1, j=1, k=1, l=1;
+    index i=1, j=1, k=1, l=1;               <span class="cm">// 각 배열 포인터 + 결과 포인터</span>
 
-    <span class="cm">// 셋 다 남아있는 동안 — 세 원소 중 최솟값 선택</span>
+    <span class="cm">// 셋 다 남아있는 동안 — 세 원소 비교해서 가장 작은 것 선택</span>
     while (i&lt;=p &amp;&amp; j&lt;=q &amp;&amp; k&lt;=r) {
-        if (U[i] &lt;= V[j] &amp;&amp; U[i] &lt;= W[k])      { S[l]=U[i]; i++; }
-        else if (V[j] &lt;= U[i] &amp;&amp; V[j] &lt;= W[k]) { S[l]=V[j]; j++; }
-        else                                      { S[l]=W[k]; k++; }
+        if (U[i] &lt;= V[j] &amp;&amp; U[i] &lt;= W[k])      { S[l]=U[i]; i++; } <span class="cm">// U가 최솟값</span>
+        else if (V[j] &lt;= U[i] &amp;&amp; V[j] &lt;= W[k]) { S[l]=V[j]; j++; } <span class="cm">// V가 최솟값</span>
+        else                                      { S[l]=W[k]; k++; } <span class="cm">// W가 최솟값</span>
         l++;
     }
-    <span class="cm">// 두 개만 남은 경우 — two-way merge</span>
+    <span class="cm">// 두 개만 남은 경우 — two-way merge (3가지 조합 처리)</span>
     while (i&lt;=p &amp;&amp; j&lt;=q) {
         if (U[i]&lt;=V[j]) { S[l]=U[i]; i++; } else { S[l]=V[j]; j++; } l++;
     }
@@ -719,7 +725,7 @@ merge3(int p, int q, int r,
     while (j&lt;=q &amp;&amp; k&lt;=r) {
         if (V[j]&lt;=W[k]) { S[l]=V[j]; j++; } else { S[l]=W[k]; k++; } l++;
     }
-    <span class="cm">// 하나만 남은 경우 — 그대로 복사</span>
+    <span class="cm">// 하나만 남은 경우 — 그대로 복사 (비교 필요 없음)</span>
     if (i&lt;=p) copy U[i:p] to S[l:l+p-i];
     if (j&lt;=q) copy V[j:q] to S[l:l+q-j];
     if (k&lt;=r) copy W[k:r] to S[l:l+r-k];
@@ -781,13 +787,13 @@ j ≥ Si 이면: C[i][j] = C[i-1][j] + C[i][j-Si]</div>
     for i=0 to m:  C[i][0] = 1;   <span class="cm">// 0원 만드는 방법: 1가지</span>
     for j=1 to N:  C[0][j] = 0;   <span class="cm">// 동전 없으면 0가지</span>
 
-    for i=1 to m:
-        for j=1 to N:
-            C[i][j] = C[i-1][j];
-            if (j &gt;= S[i])
-                C[i][j] += C[i][j - S[i]];
+    for i=1 to m:                          <span class="cm">// i번째 동전 종류를 추가하면서</span>
+        for j=1 to N:                      <span class="cm">// 금액 j원에 대해</span>
+            C[i][j] = C[i-1][j];          <span class="cm">// 일단 Si 안 쓰는 경우로 초기화</span>
+            if (j &gt;= S[i])               <span class="cm">// Si를 쓸 수 있는 금액이면</span>
+                C[i][j] += C[i][j - S[i]];<span class="cm">// Si 쓰는 경우도 더하기 (i 유지 = 또 쓸 수 있음)</span>
 
-    return C[m][N];
+    return C[m][N];                        <span class="cm">// 모든 동전 종류로 N원 만드는 경우의 수</span>
 }</div>
   <h4>검증 — N=4, S={1,2,3}</h4>
   <table>
