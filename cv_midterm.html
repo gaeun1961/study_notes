@@ -545,8 +545,60 @@ cv.setMouseCallback(<span class="cs">'Drawing'</span>,draw)
 <div class="sub-page" id="sub-3-conv">
   <div class="page-title">3.4 컨볼루션 · 다양한 필터 <span class="exam-badge">★</span></div>
   <div class="page-sub">PPT 36~38p</div>
-  <p>컨볼루션: 각 화소에 필터 u를 적용해 <strong>곱의 합</strong>을 구하는 연산</p>
-  <div class="formula">1차원: f'(x) = Σ u(i)f(x+i) &nbsp;&nbsp; 2차원: f'(y,x) = ΣΣ u(j,i)f(y+j, x+i)</div>
+
+  <h3>컨볼루션이란?</h3>
+  <p>각 화소에 필터 u를 적용해 <strong>주변 픽셀과 필터를 곱하고 더해 새로운 픽셀 값을 만드는 영역 기반 연산</strong>이에요.</p>
+  <div class="formula">1차원: f'(x) = Σ u(i)·f(x+i) &nbsp;&nbsp; 2차원: f'(y,x) = ΣΣ u(j,i)·f(y+j, x+i)</div>
+
+  <h3>컨볼루션 계산 예시 (PPT 36p)</h3>
+  <p>수직 에지를 검출하는 필터 <code style="background:var(--sur2);padding:2px 6px;border-radius:4px;font-family:monospace">[-1, 1]</code>을 영상에 적용하면:</p>
+  <div class="fig" style="background:var(--sur);border:1px solid var(--bor);border-radius:10px;padding:16px;margin:12px 0">
+    <svg width="100%" viewBox="0 0 520 120" style="max-width:520px;font-family:monospace">
+      <text x="10" y="14" font-size="11" fill="#8b95a8">원래 영상 f</text>
+      <text x="10" y="30" font-size="11" fill="#8b95a8">위치:</text>
+      <text x="10" y="52" font-size="11" fill="#e8edf5">값:</text>
+      <!-- 위치 -->
+      <text x="60" y="30" font-size="11" fill="#5a6275">0</text><text x="90" y="30" font-size="11" fill="#5a6275">1</text><text x="120" y="30" font-size="11" fill="#5a6275">2</text><text x="150" y="30" font-size="11" fill="#5a6275">3</text><text x="180" y="30" font-size="11" fill="#5a6275">4</text><text x="210" y="30" font-size="11" fill="#5a6275">5</text><text x="240" y="30" font-size="11" fill="#5a6275">6</text><text x="270" y="30" font-size="11" fill="#5a6275">7</text>
+      <!-- 값 -->
+      <rect x="52" y="38" width="24" height="20" rx="3" fill="rgba(74,158,255,0.1)" stroke="rgba(74,158,255,0.25)" stroke-width="1"/>
+      <text x="64" y="52" text-anchor="middle" font-size="11" fill="#4a9eff">3</text>
+      <rect x="82" y="38" width="24" height="20" rx="3" fill="rgba(74,158,255,0.1)" stroke="rgba(74,158,255,0.25)" stroke-width="1"/>
+      <text x="94" y="52" text-anchor="middle" font-size="11" fill="#4a9eff">3</text>
+      <rect x="112" y="38" width="24" height="20" rx="3" fill="rgba(74,158,255,0.1)" stroke="rgba(74,158,255,0.25)" stroke-width="1"/>
+      <text x="124" y="52" text-anchor="middle" font-size="11" fill="#4a9eff">3</text>
+      <rect x="142" y="38" width="24" height="20" rx="3" fill="rgba(255,179,71,0.15)" stroke="rgba(255,179,71,0.35)" stroke-width="1.5"/>
+      <text x="154" y="52" text-anchor="middle" font-size="11" fill="#ffb347" font-weight="700">5</text>
+      <rect x="172" y="38" width="24" height="20" rx="3" fill="rgba(255,179,71,0.15)" stroke="rgba(255,179,71,0.35)" stroke-width="1.5"/>
+      <text x="184" y="52" text-anchor="middle" font-size="11" fill="#ffb347" font-weight="700">7</text>
+      <rect x="202" y="38" width="24" height="20" rx="3" fill="rgba(74,158,255,0.1)" stroke="rgba(74,158,255,0.25)" stroke-width="1"/>
+      <text x="214" y="52" text-anchor="middle" font-size="11" fill="#4a9eff">7</text>
+      <rect x="232" y="38" width="24" height="20" rx="3" fill="rgba(74,158,255,0.1)" stroke="rgba(74,158,255,0.25)" stroke-width="1"/>
+      <text x="244" y="52" text-anchor="middle" font-size="11" fill="#4a9eff">7</text>
+      <rect x="262" y="38" width="24" height="20" rx="3" fill="rgba(74,158,255,0.1)" stroke="rgba(74,158,255,0.25)" stroke-width="1"/>
+      <text x="274" y="52" text-anchor="middle" font-size="11" fill="#4a9eff">7</text>
+      <!-- 필터 -->
+      <text x="10" y="80" font-size="11" fill="#8b95a8">필터 u =</text>
+      <rect x="72" y="68" width="24" height="20" rx="3" fill="rgba(255,107,122,0.15)" stroke="rgba(255,107,122,0.3)" stroke-width="1"/>
+      <text x="84" y="82" text-anchor="middle" font-size="11" fill="#ff6b7a" font-weight="700">-1</text>
+      <rect x="102" y="68" width="24" height="20" rx="3" fill="rgba(125,218,88,0.15)" stroke="rgba(125,218,88,0.3)" stroke-width="1"/>
+      <text x="114" y="82" text-anchor="middle" font-size="11" fill="#7dda58" font-weight="700">+1</text>
+      <text x="140" y="82" font-size="11" fill="#8b95a8">로 컨볼루션</text>
+      <!-- 결과 -->
+      <text x="10" y="110" font-size="11" fill="#8b95a8">결과 f':</text>
+      <text x="64" y="110" text-anchor="middle" font-size="11" fill="#5a6275">0</text>
+      <text x="94" y="110" text-anchor="middle" font-size="11" fill="#5a6275">0</text>
+      <text x="124" y="110" text-anchor="middle" font-size="11" fill="#5a6275">0</text>
+      <text x="154" y="110" text-anchor="middle" font-size="11" fill="#ff6b7a" font-weight="700">2</text>
+      <text x="184" y="110" text-anchor="middle" font-size="11" fill="#ff6b7a" font-weight="700">2</text>
+      <text x="214" y="110" text-anchor="middle" font-size="11" fill="#5a6275">0</text>
+      <text x="244" y="110" text-anchor="middle" font-size="11" fill="#5a6275">0</text>
+      <text x="310" y="85" font-size="10" fill="#5a6275">← 에지 위치(3~4)에서만 큰 값!</text>
+    </svg>
+    <p style="font-size:12px;color:var(--tx3);margin-top:8px">위치 3의 계산: f'(3) = (-1)×f(3) + (1)×f(4) = (-1)×5 + (1)×7 = <strong style="color:#ff6b7a">2</strong></p>
+  </div>
+
+  <div class="ok">핵심: 필터를 밀면서 각 위치에서 <strong>필터값과 영상값을 곱해서 더하면</strong> 그게 새 픽셀값! 에지 쪽에서 큰 값이 나와요.</div>
+
   <h3>다양한 필터 (그림 3-17)</h3>
   <div class="g3">
     <div class="card">
@@ -611,18 +663,85 @@ cv.setMouseCallback(<span class="cs">'Drawing'</span>,draw)
 
 <div class="sub-page" id="sub-3-interp">
   <div class="page-title">3.5 영상 보간법 <span class="exam-badge">★★★</span></div>
-  <div class="page-sub">PPT 50p — 양선형 보간법 계산문제 무조건!</div>
+  <div class="page-sub">PPT 50~52p — 양선형 보간법 계산문제 무조건!</div>
+
+  <h3>왜 보간이 필요한가?</h3>
+  <p>영상을 기하 변환(회전, 확대 등)하면 결과 픽셀 좌표가 <strong>실수(소수점)</strong>로 나와요. 예를 들어 2.7배 확대하면 좌표 1이 → 2.7이 되는데 이걸 어떤 픽셀값으로 채울지 결정하는 게 보간이에요.</p>
   <div class="g2">
-    <div class="card"><span class="badge b-gray">최근접 이웃법</span><p style="margin-top:6px">소수점 좌표를 반올림해서 가장 가까운 픽셀값 사용. 빠르지만 계단 현상 발생.</p></div>
-    <div class="card"><span class="badge b-red">양선형 보간법 ★★</span><p style="margin-top:6px">주변 4개 픽셀을 넓이 비율(α, β)로 가중합산. 더 자연스럽고 부드러움!</p></div>
+    <div class="cl cl-blue">
+      <span class="badge b-blue">최근접 이웃 방법</span>
+      <ul style="margin-top:8px">
+        <li>실수 좌표를 <strong>반올림</strong>해서 가장 가까운 픽셀값을 그대로 사용</li>
+        <li>계산이 빠르고 단순</li>
+        <li><strong>에일리어싱(계단 현상)</strong> 발생 — 픽셀이 뭉개져 보임</li>
+      </ul>
+      <div style="margin-top:8px;font-size:12px;color:var(--tx3)">예) 좌표 2.7 → round(2.7) = 3번 픽셀값 사용</div>
+    </div>
+    <div class="cl cl-red">
+      <span class="badge b-red">양선형 보간법 ★★</span>
+      <ul style="margin-top:8px">
+        <li>걸치는 비율(α, β)에 따라 <strong>주변 4개 픽셀을 가중합산</strong></li>
+        <li>안티 에일리어싱 — 부드럽고 자연스러운 결과</li>
+        <li>최근접보다 계산 비용이 약간 더 큼</li>
+      </ul>
+      <div style="margin-top:8px;font-size:12px;color:var(--tx3)">예) 좌표 2.7 → 주변 픽셀 2, 3 사이를 0.3:0.7 비율로 섞음</div>
+    </div>
   </div>
+
   <h3>양선형 보간 수식 <span class="exam-badge">★계산문제</span></h3>
-  <div class="formula">α = i' − i (x 소수 부분), β = j' − j (y 소수 부분)<br><br>f ≈ αβ·f(j,i) + (1-α)β·f(j,i+1) + α(1-β)·f(j+1,i) + (1-α)(1-β)·f(j+1,i+1)</div>
-  <div class="tip">직관: 빨간 점이 f(j,i)에 가까울수록 그 픽셀값이 더 많이 반영돼요!</div>
-  <div class="code"><span class="cm"># 보간법 옵션</span>
-patch1=cv.resize(patch,dsize=(0,0),fx=5,fy=5,interpolation=cv.INTER_NEAREST)  <span class="cm"># 최근접</span>
-patch2=cv.resize(patch,dsize=(0,0),fx=5,fy=5,interpolation=cv.INTER_LINEAR)   <span class="cm"># 양선형</span>
-patch3=cv.resize(patch,dsize=(0,0),fx=5,fy=5,interpolation=cv.INTER_CUBIC)    <span class="cm"># 양3차</span></div>
+  <p>실수 좌표 (j', i')가 정수 픽셀 (j, i) 사이에 걸쳐 있을 때:</p>
+  <div class="formula">α = i' − i &nbsp;&nbsp; (x방향 소수 부분, 오른쪽으로 얼마나 걸쳤는지)<br>β = j' − j &nbsp;&nbsp; (y방향 소수 부분, 아래로 얼마나 걸쳤는지)</div>
+  <div class="formula">f(j',i') ≈ (1-α)(1-β)·f(j,i) + α(1-β)·f(j,i+1) + (1-α)β·f(j+1,i) + αβ·f(j+1,i+1)</div>
+
+  <div class="fig" style="background:var(--sur);border:1px solid var(--bor);border-radius:10px;padding:16px;margin:12px 0;text-align:center">
+    <svg width="100%" viewBox="0 0 320 200" style="max-width:320px">
+      <!-- 격자 -->
+      <rect x="60" y="30" width="140" height="120" rx="4" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+      <line x1="200" y1="30" x2="200" y2="150" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+      <line x1="60" y1="150" x2="200" y2="150" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+      <!-- 4개 픽셀 -->
+      <circle cx="60" cy="30" r="5" fill="#4a9eff"/>
+      <text x="40" y="25" font-size="11" fill="#4a9eff" text-anchor="middle">f(j,i)</text>
+      <circle cx="200" cy="30" r="5" fill="#4a9eff"/>
+      <text x="220" y="25" font-size="11" fill="#4a9eff" text-anchor="middle">f(j,i+1)</text>
+      <circle cx="60" cy="150" r="5" fill="#4a9eff"/>
+      <text x="40" y="160" font-size="11" fill="#4a9eff" text-anchor="middle">f(j+1,i)</text>
+      <circle cx="200" cy="150" r="5" fill="#4a9eff"/>
+      <text x="220" y="160" font-size="11" fill="#4a9eff" text-anchor="middle">f(j+1,i+1)</text>
+      <!-- 실수 좌표 P -->
+      <circle cx="130" cy="100" r="6" fill="#ff6b7a"/>
+      <text x="140" y="96" font-size="11" fill="#ff6b7a" font-weight="700">P(j',i')</text>
+      <!-- α, β 표시 -->
+      <line x1="60" y1="165" x2="130" y2="165" stroke="#ffb347" stroke-width="1.5" marker-end="url(#arr)"/>
+      <text x="95" y="178" font-size="11" fill="#ffb347" text-anchor="middle">α (x방향)</text>
+      <line x1="215" y1="30" x2="215" y2="100" stroke="#7dda58" stroke-width="1.5"/>
+      <text x="240" y="68" font-size="11" fill="#7dda58" text-anchor="middle">β (y방향)</text>
+      <!-- 가중치 설명 -->
+      <text x="60" y="190" font-size="10" fill="#5a6275">(1-α)(1-β)</text>
+      <text x="165" y="190" font-size="10" fill="#5a6275">α(1-β)</text>
+    </svg>
+    <p style="font-size:12px;color:var(--tx3);margin-top:4px">P가 f(j,i)에 가까울수록(α,β 작을수록) f(j,i) 값이 더 많이 반영!</p>
+  </div>
+
+  <h3>계산 예시</h3>
+  <div class="card">
+    <p>실수 좌표 (j', i') = (1.3, 0.7) → j=1, i=0, <strong>α=0.7, β=0.3</strong></p>
+    <p style="margin-top:4px">주변 4픽셀: f(1,0)=10, f(1,1)=20, f(2,0)=30, f(2,1)=40</p>
+    <p style="margin-top:8px">f(1.3, 0.7) ≈ (1-0.7)(1-0.3)×10 + 0.7(1-0.3)×20 + (1-0.7)×0.3×30 + 0.7×0.3×40</p>
+    <p style="margin-top:4px">= 0.21×10 + 0.49×20 + 0.09×30 + 0.21×40 = 2.1 + 9.8 + 2.7 + 8.4 = <strong style="color:var(--star)">23</strong></p>
+  </div>
+
+  <div class="card"><table>
+    <tr><th>방법</th><th>interpolation 옵션</th><th>특징</th></tr>
+    <tr><td>최근접 이웃</td><td class="mono">cv.INTER_NEAREST</td><td>빠름, 계단 현상 발생</td></tr>
+    <tr><td class="imp">양선형 보간</td><td class="mono imp">cv.INTER_LINEAR</td><td class="imp">기본값, 부드러움, 안티 에일리어싱</td></tr>
+    <tr><td>양3차 보간</td><td class="mono">cv.INTER_CUBIC</td><td>가장 부드럽지만 느림</td></tr>
+  </table></div>
+
+  <div class="code"><span class="cm"># 보간법 비교</span>
+patch1=cv.resize(patch,dsize=(0,0),fx=5,fy=5,interpolation=cv.INTER_NEAREST)  <span class="cm"># 최근접 — 계단 현상</span>
+patch2=cv.resize(patch,dsize=(0,0),fx=5,fy=5,interpolation=cv.INTER_LINEAR)   <span class="cm"># 양선형 — 부드러움</span>
+patch3=cv.resize(patch,dsize=(0,0),fx=5,fy=5,interpolation=cv.INTER_CUBIC)    <span class="cm"># 양3차 — 더 부드러움</span></div>
 </div>
 
 <div class="sub-page" id="sub-3-p31">
@@ -927,6 +1046,21 @@ cv.waitKey(); cv.destroyAllWindows()</div>
     <p style="margin-top:4px">RETR_CCOMP: <strong>0(1→2→3) → 4(5→8) → 6(7)</strong></p>
     <p style="margin-top:4px">RETR_TREE: <strong>0(1→2→3) → 4((5→6→7)→8)</strong></p>
   </div>
+
+  <h3>관련 함수 정리</h3>
+  <div class="card"><table>
+    <tr><th>함수</th><th>인자 설명</th><th>주의사항</th></tr>
+    <tr>
+      <td class="mono imp">cv.findContours(image, mode, method)</td>
+      <td>image=입력 이진 영상<br>mode=검색 방식(RETR_*)<br>method=저장 방식(CHAIN_APPROX_*)</td>
+      <td class="imp">왕복 저장 → shape[0]&gt;100 = 실제 50이상</td>
+    </tr>
+    <tr>
+      <td class="mono imp">cv.drawContours(image, contours, contourIdx, color, thickness)</td>
+      <td>contourIdx=-1이면 모두 그리기<br>color=색상(B,G,R)</td>
+      <td>thickness=-1이면 내부 채우기</td>
+    </tr>
+  </table></div>
 </div>
 
 <div class="sub-page" id="sub-4-hough">
@@ -1286,21 +1420,43 @@ cv.waitKey(); cv.destroyAllWindows()</div>
 <div class="sub-page" id="sub-5-moravec">
   <div class="page-title">5.2.1 모라벡 알고리즘 <span class="exam-badge">★계산</span></div>
   <div class="page-sub">PPT 9~11p — S(0,1)=4 계산!</div>
-  <div class="formula">S(v,u) = ΣΣ (f(y+v, x+u) − f(y,x))² &nbsp;&nbsp;&nbsp; (5.1)</div>
+
+  <h3>모라벡의 아이디어</h3>
+  <p>a(코너)는 여러 방향으로 색상 변화가 있어 찾기 쉬운데 c(평탄)는 어느 방향으로도 미세한 변화만 있어 찾기 어려워요. 이를 수식으로 표현한 것이 <strong>제곱차의 합 S(v,u)</strong>예요.</p>
+
+  <div class="formula">S(v,u) = ΣΣ (f(y+v, x+u) − f(y,x))² &nbsp;&nbsp;&nbsp; (5.1)<br><br>이동 방향(v,u), 움직인 후 밝기 f(y+v,x+u), 원래 밝기 f(y,x)</div>
+
+  <h3>식 (5.1)의 의도</h3>
+  <div class="g3">
+    <div class="card" style="text-align:center">
+      <div style="font-size:13px;font-weight:600;margin-bottom:6px;color:var(--tx3)">c (평탄)</div>
+      <p style="font-size:12px;color:var(--tx3)">모든 방향에서 변화 없음<br>→ S값 모두 0<br>→ 특징 자격 없음</p>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:13px;font-weight:600;margin-bottom:6px;color:var(--amb)">b (에지)</div>
+      <p style="font-size:12px;color:var(--tx3)">수평 방향만 변화<br>→ S값 좌우 이웃만 큼<br>→ 특징으로 부족</p>
+    </div>
+    <div class="card" style="text-align:center;border:1px solid rgba(255,215,0,0.3)">
+      <div style="font-size:13px;font-weight:600;margin-bottom:6px;color:var(--star)">a (코너) ★</div>
+      <p style="font-size:12px;color:var(--tx3)">모든 방향으로 변화<br>→ S값 모두 큼<br>→ 훌륭한 특징점!</p>
+    </div>
+  </div>
+
+  <h3>특징점 가능성 값 측정</h3>
   <div class="cl cl-blue">
-    <span class="badge b-blue">특징점 가능성 계산</span>
+    <span class="badge b-blue">계산 방법</span>
     <ul style="margin-top:8px">
-      <li>상하좌우 4방향으로 각각 S값 계산</li>
-      <li>특징점 가능성 = <strong>min(S 상, S 하, S 좌, S 우)</strong></li>
-      <li>min: 가장 약한 방향도 커야 진짜 코너!</li>
+      <li>상하좌우 4방향 각각 S값 계산 → S 맵 생성</li>
+      <li>특징 가능성 = <strong>S 맵에서 상하좌우 네 이웃 화소의 최솟값</strong></li>
+      <li>min을 쓰는 이유: <strong>가장 약한 방향도 커야 진짜 코너!</strong></li>
+      <li>이 값이 임계값보다 크면 특징점</li>
     </ul>
   </div>
-  <div class="formula">S(0,1) = Σ Σ (f(y, x+1) − f(y,x))² = 4 &nbsp;&nbsp;&nbsp; (예시 5-1)</div>
-  <div class="g3">
-    <div class="card" style="text-align:center;font-size:13px"><strong>평탄</strong><p style="font-size:12px;color:var(--tx3)">S 모두 작음 → min 작음</p></div>
-    <div class="card" style="text-align:center;font-size:13px"><strong>에지</strong><p style="font-size:12px;color:var(--tx3)">한 방향만 큼 → min 작음</p></div>
-    <div class="card" style="text-align:center;font-size:13px"><strong style="color:var(--star)">코너 ★</strong><p style="font-size:12px;color:var(--tx3)">모두 큼 → min 큼 = 특징점!</p></div>
-  </div>
+
+  <h3>[예시 5-1] S(0,1) 계산 <span class="exam-badge">★직접계산</span></h3>
+  <p>화소 위치 (y,x) = (4,3)에서 오른쪽으로 1칸 이동한 경우 (v=0, u=1):</p>
+  <div class="formula">S(0,1) = Σ Σ (f(y, x+1) − f(y,x))² = 4</div>
+  <div class="tip">시험 팁: (v,u) = (0,1)은 x방향(오른쪽), (1,0)은 y방향(아래), (-1,0)은 위, (0,-1)은 왼쪽!</div>
 </div>
 
 <div class="sub-page" id="sub-5-harris_t">
@@ -1314,6 +1470,29 @@ cv.waitKey(); cv.destroyAllWindows()</div>
     <tr><td>C값</td><td class="imp">C=0.1925 → 코너!</td><td>C=0.0237 → 에지</td><td>C=0.0 → 평탄</td></tr>
   </table></div>
   <div class="ok">기억법: C 큰 양수=코너 / C 음수=에지 / C≈0=평탄<br>이동과 회전에 불변 / 스케일에는 불변 아님 → SIFT로 해결!</div>
+
+  <h3>해리스 특징점 분석</h3>
+  <ul>
+    <li>물체의 실제 모퉁이 뿐 아니라 <strong>블롭(blob)</strong>에서도 검출됨</li>
+    <li>이후에는 모퉁이 대신 <strong>특징점(feature point) 또는 관심점(interest point)</strong>으로 부름</li>
+    <li><strong>이동과 회전에 불변</strong> — 같은 점을 다른 각도에서 봐도 검출 가능</li>
+    <li><strong>스케일에는 불변 아님</strong> — 영상 크기가 달라지면 같은 점을 못 찾을 수 있음 → SIFT로 해결!</li>
+  </ul>
+
+  <h3>관련 함수 정리</h3>
+  <div class="card"><table>
+    <tr><th>함수</th><th>인자 설명</th><th>주의사항</th></tr>
+    <tr>
+      <td class="mono imp">cv.cornerHarris(src, blockSize, ksize, k)</td>
+      <td>src=입력 그레이스케일 영상<br>blockSize=주변 영역 크기<br>ksize=소벨 커널 크기<br>k=Harris 상수(보통 0.04)</td>
+      <td>반환: float32 C값 맵<br>C↑양수=코너, C음수=에지, C≈0=평탄</td>
+    </tr>
+    <tr>
+      <td class="mono imp">cv.dilate(harris, None)</td>
+      <td>harris=C값 맵<br>None=기본 3×3 커널</td>
+      <td>NMS용 팽창으로 극대점 찾기</td>
+    </tr>
+  </table></div>
 </div>
 
 <div class="sub-page" id="sub-5-sift_t">
@@ -1334,6 +1513,48 @@ cv.waitKey(); cv.destroyAllWindows()</div>
     <tr><td class="mono imp">FLANN</td><td>빠른 근사 최근접 이웃</td><td class="imp">아주 빠름!</td></tr>
   </table></div>
   <div class="tip">distance 작을수록 두 특징점이 더 유사! 거리순 정렬 후 상위 N개만 사용.</div>
+
+  <h3>매칭 전략 3가지 (PPT 40p)</h3>
+  <div class="card"><table>
+    <tr><th>전략</th><th>방법</th><th>특징</th></tr>
+    <tr>
+      <td>고정 임계값</td>
+      <td>거리 d(ai,bj) &lt; T인 모든 쌍을 매칭</td>
+      <td>T 설정이 어려움</td>
+    </tr>
+    <tr>
+      <td>최근접 이웃</td>
+      <td>ai마다 가장 가까운 bj를 찾아 d &lt; T이면 매칭</td>
+      <td>조금 더 나음</td>
+    </tr>
+    <tr>
+      <td class="imp">최근접 이웃 거리 비율 (Lowe's ratio)</td>
+      <td class="imp">1번째 가장 가까운 bj와 2번째 가까운 bk의 거리 비율 &lt; T이면 매칭</td>
+      <td class="imp">세 가지 중 가장 높은 성능!</td>
+    </tr>
+  </table></div>
+  <div class="star-box">⭐ Lowe's ratio test: m.distance &lt; 0.7 * n.distance → 첫번째가 두번째보다 충분히 가까울 때만 채택!</div>
+
+  <h3>관련 함수 정리</h3>
+  <div class="card"><table>
+    <tr><th>함수</th><th>인자 설명</th><th>주의사항</th></tr>
+    <tr>
+      <td class="mono imp">cv.BFMatcher(normType, crossCheck)</td>
+      <td>normType=거리 측정 방식<br>crossCheck=교차 검증 여부</td>
+      <td>NORM_L2=SIFT용. 정확하지만 느림</td>
+    </tr>
+    <tr>
+      <td class="mono imp">cv.FlannBasedMatcher(flann_params, search_params)</td>
+      <td>algorithm=1, trees=5<br>checks=50</td>
+      <td class="imp">아주 빠름! knnMatch와 함께 사용</td>
+    </tr>
+    <tr>
+      <td class="mono imp">flann.knnMatch(des1, des2, k=2)</td>
+      <td>k=2: 최근접 2개 반환</td>
+      <td>Lowe's ratio test 위해 k=2 필수!</td>
+    </tr>
+  </table></div>
+  <div class="info">실습 코드는 사이드바 → 실습 코드 → 프로그램 5-3 에서 확인!</div>
 </div>
 
 <div class="sub-page" id="sub-5-p51">
