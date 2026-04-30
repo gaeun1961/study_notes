@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>웹DB프로그래밍 기말고사 정리</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+:root {
+  --c0:#ff6b7a;--c0d:rgba(255,107,122,0.12);
+  --c6:#30d9a0;--c6d:rgba(48,217,160,0.12);
+  --c7:#b39dff;--c7d:rgba(179,157,255,0.12);
+  --c8:#4a9eff;--c8d:rgba(74,158,255,0.12);
+  --c9:#ffb347;--c9d:rgba(255,179,71,0.12);
+  --amb:#ffd700;--ambd:rgba(255,215,0,0.12);
+}
+.header{background:linear-gradient(180deg,rgba(255,107,122,0.04) 0%,transparent 100%)}
+.header-badge{background:var(--c0d);color:var(--c0);border-color:rgba(255,107,122,0.25)}
+.ch-tab.on[data-ch="0"]{color:var(--c0)}
+.ch-tab.on[data-ch="6"]{color:var(--c6)}
+.ch0 .sub-tab.on{border-left-color:var(--c0);color:var(--c0)}
+.ch6 .sub-tab.on{border-left-color:var(--c6);color:var(--c6)}
+.cl-red{border-left-color:var(--c0)} .cl-teal{border-left-color:var(--c6)}
+.cl-pur{border-left-color:var(--c7)} .cl-blue{border-left-color:var(--c8)}
+.cl-amb{border-left-color:var(--c9)} .cl-gold{border-left-color:var(--amb)}
+.tip{background:var(--c7d);border-color:rgba(179,157,255,0.2);color:var(--c7)}
+.warn{background:var(--c0d);border-color:rgba(255,107,122,0.2);color:var(--c0)}
+.ok{background:var(--c6d);border-color:rgba(48,217,160,0.2);color:var(--c6)}
+.info{background:var(--c8d);border-color:rgba(74,158,255,0.2);color:var(--c8)}
+.b-red{background:var(--c0d);color:var(--c0);border-color:rgba(255,107,122,0.25)}
+.b-teal{background:var(--c6d);color:var(--c6);border-color:rgba(48,217,160,0.25)}
+.b-pur{background:var(--c7d);color:var(--c7);border-color:rgba(179,157,255,0.25)}
+.b-blue{background:var(--c8d);color:var(--c8);border-color:rgba(74,158,255,0.25)}
+.b-amb{background:var(--c9d);color:var(--c9);border-color:rgba(255,179,71,0.25)}
+.b-gold{background:var(--ambd);color:var(--amb);border-color:rgba(255,215,0,0.25)}
+.b-gray{background:rgba(255,255,255,0.06);color:var(--tx2);border-color:var(--bor)}
+.mbox{background:rgba(48,217,160,0.05);border:1px solid rgba(48,217,160,0.2);border-radius:10px;padding:12px 16px;margin:8px 0}
+.mname{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--c6);margin-bottom:6px}
+.mdesc{font-size:13px;color:var(--tx2);line-height:1.75}
+.mdesc .arg{color:var(--c8);font-family:'JetBrains Mono',monospace;font-size:12px}
+.mdesc .ret{color:var(--c9);font-family:'JetBrains Mono',monospace;font-size:12px}
+.exam-warn{background:rgba(255,107,122,0.08);border:1px solid rgba(255,107,122,0.3);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:13px;color:var(--c0);line-height:1.7}
+.exam-warn::before{content:"🚨 시험 포인트  ";font-weight:700}
+</style>
+</head>
+<body>
+<a class="back-btn" href="index.html">&#8249; 목록으로</a>
+<div class="header">
+  <div class="header-top">
+    <h1>웹DB프로그래밍</h1>
+    <span class="header-badge">기말고사 정리</span>
+  </div>
+  <div class="ch-tabs">
+    <button class="ch-tab on" data-ch="0" onclick="showCh(0)">⚠️ 중간 핵심복습</button>
+    <button class="ch-tab" data-ch="6" onclick="showCh(6)">Ch.6 JSP 기초</button>
+  </div>
+</div>
+<div class="main">
+<nav class="sidebar ch0" id="sidebar">
+<div id="menu-0">
+  <div class="sidebar-label">시험에 나온 것</div>
+  <button class="sub-tab on" onclick="showSub(0,'why')">왜 정보공유가 필요한가<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(0,'five')">5가지 방법 한눈에<span class="star">★</span></button>
+  <div class="sidebar-label">방법별 메소드 완전정리</div>
+  <button class="sub-tab" onclick="showSub(0,'url')">① URL Rewriting<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(0,'cookie')">② Cookie<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(0,'session')">③ Session<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(0,'context')">④ ServletContext<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(0,'dispatcher')">⑤ RequestDispatcher<span class="star">★</span></button>
+  <div class="sidebar-label">정리</div>
+  <button class="sub-tab" onclick="showSub(0,'compare')">비교표 + 암기법<span class="star">★</span></button>
+</div>
+<div id="menu-6" style="display:none">
+  <div class="sidebar-label">JSP 개요</div>
+  <button class="sub-tab on" onclick="showSub(6,'what')">JSP란?<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(6,'process')">JSP 실행과정<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(6,'mvc')">MVC 패턴</button>
+  <button class="sub-tab" onclick="showSub(6,'procon')">JSP 장단점</button>
+  <div class="sidebar-label">스크립팅 요소</div>
+  <button class="sub-tab" onclick="showSub(6,'elements')">5가지 요소 정리<span class="star">★</span></button>
+  <div class="sidebar-label">지시어</div>
+  <button class="sub-tab" onclick="showSub(6,'page')">page 지시어<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(6,'include')">include 지시어<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(6,'taglib')">taglib 지시어</button>
+  <div class="sidebar-label">스크립트 태그</div>
+  <button class="sub-tab" onclick="showSub(6,'scriptlet')">스크립트릿 &lt;% %&gt;<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(6,'declaration')">선언문 &lt;%! %&gt;<span class="star">★</span></button>
+  <button class="sub-tab" onclick="showSub(6,'expression')">표현식 &lt;%= %&gt;<span class="star">★</span></button>
+</div>
+</nav>
+<main class="content">
+
+<!-- CH.0 -->
+<div class="ch-page on" id="ch-0">
+
+<div class="sub-page on" id="sub-0-why">
+  <div class="page-title">왜 정보공유가 필요한가? <span class="exam-badge">★ 실제 출제</span></div>
+  <div class="page-sub">중간고사 실제 출제 문항 — 서술 답안 외워두기</div>
+  <div class="warn">HTTP는 <strong>비연결형(Stateless) 통신</strong>이다. 요청-응답이 끝나면 연결이 끊기고, 이전 페이지의 정보가 사라진다.</div>
+  <h3>왜 문제가 되는가?</h3>
+  <div class="cl cl-red">
+    <p>로그인 페이지에서 아이디를 입력하고 로그인 버튼을 눌렀다.</p>
+    <p style="margin-top:5px">→ LoginServlet이 실행되어 아이디 정보를 처리했다.</p>
+    <p style="margin-top:5px">→ 그런데 다음 페이지(마이페이지)로 이동하면 아이디 정보가 사라진다!</p>
+    <p style="margin-top:5px">→ HTTP가 비연결형이기 때문에 이전 request 객체가 소멸되기 때문.</p>
+  </div>
+  <div class="exam-warn">모범 답안: "HTTP가 비연결형(Stateless) 통신이기 때문에 페이지 이동 시 이전 요청 정보가 소멸된다. 따라서 로그인 상태 유지, 장바구니 등 여러 페이지에 걸쳐 데이터를 공유하려면 별도의 정보 공유 방법이 필요하다."</div>
+</div>
+
+<div class="sub-page" id="sub-0-five">
+  <div class="page-title">5가지 방법 한눈에 <span class="exam-badge">★ 실제 출제</span></div>
+  <div class="page-sub">이름 + 저장위치 + 언제 쓰나 — 이 3가지 세트로 기억</div>
+  <table>
+    <tr><th>번호</th><th>방법</th><th>저장 위치</th><th>적합한 상황</th></tr>
+    <tr><td class="imp">①</td><td class="imp">URL Rewriting</td><td>URL (쿼리스트링)</td><td>간단한 값, 노출돼도 되는 데이터</td></tr>
+    <tr><td class="imp">②</td><td class="imp">Cookie</td><td>클라이언트 (브라우저)</td><td>방문 횟수, 자동로그인 등 비민감 정보</td></tr>
+    <tr><td class="imp">③</td><td class="imp">Session</td><td>서버</td><td>로그인 상태, 민감한 정보</td></tr>
+    <tr><td class="imp">④</td><td class="imp">ServletContext</td><td>서버 (공유 공간)</td><td>모든 사용자 공통 데이터 (공지사항)</td></tr>
+    <tr><td class="imp">⑤</td><td class="imp">RequestDispatcher</td><td>request 객체</td><td>서블릿 간 처리 위임 (forward)</td></tr>
+  </table>
+  <div class="star-box" style="margin-top:14px">⭐ 핵심: 쿠키=클라이언트 저장 / 세션=서버 저장 / 세션은 브라우저 단위!</div>
+</div>
+
+<div class="sub-page" id="sub-0-url">
+  <div class="page-title">① URL Rewriting <span class="exam-badge">★</span></div>
+  <div class="page-sub">URL 뒤에 ?key=value 형태로 데이터 전달</div>
+  <h3>메소드</h3>
+  <div class="mbox">
+    <div class="mname">response.sendRedirect(String url)</div>
+    <div class="mdesc">인자: <span class="arg">url</span> — 이동할 URL (쿼리스트링 포함 가능) | 반환: <span class="ret">void</span></div>
+  </div>
+  <div class="mbox">
+    <div class="mname">request.getParameter(String name)</div>
+    <div class="mdesc">인자: <span class="arg">name</span> — 쿼리스트링의 키 이름 | 반환: <span class="ret">String</span> (없으면 null)</div>
+  </div>
+  <div class="ct">코드</div>
+  <div class="code"><span class="cm">// 보내는 쪽</span>
+String name = request.getParameter(<span class="cs">"name"</span>);
+response.sendRedirect(<span class="cs">"ResultServlet?name="</span> + name + <span class="cs">"&gender=남자"</span>);
+
+<span class="cm">// 받는 쪽</span>
+String name   = request.getParameter(<span class="cs">"name"</span>);
+String gender = request.getParameter(<span class="cs">"gender"</span>);</div>
+  <div class="g2">
+    <div class="cl cl-teal"><span class="badge b-teal">장점</span><p style="margin-top:5px">구현 간단</p></div>
+    <div class="cl cl-red"><span class="badge b-red">단점</span><p style="margin-top:5px">URL에 노출됨. 한글은 URLEncoder 필요.</p></div>
+  </div>
+</div>
+
+<div class="sub-page" id="sub-0-cookie">
+  <div class="page-title">② Cookie <span class="exam-badge">★</span></div>
+  <div class="page-sub">서버가 클라이언트(브라우저)에 저장. name=value 형식.</div>
+  <h3>메소드 — 생성/전송</h3>
+  <div class="mbox">
+    <div class="mname">new Cookie(String name, String value)</div>
+    <div class="mdesc">인자: <span class="arg">name</span> — 쿠키 키 / <span class="arg">value</span> — 값 | 반환: <span class="ret">Cookie 객체</span></div>
+  </div>
+  <div class="mbox">
+    <div class="mname">cookie.setMaxAge(int seconds)</div>
+    <div class="mdesc">인자: <span class="arg">seconds</span> — 유효시간(초). <strong>0이면 즉시 삭제</strong>. 음수면 브라우저 닫을 때 삭제 | 반환: <span class="ret">void</span></div>
+  </div>
+  <div class="mbox">
+    <div class="mname">response.addCookie(Cookie cookie)</div>
+    <div class="mdesc">인자: <span class="arg">cookie</span> — 전송할 쿠키 객체 | 반환: <span class="ret">void</span></div>
+  </div>
+  <h3>메소드 — 읽기/수정</h3>
+  <div class="mbox">
+    <div class="mname">request.getCookies()</div>
+    <div class="mdesc">인자: 없음 | 반환: <span class="ret">Cookie[]</span> — 모든 쿠키 배열. 쿠키 없으면 null</div>
+  </div>
+  <div class="mbox">
+    <div class="mname">cookie.getName() / cookie.getValue()</div>
+    <div class="mdesc">getName() → <span class="ret">String</span> (키 이름) | getValue() → <span class="ret">String</span> (값)</div>
+  </div>
+  <div class="mbox">
+    <div class="mname">cookie.setValue(String value)</div>
+    <div class="mdesc">인자: <span class="arg">value</span> — 변경할 값 | 반환: <span class="ret">void</span></div>
+  </div>
+  <div class="ct">전체 코드</div>
+  <div class="code"><span class="cm">// 생성 & 전송</span>
+Cookie ck = <span class="ck">new</span> Cookie(<span class="cs">"user"</span>, <span class="cs">"kim"</span>);
+ck.setMaxAge(3600); <span class="cm">// 1시간</span>
+response.addCookie(ck);
+
+<span class="cm">// 읽기</span>
+Cookie[] cookies = request.getCookies();
+<span class="ck">if</span> (cookies != <span class="ck">null</span>) {
+    <span class="ck">for</span> (Cookie c : cookies) {
+        <span class="ck">if</span> (c.getName().equals(<span class="cs">"user"</span>)) {
+            String val = c.getValue();
+        }
+    }
+}
+
+<span class="cm">// 삭제: setMaxAge(0)</span>
+Cookie ck = <span class="ck">new</span> Cookie(<span class="cs">"user"</span>, <span class="cs">""</span>);
+ck.setMaxAge(0);
+response.addCookie(ck);</div>
+  <div class="g2">
+    <div class="cl cl-teal"><span class="badge b-teal">장점</span><ul style="margin-top:5px"><li>서버 메모리 안 씀</li><li>브라우저 닫아도 유지 가능</li></ul></div>
+    <div class="cl cl-red"><span class="badge b-red">단점</span><ul style="margin-top:5px"><li>클라이언트 저장 → 보안 취약</li><li>4KB 용량 제한</li></ul></div>
+  </div>
+</div>
+
+<div class="sub-page" id="sub-0-session">
+  <div class="page-title">③ Session <span class="exam-badge">★</span></div>
+  <div class="page-sub">서버에 저장. 브라우저마다 세션 ID 발급.</div>
+  <h3>메소드</h3>
+  <div class="mbox">
+    <div class="mname">request.getSession()</div>
+    <div class="mdesc">인자: 없음 (또는 boolean — false면 없을 때 null 반환) | 반환: <span class="ret">HttpSession</span></div>
+  </div>
+  <div class="mbox">
+    <div class="mname">session.setAttribute(String name, Object value)</div>
+    <div class="mdesc">인자: <span class="arg">name</span> — 키 / <span class="arg">value</span> — 값 (<strong>Object 타입!</strong>) | 반환: <span class="ret">void</span></div>
+  </div>
+  <div class="mbox">
+    <div class="mname">session.getAttribute(String name)</div>
+    <div class="mdesc">인자: <span class="arg">name</span> — 키 이름 | 반환: <span class="ret">Object</span> — <strong>형변환 (String) 필수!</strong> 없으면 null</div>
+  </div>
+  <div class="mbox">
+    <div class="mname">session.removeAttribute(String name)</div>
+    <div class="mdesc">인자: <span class="arg">name</span> — 삭제할 키 | 반환: <span class="ret">void</span> — 단일 속성 삭제</div>
+  </div>
+  <div class="mbox">
+    <div class="mname">session.invalidate()</div>
+    <div class="mdesc">인자: 없음 | 반환: <span class="ret">void</span> — 세션 전체 삭제 <strong>(로그아웃)</strong></div>
+  </div>
+  <div class="mbox">
+    <div class="mname">session.setMaxInactiveInterval(int seconds)</div>
+    <div class="mdesc">인자: <span class="arg">seconds</span> — 유효시간(초). 기본 1800초(30분) | 반환: <span class="ret">void</span></div>
+  </div>
+  <div class="ct">전체 코드</div>
+  <div class="code">HttpSession session = request.getSession();
+
+session.setAttribute(<span class="cs">"loginUser"</span>, <span class="cs">"kim"</span>); <span class="cm">// 저장</span>
+
+String user = (String) session.getAttribute(<span class="cs">"loginUser"</span>); <span class="cm">// 읽기 (형변환!)</span>
+
+session.removeAttribute(<span class="cs">"loginUser"</span>); <span class="cm">// 단일 삭제</span>
+session.invalidate(); <span class="cm">// 전체 삭제 (로그아웃)</span>
+session.setMaxInactiveInterval(1800); <span class="cm">// 유효시간 30분</span></div>
+  <div class="warn">세션은 <strong>브라우저 단위</strong>! 크롬에서 로그인해도 엣지로 열면 로그아웃. 방문 횟수처럼 지속돼야 하는 건 쿠키!</div>
+</div>
+
+<div class="sub-page" id="sub-0-context">
+  <div class="page-title">④ ServletContext <span class="exam-badge">★</span></div>
+  <div class="page-sub">모든 서블릿이 공유하는 서버 공간. Application Context라고도 함.</div>
+  <h3>메소드</h3>
+  <div class="mbox">
+    <div class="mname">request.getServletContext()</div>
+    <div class="mdesc">인자: 없음 | 반환: <span class="ret">ServletContext</span></div>
+  </div>
+  <div class="mbox">
+    <div class="mname">ctx.setAttribute(String name, Object value)</div>
+    <div class="mdesc">인자: <span class="arg">name</span> — 키 / <span class="arg">value</span> — 값 (Object 타입) | 반환: <span class="ret">void</span></div>
+  </div>
+  <div class="mbox">
+    <div class="mname">ctx.getAttribute(String name)</div>
+    <div class="mdesc">인자: <span class="arg">name</span> — 키 | 반환: <span class="ret">Object</span> — 형변환 필요</div>
+  </div>
+  <div class="ct">전체 코드</div>
+  <div class="code">ServletContext ctx = request.getServletContext();
+ctx.setAttribute(<span class="cs">"notice"</span>, <span class="cs">"서버 점검 예정"</span>);
+String notice = (String) ctx.getAttribute(<span class="cs">"notice"</span>);</div>
+  <div class="info">웹 애플리케이션 단위로 하나. 모든 사용자, 모든 서블릿이 같은 공간 공유. Java의 static 변수와 유사.</div>
+</div>
+
+<div class="sub-page" id="sub-0-dispatcher">
+  <div class="page-title">⑤ RequestDispatcher <span class="exam-badge">★</span></div>
+  <div class="page-sub">request/response 객체를 그대로 다른 서블릿에 전달.</div>
+  <h3>메소드</h3>
+  <div class="mbox">
+    <div class="mname">request.getRequestDispatcher(String path)</div>
+    <div class="mdesc">인자: <span class="arg">path</span> — 포워딩할 서블릿/JSP 경로 | 반환: <span class="ret">RequestDispatcher</span></div>
+  </div>
+  <div class="mbox">
+    <div class="mname">rd.forward(HttpServletRequest req, HttpServletResponse res)</div>
+    <div class="mdesc">인자: <span class="arg">req</span> — request 객체 / <span class="arg">res</span> — response 객체 | 반환: <span class="ret">void</span><br>→ request 객체가 그대로 전달 → 다음 서블릿에서도 getParameter() 사용 가능!</div>
+  </div>
+  <div class="ct">전체 코드</div>
+  <div class="code">RequestDispatcher rd = request.getRequestDispatcher(<span class="cs">"/ResultServlet"</span>);
+rd.forward(request, response);</div>
+  <table style="margin-top:12px">
+    <tr><th></th><th>sendRedirect</th><th>forward (dispatcher)</th></tr>
+    <tr><td class="imp">이동 방식</td><td>브라우저가 새 요청</td><td>서버 내부에서 전달</td></tr>
+    <tr><td class="imp">URL 변화</td><td>바뀜</td><td>안 바뀜</td></tr>
+    <tr><td class="imp">request 데이터</td><td>소멸</td><td class="imp">유지!</td></tr>
+    <tr><td class="imp">외부 URL</td><td>가능</td><td>불가</td></tr>
+  </table>
+</div>
+
+<div class="sub-page" id="sub-0-compare">
+  <div class="page-title">비교표 + 암기법 <span class="exam-badge">★</span></div>
+  <div class="page-sub">시험장에서 헷갈리지 않도록!</div>
+  <table>
+    <tr><th>방법</th><th>저장</th><th>보안</th><th>핵심 메소드 (인자 포함)</th></tr>
+    <tr><td class="imp">URL Rewriting</td><td>URL</td><td class="ch">취약</td><td class="mono" style="font-size:11px">sendRedirect("URL?k=v")<br>getParameter("k")</td></tr>
+    <tr><td class="imp">Cookie</td><td>클라이언트</td><td class="ch">취약</td><td class="mono" style="font-size:11px">new Cookie("k","v") / setMaxAge(초)<br>addCookie(ck) / getCookies()<br>getName() / getValue()</td></tr>
+    <tr><td class="imp">Session</td><td>서버</td><td class="cs">우수</td><td class="mono" style="font-size:11px">getSession()<br>setAttribute("k", v) / getAttribute("k")<br>removeAttribute("k") / invalidate()</td></tr>
+    <tr><td class="imp">ServletContext</td><td>서버(공유)</td><td class="cs">우수</td><td class="mono" style="font-size:11px">getServletContext()<br>setAttribute("k", v) / getAttribute("k")</td></tr>
+    <tr><td class="imp">Dispatcher</td><td>request</td><td class="cs">우수</td><td class="mono" style="font-size:11px">getRequestDispatcher("경로")<br>rd.forward(request, response)</td></tr>
+  </table>
+  <div class="cl cl-gold" style="margin-top:14px">
+    <p><strong>암기 포인트</strong></p>
+    <p style="margin-top:6px">getAttribute 반환 타입 → 셋 다 <strong>Object</strong> → 항상 <strong>(String) 형변환 필요</strong></p>
+    <p style="margin-top:4px">Cookie만 getCookies()로 배열 받아서 for문 → getName() 비교 → getValue()</p>
+    <p style="margin-top:4px">삭제: Cookie → <strong>setMaxAge(0)</strong> / Session 전체 → <strong>invalidate()</strong></p>
+    <p style="margin-top:4px">세션은 <strong>브라우저 단위</strong> → 방문 횟수 = 쿠키로!</p>
+  </div>
+  <div class="exam-warn">메소드 쓸 때 인자까지 같이! getAttribute("키이름"), setAttribute("키이름", 값) 형태로 써야 점수 받음.</div>
+</div>
+
+</div><!-- end ch-0 -->
+
+<!-- CH.6 -->
+<div class="ch-page" id="ch-6">
+
+<div class="sub-page on" id="sub-6-what">
+  <div class="page-title">JSP란? <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.6 Section 01</div>
+  <div class="star-box">⭐ JSP = Java Server Pages = HTML 안에 자바 코드를 직접 사용할 수 있는 구조</div>
+  <p style="margin-top:10px">서블릿의 단점(HTML을 out.print()로 문자열로 써야 함)을 보완하기 위해 만들어짐.</p>
+  <div class="g2">
+    <div class="cl cl-red"><span class="badge b-red">서블릿의 단점</span>
+      <div class="code" style="margin-top:8px">out.print("<span class="cs">&lt;html&gt;&lt;h2&gt;</span>" + name + "<span class="cs">&lt;/h2&gt;&lt;/html&gt;</span>");
+<span class="cm">// HTML 태그를 문자열로 → 복잡!</span></div>
+    </div>
+    <div class="cl cl-teal"><span class="badge b-teal">JSP의 해결</span>
+      <div class="code" style="margin-top:8px">&lt;html&gt;
+  &lt;h2&gt;<span class="ck">&lt;%= name %&gt;</span>&lt;/h2&gt;
+&lt;/html&gt;
+<span class="cm">// HTML 안에 자바 코드 삽입!</span></div>
+    </div>
+  </div>
+  <h3>JSP의 특징</h3>
+  <ul>
+    <li>HTML 파일에 자바 코드를 직접 사용</li>
+    <li>최초 호출 시 서블릿으로 변환되어 컴파일됨</li>
+    <li>모든 JSP 페이지는 자바 클래스 형태로 관리</li>
+    <li>컨테이너에 의해 메모리에 적재됨</li>
+    <li>CSS, JavaScript 사용 형식은 HTML과 동일</li>
+  </ul>
+</div>
+
+<div class="sub-page" id="sub-6-process">
+  <div class="page-title">JSP 실행과정 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.6 Section 01</div>
+  <h3>최초 요청 (서블릿 클래스 없을 때)</h3>
+  <div class="code">① 클라이언트가 hello.jsp 요청
+② WAS: 서블릿 클래스 유무 확인 → 없음
+③ hello.jsp → hello_jsp.java (자바 소스로 변환)
+④ hello_jsp.java → hello_jsp.class (컴파일)
+⑤ jspInit() 호출 → 서블릿 실행 준비
+⑥ _jspService() 호출 → 요청 처리
+⑦ 처리 결과를 클라이언트에 응답</div>
+  <h3>두 번째 이후 요청 (서블릿 클래스 있을 때)</h3>
+  <div class="code">① 클라이언트가 hello.jsp 요청
+② WAS: 서블릿 클래스 있음 + 메모리에 있음
+③ 바로 _jspService() 호출 → 요청 처리</div>
+  <div class="ok">서블릿 생명주기와 동일! jspInit()=init() / _jspService()=service() / jspDestroy()=destroy()</div>
+</div>
+
+<div class="sub-page" id="sub-6-mvc">
+  <div class="page-title">MVC 패턴</div>
+  <div class="page-sub">Ch.6 Section 01</div>
+  <p>소프트웨어 개발 디자인 패턴. 역할을 분리해 유지보수를 쉽게 함.</p>
+  <div class="g2">
+    <div class="cl cl-red"><span class="badge b-red">Controller — 서블릿</span><p style="margin-top:5px">클라이언트 요청 받아 처리 흐름 제어. Model에 처리 요청 후 View로 전달.</p></div>
+    <div class="cl cl-blue"><span class="badge b-blue">View — JSP</span><p style="margin-top:5px">화면 표시 담당. 데이터를 HTML로 렌더링.</p></div>
+  </div>
+  <div class="cl cl-teal"><span class="badge b-teal">Model — Business Logic</span><p style="margin-top:5px">실제 데이터 처리(DB 조회 등). 비즈니스 로직 담당.</p></div>
+</div>
+
+<div class="sub-page" id="sub-6-procon">
+  <div class="page-title">JSP 장단점</div>
+  <div class="page-sub">Ch.6 Section 01</div>
+  <div class="g2">
+    <div class="cl cl-teal"><span class="badge b-teal">장점</span><ul style="margin-top:8px">
+      <li>HTML에 자바 코드 직접 사용 → 서블릿보다 편함</li>
+      <li>서블릿으로 변환되어 실행 → 서블릿의 장점 모두 가짐</li>
+      <li>MVC 패턴, 스프링 프레임워크 적용 가능</li>
+      <li>커스텀 태그 라이브러리 사용 가능</li>
+    </ul></div>
+    <div class="cl cl-red"><span class="badge b-red">단점</span><ul style="margin-top:8px">
+      <li>UI 변경해도 JSP→Java→class→실행 과정 거쳐야 해서 확인에 시간 소요</li>
+      <li>화면 디자인 확인 시 반드시 서블릿 컨테이너 실행 필요</li>
+    </ul></div>
+  </div>
+</div>
+
+<div class="sub-page" id="sub-6-elements">
+  <div class="page-title">JSP 스크립팅 요소 5가지 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.6 Section 02 — 공통: &lt;% … %&gt; 형식 사용</div>
+  <table>
+    <tr><th>종류</th><th>문법</th><th>역할</th></tr>
+    <tr><td class="imp">지시어 Directive</td><td class="mono">&lt;%@ … %&gt;</td><td>페이지 변환 정보 (컨테이너에 전달)</td></tr>
+    <tr><td class="imp">스크립트릿 Scriptlet</td><td class="mono">&lt;% … %&gt;</td><td>Java 코드 삽입 (기본)</td></tr>
+    <tr><td class="imp">주석 Comment</td><td class="mono">&lt;%-- … --%&gt;</td><td>주석 처리 (HTML 소스에 안 보임)</td></tr>
+    <tr><td class="imp">선언문 Declaration</td><td class="mono">&lt;%! … %&gt;</td><td>전역 변수/메소드 선언</td></tr>
+    <tr><td class="imp">표현식 Expression</td><td class="mono">&lt;%= … %&gt;</td><td>변수/메소드 값 출력</td></tr>
+  </table>
+</div>
+
+<div class="sub-page" id="sub-6-page">
+  <div class="page-title">page 지시어 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.6 Section 02 — JSP 파일 맨 앞에 위치. 이클립스에서 자동 생성.</div>
+  <div class="code"><span class="ck">&lt;%@ page</span> language=<span class="cs">"java"</span>
+         contentType=<span class="cs">"text/html; charset=UTF-8"</span>
+         pageEncoding=<span class="cs">"UTF-8"</span>
+         import=<span class="cs">"java.util.*"</span>
+         errorPage=<span class="cs">"error.jsp"</span> <span class="ck">%&gt;</span></div>
+  <table style="margin-top:10px">
+    <tr><th>속성</th><th>역할</th></tr>
+    <tr><td class="mono imp">language</td><td>스크립트 언어 지정 (보통 "java")</td></tr>
+    <tr><td class="mono imp">contentType</td><td>응답 파일 형식 + 인코딩 지정</td></tr>
+    <tr><td class="mono imp">pageEncoding</td><td>컨테이너가 처리할 때 쓰는 인코딩. POST면 request.setCharacterEncoding()도 추가 필요</td></tr>
+    <tr><td class="mono imp">import</td><td>자바 클래스 패키지 import. 여러 개면 콤마로 구분</td></tr>
+    <tr><td class="mono imp">errorPage</td><td>에러 발생 시 이동할 페이지 지정</td></tr>
+  </table>
+  <div class="ct">import 사용 예</div>
+  <div class="code"><span class="ck">&lt;%@ page</span> contentType=<span class="cs">"text/html"</span> pageEncoding=<span class="cs">"utf-8"</span> <span class="ck">%&gt;</span>
+<span class="ck">&lt;%@ page</span> import=<span class="cs">"java.util.Date"</span> <span class="ck">%&gt;</span>
+<span class="ck">&lt;%</span>
+    request.setCharacterEncoding(<span class="cs">"utf-8"</span>);
+    String uid = request.getParameter(<span class="cs">"id"</span>);
+    String res = <span class="cs">"&lt;h3&gt;아이디: "</span> + uid + <span class="cs">"&lt;/h3&gt;"</span>;
+    res += <span class="cs">"&lt;br&gt;로그인 시간: "</span> + (<span class="ck">new</span> Date()).toString();
+    out.print(res);
+<span class="ck">%&gt;</span></div>
+</div>
+
+<div class="sub-page" id="sub-6-include">
+  <div class="page-title">include 지시어 <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.6 Section 02 — 다른 파일을 현재 위치에 포함</div>
+  <div class="code"><span class="ck">&lt;%@ include</span> file=<span class="cs">"파일경로"</span> <span class="ck">%&gt;</span></div>
+  <ul style="margin:10px 0">
+    <li>사용된 위치에 특정 파일(html, jsp)의 내용을 그대로 가져옴</li>
+    <li>컨테이너는 포함된 파일을 <strong>하나로 합쳐서</strong> 자바 소스 생성 후 컴파일</li>
+    <li>원하는 위치에 자유롭게 사용 가능</li>
+  </ul>
+  <div class="ct">헤더/바디/푸터 분리 예</div>
+  <div class="code"><span class="cm">&lt;!-- main.jsp --&gt;</span>
+<span class="ck">&lt;%@ include</span> file=<span class="cs">"header.jsp"</span> <span class="ck">%&gt;</span>
+<span class="ck">&lt;%@ include</span> file=<span class="cs">"body.jsp"</span> <span class="ck">%&gt;</span>
+<span class="ck">&lt;%@ include</span> file=<span class="cs">"footer.jsp"</span> <span class="ck">%&gt;</span>
+<span class="cm">&lt;!-- 컨테이너는 세 파일을 하나로 합쳐서 처리 --&gt;</span></div>
+  <div class="ok">include 지시어로 포함된 파일들은 하나의 서블릿으로 변환됨 → 변수 공유 가능!</div>
+</div>
+
+<div class="sub-page" id="sub-6-taglib">
+  <div class="page-title">taglib 지시어</div>
+  <div class="page-sub">Ch.6 Section 02</div>
+  <p>JSP의 태그 확장인 <strong>커스텀 태그</strong>를 사용하기 위한 지시어.</p>
+  <div class="code"><span class="ck">&lt;%@ taglib</span> (uri=<span class="cs">"태그 라이브러리 경로"</span> 또는 tagdir=<span class="cs">"태그 파일 경로"</span>)
+           prefix=<span class="cs">"접두어"</span> <span class="ck">%&gt;</span></div>
+  <table style="margin-top:10px">
+    <tr><th>속성</th><th>역할</th></tr>
+    <tr><td class="mono imp">uri</td><td>태그 라이브러리 위치 (.tld 파일 경로)</td></tr>
+    <tr><td class="mono imp">tagdir</td><td>태그 파일로 구현한 경우 태그 파일 경로</td></tr>
+    <tr><td class="mono imp">prefix</td><td>해당 태그를 구분하기 위한 접두어</td></tr>
+  </table>
+  <div class="ct">사용 예</div>
+  <div class="code"><span class="ck">&lt;%@ taglib</span> tagdir=<span class="cs">"/WEB-INF/tags"</span> prefix=<span class="cs">"m"</span> <span class="ck">%&gt;</span>
+&lt;h2&gt;&lt;m:printData /&gt;&lt;/h2&gt;</div>
+</div>
+
+<div class="sub-page" id="sub-6-scriptlet">
+  <div class="page-title">스크립트릿 &lt;% %&gt; <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.6 Section 03 — 가장 기본. 모든 자바 코드 사용 가능.</div>
+  <p>서블릿 변환 시 <strong>_jspService() 메소드 내부</strong>에 배치됨. HTML과 섞어서 사용 가능.</p>
+  <div class="ct">기본 사용</div>
+  <div class="code">&lt;html&gt;
+<span class="ck">&lt;%</span>
+    String uid = request.getParameter(<span class="cs">"id"</span>);
+    String res = <span class="cs">"&lt;h3&gt;User ID: "</span> + uid + <span class="cs">"&lt;/h3&gt;"</span>;
+    out.print(res);
+<span class="ck">%&gt;</span>
+&lt;/html&gt;</div>
+  <div class="tip">출력: out.print() 또는 out.println(). println()은 소스에서만 줄바꿈. 브라우저 줄바꿈은 &lt;br&gt; 태그 필요!</div>
+</div>
+
+<div class="sub-page" id="sub-6-declaration">
+  <div class="page-title">선언문 &lt;%! %&gt; <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.6 Section 03 — 전역 변수/메소드 선언</div>
+  <p>서블릿 변환 시 <strong>_jspService() 메소드 외부</strong>에 배치됨 → 전역으로 동작.</p>
+  <div class="g2">
+    <div class="cl cl-blue"><span class="badge b-blue">선언문 태그 &lt;%! %&gt;</span><ul style="margin-top:5px"><li>변수 + 메소드 선언 가능</li><li>_jspService() <strong>외부</strong>에 배치</li></ul></div>
+    <div class="cl cl-pur"><span class="badge b-pur">스크립트릿 태그 &lt;% %&gt;</span><ul style="margin-top:5px"><li>변수만 선언 가능 (메소드 불가)</li><li>_jspService() <strong>내부</strong>에 배치</li></ul></div>
+  </div>
+  <div class="ct">전역 변수 선언</div>
+  <div class="code"><span class="ck">&lt;%!</span> <span class="ck">int</span> count = 0; <span class="ck">%&gt;</span>
+&lt;body&gt;
+<span class="ck">&lt;%</span> out.println(++count); <span class="ck">%&gt;</span>
+&lt;/body&gt;</div>
+  <div class="ct">전역 메소드 선언</div>
+  <div class="code"><span class="ck">&lt;%@</span> page import=<span class="cs">"java.util.Date"</span> <span class="ck">%&gt;</span>
+<span class="ck">&lt;%!</span>
+    String getDate() {
+        <span class="ck">return</span> (<span class="ck">new</span> Date()).toString();
+    }
+<span class="ck">%&gt;</span>
+<span class="ck">&lt;%</span>
+    out.print(<span class="cs">"로그인 시간: "</span> + getDate());
+<span class="ck">%&gt;</span></div>
+</div>
+
+<div class="sub-page" id="sub-6-expression">
+  <div class="page-title">표현식 &lt;%= %&gt; <span class="exam-badge">★</span></div>
+  <div class="page-sub">Ch.6 Section 03 — 값을 바로 HTML에 출력</div>
+  <p>out.println()의 인자로 적합한 모든 자바 코드 가능. <strong>세미콜론(;) 없음!</strong></p>
+  <div class="code"><span class="cm">&lt;!-- 변수/메소드 출력 --&gt;</span>
+&lt;h3&gt;User ID: <span class="ck">&lt;%= request.getParameter("id") %&gt;</span>&lt;/h3&gt;
+현재 시간: <span class="ck">&lt;%= java.time.LocalDateTime.now() %&gt;</span>
+
+<span class="cm">&lt;!-- 연산 결과 출력 --&gt;</span>
+<span class="ck">&lt;%</span> int a=10; int b=20; int c=30; <span class="ck">%&gt;</span>
+합계: <span class="ck">&lt;%= a + b + c %&gt;</span>  <span class="cm">&lt;!-- 결과: 60 --&gt;</span></div>
+  <div class="warn">세미콜론(;) 쓰면 오류! &lt;%= result %&gt; O / &lt;%= result; %&gt; X</div>
+</div>
+
+</div><!-- end ch-6 -->
+
+</main>
+</div>
+<script src="shared.js"></script>
+<script>showCh(0);</script>
+</body>
+</html>
